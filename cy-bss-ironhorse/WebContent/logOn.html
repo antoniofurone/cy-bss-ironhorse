@@ -41,7 +41,7 @@
 		</div>
 		
 		<button type="button" class="btn btn-default" ng-click="onSubmit()">Submit</button>
-		<button type="button" class="btn btn-default" ng-click="onReset()"">Reset</button>
+		<button type="button" class="btn btn-default" ng-click="onReset()">Reset</button>
 	
 		
 </form>	
@@ -62,12 +62,15 @@
     	   
     	   
     	$scope.onSubmit = function() {
+    		$scope.errorMessage="";
     		
+    		if (!$scope.logon.$valid)
+    			return;
     		
     		var request = '{"method": "POST","url": "'+$scope.coreUrl+'/rest/cybss-auth/logOn'+'",'; 
-			"headers": {"Security-Token": "'+$scope.securityToken+'"},';
+			request+='"headers": {"Security-Token": "'+$scope.securityToken+'"},';
 			request+='"data": {"userId":"'+$scope.userId+'","pwd":"'+$scope.pwd+'"}}';
-			alert("request="+request);
+			
 			console.log("request="+request);	
 			
 			callWs($http,$scope,request);    		
@@ -76,20 +79,32 @@
 		$scope.onReset = function() {
     		$scope.userId="";
     		$scope.pwd="";
+    		$scope.errorMessage="";
     	}
 		
        });   
 
        
        function callWs($http,$scope,request){
-       	//window.alert("request="+request);
        	var reqObj=JSON.parse(request);
-       	//window.alert("reqObj="+reqObj);
-   		$http(reqObj).then(
+       	$http(reqObj).then(
    			function(response){
-   				alert("OK !!!");
-   				$scope.logon.response=JSON.stringify(response);
-   				
+   				if (response.data.resultCode=='00'){
+   					
+   					
+   					if (typeof(Storage) !== "undefined") 
+   	       	    		localStorage.setItem("org.cysoft.bss.ih.securityToken", response.data.securityToken); 
+   	       			else 
+   	         	       alert("Local storage isn't supported !");
+   	         		 
+   	       			$("#logon").attr("action","index.html");
+   	       		 	$("#logon").submit();
+   					
+   				}
+   				else
+   					{
+   					manageError($scope,response.data.resultCode,response.data.resultDesc);
+   					}
    			}, 
    			function(response){
    				manageError($scope,response.status,response.data);
@@ -97,7 +112,7 @@
        }
        
        function manageError($scope,status,data){
-       	$scope.errorMessage="Status:"+status+" - "+data;	
+       	$scope.errorMessage=status+" - "+data;	
        }
 
 </script>
