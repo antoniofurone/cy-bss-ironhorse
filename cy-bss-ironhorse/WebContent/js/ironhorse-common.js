@@ -6,6 +6,7 @@ var ROLE_USER="User";
 var ROLE_PARTNER="Partner";
 
 
+
 function getLocalStorageItem(paramName){ 
 	if (typeof(Storage) !== "undefined") 
 	   return localStorage.getItem(paramName);
@@ -23,7 +24,9 @@ function setLocalStorageItem(paramName,value){
 }
 
 function getLanguage(){
-	var userLang = navigator.language || navigator.userLanguage;
+	var userLang=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
+	if (userLang==undefined)  		
+		userLang = navigator.language || navigator.userLanguage;
 	if (userLang=='it-IT' || userLang=='it')
    	 return 'it';
     else
@@ -54,10 +57,39 @@ function callRestWs($http,endPoint,method,headers,data,success,error){
 
 function setMenuCntl(app) {
 	
-	app.controller('menuCtrl', function($scope, $http,$translate) {
+	
+	
+	app.controller('menuCtrl', function($scope, $http, $translate) {
 		var userRole=getLocalStorageItem('org.cysoft.bss.ih.user.role');
-		if (userRole!='undefined')
+		if (userRole!=undefined)
 			$scope.userRole=userRole;
 		console.log("user role="+$scope.userRole);
+		
+		 $scope.onLogOff = function() {
+			 $scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
+			 callRestWs($http,'/cybss-auth/logOff','GET',
+						'"Security-Token": "'+$scope.securityToken+'"',
+						'',
+						function(response){
+								if (response.data.resultCode==RESULT_OK){
+									setLocalStorageItem("org.cysoft.bss.ih.securityToken",'');
+									$("#callPage").attr("action","logOn.html");
+		   	       		 			$("#callPage").submit();
+								}
+								else
+								{
+									alert(response.data.resultCode+'-'+response.data.resultDesc);
+								}
+							}, 
+							function(response){
+									alert(response.status+'-'+response.data);
+							});
+			 
+		 }
+		
 	});  
+}
+
+function manageError($scope,status,data){
+		$scope.errorMessage=status+" - "+data;	
 }

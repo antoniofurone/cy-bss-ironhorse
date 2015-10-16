@@ -12,44 +12,82 @@
 	<script src="js/angular-translate/2.8.1/angular-translate.min.js"></script>
 	
 	<script src="js/ironhorse-common.js"></script>
-	
+	<script src="js/ironhorse-transl.js"></script>
 	   
 </head>
 <body>
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	<div class="page-header" ng-include="'includes/header.html'" ></div>
 	
+	<form novalidate name="index" id="index" class="form-horizontal" role="form" method="post">
+	
+	<div class="form-group" ng-show="!errorMessage">
+		<div class="col-sm-4">
+				<div class="alert alert-info">
+		   			{{'LABEL.CIAO' | translate }} <strong>{{ user.name }}</strong>! <br>
+	        		{{'LABEL.YOUR_ROLE' | translate }} <strong>{{ user.role }}</strong>
+	        	</div>
+	    </div>
+	</div>
+	
+	<div class="form-group" ng-show="errorMessage">
+	    <div class="col-sm-9">
+	    	<div class="alert alert-danger">
+          		{{ errorMessage }}
+        	</div>
+		</div>
+	</div>
+		
+	</form>
 
 </div>
 
 <script>
-	var app = angular.module('pageApp', ['pascalprecht.translate'])
+	
+	var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator'])
 		.config(function($translateProvider) {
 	     	$translateProvider
 	     	.translations('en',{
-    		    'SUBMIT.BUTTON':'Submit',
-    		    'TEST.BUTTON': 'Test',
-    		    'CORE.URL.REQUIRED': 'Core URL is required.',
-    		    'URL.INVALID': 'Invalid URL.'
+    		    'LABEL.CIAO':'Hi',
+    		    'LABEL.YOUR_ROLE':"Your role is"
     		  })
     		  
     		.translations('it',{
-    		    'SUBMIT.BUTTON':'Conferma',
-    		    'TEST.BUTTON': 'Test',
-    		    'CORE.URL.REQUIRED': 'Core URL è obbligatorio.',
-    		    'URL.INVALID': 'URL non valido.'
+    			'LABEL.CIAO':'Ciao',
+    			'LABEL.YOUR_ROLE':"Il tuo ruolo e'"
     		  });
-	     
-	    	 $translateProvider.preferredLanguage(getLanguage());
+	     	
+	     	 $translateProvider.preferredLanguage(getLanguage());
 	 	});
 	   
 
 	app.controller('pageCtrl', function($scope, $http,$translate) {
-		//$scope.userRole="Administrator";
+	
+		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 		
-	});   
+		var user_id=getLocalStorageItem("org.cysoft.bss.ih.user.id");
+		
+		callRestWs($http,'user/'+user_id+'/get','GET',
+				'"Security-Token": "'+$scope.securityToken+'"',
+				'',
+				function(response){
+						if (response.data.resultCode==RESULT_OK){
+							$scope.user=response.data.user;
+						}
+						else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+					function(response){
+							manageError($scope,response.status,response.data);
+					});
+
+ 	});   
 	   
 	setMenuCntl(app);
+		
+
 </script>
 
 
