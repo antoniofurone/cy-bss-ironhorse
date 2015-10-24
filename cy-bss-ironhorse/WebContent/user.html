@@ -16,8 +16,57 @@
 <body>
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	<div class="page-header" ng-include="'includes/header.html'" ></div>
+	<div class="well well-sm"><span>{{'SEARCH.TITLE' | translate }}</span></div>
 	
 	<form novalidate name="userlist" id="userlist" class="form-horizontal" role="form" method="post">
+		<div class="form-group">
+			<label class="col-sm-1 control-label">{{'USERNAME.LABEL' | translate }}</label>
+			<div class="col-sm-3">
+				<input class="form-control" name="userName" id="userName" type="text" ng-model="userName"/>
+			</div>
+			<button type="button" class="btn btn-default" ng-click="onSearch()" translate>SEARCH.BUTTON</button>
+		</div>
+      	
+      	<div class="col-sm-3">
+		<table class="table table-striped">
+      		<thead><tr>
+      			<th>UserId</th><th>Name</th>
+      			<th>Role</th><th>Language</th><th>Active</th>
+      			<th></th><th></th>
+      		</tr></thead>
+      		<tbody><tr ng-repeat="user in users">
+    		
+    		<td>{{ user.userId }}</td>
+    		<td>{{ user.name }}</td>
+    		<td>{{ user.role }}</td>
+    		<td>{{ user.languageCode }}</td>
+    		<td>{{ user.flgActive }}</td>
+    		
+    		<td>
+      			<button class="btn" ng-click="editUser(user.id)">
+      			</span>&nbsp;&nbsp;Edit</button>
+    		</td>
+    		<td>
+      			<button class="btn" ng-click="deleteUser(user.id)">
+      			</span>&nbsp;&nbsp;Remove</button>
+    		</td>
+    		
+    		
+  			</tr></tbody>
+   		</table>
+      	</div>
+      	
+		<div class="form-group" ng-show="errorMessage">
+		    <label class="col-sm-1 control-label">Error</label>
+		    <div class="col-sm-9">
+		    	<div class="alert alert-danger">
+	          		{{ errorMessage }}
+	        	</div>
+			</div>
+		</div>
+		
+		
+		
 	
 	</form>
 
@@ -29,9 +78,15 @@
 		.config(function($translateProvider) {
 	     	$translateProvider
 	     	.translations('en',{
+	     		'SEARCH.BUTTON':'Search',
+	     		'USERNAME.LABEL':'User Name',
+	     		'SEARCH.TITLE':'Search Users'
     		  })
     		  
     		.translations('it',{
+    			'SEARCH.BUTTON':'Ricerca',
+    			'USERNAME.LABEL':'Nome Utente',
+    			'SEARCH.TITLE':'Ricerca Utenti'
     		  });
 	     	
 	     	 $translateProvider.preferredLanguage(getLanguage());
@@ -39,7 +94,31 @@
 	   
 
 	app.controller('pageCtrl', function($scope, $http,$translate) {
- 	
+		
+		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
+		
+		$scope.onSearch = function() {
+    		$scope.errorMessage="";
+    		
+    		callRestWs($http,'user/find?name='+($scope.userName!=undefined?encodeURIComponent($scope.userName):''),'GET',
+    				'"Security-Token": "'+$scope.securityToken+'"',
+    				'',
+    				function(response){
+   						if (response.data.resultCode==RESULT_OK){
+   							alert (JSON.stringify(response));
+   							$scope.users=response.data.users;
+   							alert ($scope.users);
+   						}
+   						else
+   						{
+   							manageError($scope,response.data.resultCode,response.data.resultDesc);
+   						}
+   					}, 
+   					function(response){
+   							manageError($scope,response.status,response.data);
+   					});
+    		
+		}
 	
 	});   
 	   
