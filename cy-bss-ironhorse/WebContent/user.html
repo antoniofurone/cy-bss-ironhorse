@@ -16,56 +16,113 @@
 <body>
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	<div class="page-header" ng-include="'includes/header.html'" ></div>
-	<div class="well well-sm"><span>{{'SEARCH.TITLE' | translate }}</span></div>
 	
-	<form novalidate name="userlist" id="userlist" class="form-horizontal" role="form" method="post">
-		<div class="form-group">
-			<label class="col-sm-1 control-label">{{'USERNAME.LABEL' | translate }}</label>
-			<div class="col-sm-3">
-				<input class="form-control" name="userName" id="userName" type="text" ng-model="userName"/>
+	<form novalidate name="userList" id="userList" class="form-horizontal" role="form" method="post">
+		<div id='list' ng-show="!showList">
+			<div class="well well-sm"><span>{{'NEW.TITLE' | translate }}</span></div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'USERID.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+					<input class="form-control" name="userId" id="userId" type="text" ng-model="userId" required/>
+					<span class="help-block" ng-show="userList.userId.$error.required" translate>USER_ID.REQUIRED</span>
+      			</div>
 			</div>
-			<button type="button" class="btn btn-default" ng-click="onSearch()">
-			<span class="glyphicon glyphicon-search"></span>
-			{{'SEARCH.BUTTON' | translate }}
-			</button>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'PWD.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+					<input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" required/>
+					<span class="help-block" ng-show="userList.pwd.$error.required" translate>PWD.REQUIRED</span>
+      			</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'CONFPWD.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+					<input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" required/>
+					<span class="help-block" ng-show="userList.confPwd.$error.required" translate>CONFPWD.REQUIRED</span>
+      			</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'NAME.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+					<input class="form-control" name="name" id="name" type="text" ng-model="name" required/>
+					<span class="help-block" ng-show="userList.name.$error.required" translate>NAME.REQUIRED</span>
+      			</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'ROLE.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+		        <select id="selectedRole" name="selectedRole" class="form-control" ng-model="selectedRole" required>
+		        	 <option ng-repeat="r in roles" value="{{s.id}}">{{s.name}}</option>
+		        </select>
+		        <span class="help-block" ng-show="userList.selectedRole.$error.required" translate>ROLE.REQUIRED</span>
+      			</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'LANGUAGE.LABEL' | translate }}</label>
+				<div class="col-sm-4">
+		        <select id="selectedLanguage" name="selectedLanguage" class="form-control" ng-model="selectedLanguage" required>
+		        	 <option ng-repeat="l in languages" value="{{l.id}}">{{l.name}}</option>
+		        </select>
+		        <span class="help-block" ng-show="userList.selectedLanguage.$error.required" translate>LANGUAGE.REQUIRED</span>
+      			</div>
+			</div>
 			
-			<button type="button" class="btn btn-default" ng-click="onNew()">
-			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;
-			{{'NEW.BUTTON' | translate }}
-			</button>
-			
+				
 		</div>
-      	
-      	<div>
-		<table class="table table-striped">
-      		<thead><tr>
-      			<th>UserId</th><th>Name</th>
-      			<th>Role</th><th>Language</th><th>Active</th>
-      			<th></th><th></th>
-      		</tr></thead>
-      		<tbody><tr ng-repeat="user in users">
-    		
-    		<td>{{ user.userId }}</td>
-    		<td>{{ user.name }}</td>
-    		<td>{{ user.role }}</td>
-    		<td>{{ user.languageCode }}</td>
-    		<td>{{ user.flgActive }}</td>
-    		
-    		<td>
-      			<button class="btn" ng-click="editUser(user.id)">
-      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
-      			</button>
-    		</td>
-    		<td>
-      			<button class="btn" ng-click="deleteUser(user.id)">
-      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
-      			</button>
-    		</td>
-    		
-    		
-  			</tr></tbody>
-   		</table>
+		
+		<div id='list' ng-show="showList">		
+			<div class="well well-sm"><span>{{'SEARCH.TITLE' | translate }}</span></div>
+				
+			<div class="form-group">
+				<label class="col-sm-1 control-label">{{'USERNAME.LABEL' | translate }}</label>
+				<div class="col-sm-3">
+					<input class="form-control" name="userName" id="userName" type="text" ng-model="userName"/>
+				</div>
+				<button type="button" class="btn btn-default" ng-click="onSearch()">
+				<span class="glyphicon glyphicon-search"></span>
+				{{'SEARCH.BUTTON' | translate }}
+				</button>
+				
+				<button type="button" class="btn btn-default" ng-click="onNew()">
+				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;
+				{{'NEW.BUTTON' | translate }}
+				</button>
+				
+			</div>
+	      	
+	      	<div>
+			<table class="table table-striped" ng-show="users">
+	      		<thead><tr>
+	      			<th>UserId</th><th>Name</th>
+	      			<th>Role</th><th>Language</th><th>Active</th>
+	      			<th></th><th></th>
+	      		</tr></thead>
+	      		<tbody><tr ng-repeat="user in users">
+	    		
+	    		<td>{{ user.userId }}</td>
+	    		<td>{{ user.name }}</td>
+	    		<td>{{ user.role }}</td>
+	    		<td>{{ user.languageCode }}</td>
+	    		<td>{{ user.flgActive }}</td>
+	    		
+	    		<td>
+	      			<button class="btn btn-default" ng-click="editUser(user.id)">
+	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
+	      			</button>
+	    		</td>
+	    		<td>
+	      			<button class="btn btn-default" ng-click="deleteUser(user.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
+	      			</button>
+	    		</td>
+	    		
+	    		
+	  			</tr></tbody>
+	   		</table>
+	      	</div>
+	      	
       	</div>
+      	<!--  end list -->
       	
 		<div class="form-group" ng-show="errorMessage">
 		    <label class="col-sm-1 control-label">Error</label>
@@ -75,10 +132,8 @@
 	        	</div>
 			</div>
 		</div>
-		
-		
-		
 	
+		
 	</form>
 
 </div>
@@ -92,22 +147,48 @@
 	     		'SEARCH.BUTTON':'Search',
 	     		'NEW.BUTTON':'New',
 	     		'USERNAME.LABEL':'User Name',
-	     		'SEARCH.TITLE':'Search Users'
-    		  })
+	     		'SEARCH.TITLE':'Search Users',
+	     		'NEW.TITLE':'New User',
+	     		'USERID.LABEL':'User Id',
+	     		'USER_ID.REQUIRED':'User Id required',
+	     		'PWD.LABEL':'Password',
+	     		'PWD.REQUIRED':'Password required',
+	     		'CONFPWD.LABEL':'Confirm Password',
+	     		'CONFPWD.REQUIRED':'Confirm Password required',
+	     		'NAME.LABEL':'Name',
+	     		'NAME.REQUIRED':'Name required',
+	     		'ROLE.LABEL':'Role',
+	     		'ROLE.REQUIRED':'Role required',
+	    		'LANGUAGE.LABEL':'Language',
+	     		'LANGUAGE.REQUIRED':'Language required'
+	     
+	     	  })
     		  
     		.translations('it',{
     			'SEARCH.BUTTON':'Ricerca',
     			'NEW.BUTTON':'Nuovo',
     			'USERNAME.LABEL':'Nome Utente',
-    			'SEARCH.TITLE':'Ricerca Utenti'
-    		  });
+    			'SEARCH.TITLE':'Ricerca Utenti',
+    			'NEW.TITLE':'Nuovo Utente',
+    			'USERID.LABEL':'User Id',
+    			'USER_ID.REQUIRED':'User Id obbligatorio',
+    			'PWD.LABEL':'Password',
+	     		'PWD.REQUIRED':'Password obbligatoria',
+	    		'CONFPWD.LABEL':'Conferma Password',
+	     		'CONFPWD.REQUIRED':'Conferma Password obbligatoria',
+	     		'NAME.LABEL':'Nome',
+	     		'NAME.REQUIRED':'Nome obbligatorio',
+	    		'LANGUAGE.LABEL':'Lingua',
+	     		'LANGUAGE.REQUIRED':'Lingua obbligatoria'
+	     	  });
+	     	
 	     	
 	     	 $translateProvider.preferredLanguage(getLanguage());
 	 	});
 	   
 
 	app.controller('pageCtrl', function($scope, $http,$translate) {
-		
+		$scope.showList=true;
 		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 		
 		$scope.onSearch = function() {
@@ -118,9 +199,9 @@
     				'',
     				function(response){
    						if (response.data.resultCode==RESULT_OK){
-   							alert (JSON.stringify(response));
+   							//alert (JSON.stringify(response));
    							$scope.users=response.data.users;
-   							alert ($scope.users);
+   							//alert ($scope.users);
    						}
    						else
    						{
@@ -132,7 +213,14 @@
    					});
     		
 		}
-	
+		// end search
+		
+		$scope.onNew = function() {
+    		$scope.errorMessage="";
+    		$scope.showList=false;
+		}
+		// end new
+		
 	});   
 	   
 	setMenuCntl(app);
