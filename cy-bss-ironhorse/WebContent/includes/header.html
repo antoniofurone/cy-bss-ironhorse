@@ -13,9 +13,11 @@
             <li ng-show="userRole == 'Super Administrator' || userRole == 'Administrator'">
             	<a href="user.html">{{'MENU.ADMIN.USER' | irtranslate }}</a>
             </li>
+            <!-- 
             <li>
             	<a href="profile.html">{{'MENU.ADMIN.PROFILE' | irtranslate }}</a>
             </li>
+            -->
           </ul>
         </li>
         <li><a href="#" ng-click="onLogOff()" ng-show="userRole != 'undefined'">LogOff</a></li> 

@@ -89,8 +89,8 @@
 	    		
 	    		
 	    		callRestWs($http,'cybss-auth/logOn','POST',
-	    				'"Security-Token": "'+$scope.securityToken+'"',
-	    				'"userId":"'+$scope.userId+'","pwd":"'+$scope.pwd+'"',
+	    				{"Security-Token": $scope.securityToken},
+	    				{"userId":$scope.userId,"pwd":$scope.pwd},
 	    				function(response){
 	   						if (response.data.resultCode==RESULT_OK){
 	   							
@@ -110,8 +110,8 @@
 	   							manageError($scope,response.data.resultCode,response.data.resultDesc);
 	   						}
 	   					}, 
-	   					function(response){
-	   							manageError($scope,response.status,response.data);
+	   					function(data, status, headers, config){
+	   							manageError($scope,status,data);
 	   					});
 	    		
     		}

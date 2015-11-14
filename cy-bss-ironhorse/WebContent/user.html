@@ -18,8 +18,33 @@
 	<div class="page-header" ng-include="'includes/header.html'" ></div>
 	
 	<form novalidate name="userList" id="userList" class="form-horizontal" role="form" method="post">
+		
+		<div class="form-group" ng-show="errorMessage">
+		    <div class="col-sm-8">
+		    	<div class="alert alert-danger">
+	          		{{ errorMessage }}
+	        	</div>
+			</div>
+		</div>
+		
+		<div class="form-group" ng-show="infoMessage">
+		    <div class="col-sm-8">
+		    	<div class="alert alert-info">
+	          		{{ infoMessage }}
+	        	</div>
+			</div>
+		</div>
+		
+		
 		<div id='list' ng-show="!showList">
-			<div class="well well-sm"><span>{{'NEW.TITLE' | translate }}</span></div>
+			<div class="well well-sm" ng-show="!modify"><span>{{'NEW.TITLE' | translate }}</span></div>
+			<div class="well well-sm" ng-show="modify"><span>{{'MODIFY.TITLE' | translate }}</span></div>
+			
+			<button type="button" class="btn btn-default" ng-click="onBack()">
+				<span class="glyphicon glyphicon-back"></span>
+				{{'BACK.BUTTON' | translate }}
+			</button>
+			
 			<div class="form-group">
 				<label class="col-sm-1 control-label">{{'USERID.LABEL' | translate }}</label>
 				<div class="col-sm-4">
@@ -32,7 +57,7 @@
 					<span class="help-block" ng-show="userList.name.$error.required" translate>NAME.REQUIRED</span>
       			</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="!modify">
 				<label class="col-sm-1 control-label">{{'PWD.LABEL' | translate }}</label>
 				<div class="col-sm-4">
 					<input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" required/>
@@ -63,7 +88,7 @@
 			</div>
 			
 			<button type="button" class="btn btn-default" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
-			<button type="button" class="btn btn-default" ng-click="onReset()" translate>RESET.BUTTON</button>
+			<button type="button" ng-show="!modify" class="btn btn-default" ng-click="onReset()" translate>RESET.BUTTON</button>
 				
 		</div>
 		
@@ -121,15 +146,6 @@
       	</div>
       	<!--  end list -->
       	
-		<div class="form-group" ng-show="errorMessage">
-		    <label class="col-sm-1 control-label">Error</label>
-		    <div class="col-sm-9">
-		    	<div class="alert alert-danger">
-	          		{{ errorMessage }}
-	        	</div>
-			</div>
-		</div>
-	
 		
 	</form>
 
@@ -146,6 +162,7 @@
 	     		'USERNAME.LABEL':'User Name',
 	     		'SEARCH.TITLE':'Search Users',
 	     		'NEW.TITLE':'New User',
+	     		'MODIFY.TITLE':'Edit User',
 	     		'USERID.LABEL':'User Id',
 	     		'USER_ID.REQUIRED':'User Id required',
 	     		'PWD.LABEL':'Password',
@@ -159,7 +176,10 @@
 	    		'LANGUAGE.LABEL':'Language',
 	     		'LANGUAGE.REQUIRED':'Language required',
 				'SUBMIT.BUTTON':'Submit',
-    		    'RESET.BUTTON': 'Reset'
+    		    'RESET.BUTTON': 'Reset',
+    		    'BACK.BUTTON': 'Back',
+    		    'PWD.DIFF': 'Password different from Confirm Password. Please Check !',
+    		    'INS.OK': 'User added !'
          	  })
     		  
     		.translations('it',{
@@ -168,6 +188,7 @@
     			'USERNAME.LABEL':'Nome Utente',
     			'SEARCH.TITLE':'Ricerca Utenti',
     			'NEW.TITLE':'Nuovo Utente',
+    			'MODIFY.TITLE':'Modifica Utente',
     			'USERID.LABEL':'User Id',
     			'USER_ID.REQUIRED':'User Id obbligatorio',
     			'PWD.LABEL':'Password',
@@ -179,7 +200,10 @@
 	    		'LANGUAGE.LABEL':'Lingua',
 	     		'LANGUAGE.REQUIRED':'Lingua obbligatoria',
 				'SUBMIT.BUTTON':'Conferma',
-	    		'RESET.BUTTON': 'Reset'
+	    		'RESET.BUTTON': 'Reset',
+	    		'BACK.BUTTON': 'Indietro',
+	    		'PWD.DIFF': 'Password differente da Confirm Password. Verifica, Grazie !',
+	    		'INS.OK': 'Utente inserito !'
 	     	  });
 	     	
 	     	
@@ -195,8 +219,8 @@
     		$scope.errorMessage="";
     		
     		callRestWs($http,'user/find?name='+($scope.userName!=undefined?encodeURIComponent($scope.userName):''),'GET',
-    				'"Security-Token": "'+$scope.securityToken+'"',
-    				'',
+    				{"Security-Token":$scope.securityToken},
+    				{},
     				function(response){
    						if (response.data.resultCode==RESULT_OK){
    							//alert (JSON.stringify(response));
@@ -208,21 +232,26 @@
    							manageError($scope,response.data.resultCode,response.data.resultDesc);
    						}
    					}, 
-   					function(response){
-   							manageError($scope,response.status,response.data);
+   					function(data, status, headers, config){
+   							manageError($scope,status,data);
    					});
     		
 		}
 		// end search
 		
+		$scope.onBack = function() {
+    		resetForm($scope);
+    		$scope.showList=true;
+		}
+		
 		$scope.onNew = function() {
-    		$scope.errorMessage="";
     		$scope.showList=false;
+    		resetForm($scope);
     		
     		
     		callRestWs($http,'language/getLanguageAll','GET',
-    				'"Security-Token": "'+$scope.securityToken+'"',
-    				'',
+    				{"Security-Token":$scope.securityToken},
+    				{},
     				function(response){
    						if (response.data.resultCode==RESULT_OK){
    							//alert (JSON.stringify(response));
@@ -233,14 +262,14 @@
    							manageError($scope,response.data.resultCode,response.data.resultDesc);
    						}
    					}, 
-   					function(response){
-   							manageError($scope,response.status,response.data);
+   					function(data, status, headers, config){
+   							manageError($scope,status,data);
    					});
     	
     	
     		callRestWs($http,'user/getRoleAll','GET',
-    				'"Security-Token": "'+$scope.securityToken+'"',
-    				'',
+    				{"Security-Token":$scope.securityToken},
+    				{},
     				function(response){
    						if (response.data.resultCode==RESULT_OK){
    							//alert (JSON.stringify(response));
@@ -251,8 +280,8 @@
    							manageError($scope,response.data.resultCode,response.data.resultDesc);
    						}
    					}, 
-   					function(response){
-   							manageError($scope,response.status,response.data);
+   					function(data, status, headers, config){
+   							manageError($scope,status,data);
    					});
     	
     		
@@ -260,28 +289,166 @@
 		// end new
 		
 		$scope.onSubmit = function() {
-    		if (!$scope.logon.$valid)
-    			return;
-
+			$scope.errorMessage="";
+			$scope.infoMessage="";
 			
+			if (!$scope.userList.$valid)
+    			return;
+		
+    		if ($scope.pwd!=$scope.confPwd){
+    			$translate('PWD.DIFF')
+    	          .then(function (translatedValue) {
+    	              $scope.errorMessage=translatedValue;
+    	          });  
+    		}
+    		
+    		var headers={"Security-Token":$scope.securityToken};
+    		var data = {};
+    		data['userId']=$scope.userId;
+    		data['name']=$scope.name;
+    		data['pwd']=$scope.pwd;
+    		data['roleId']=$scope.selectedRole;
+    		data['languageId']=$scope.selectedLanguage;
+    		if ($scope.modify)
+    			data['id']=$scope.user_id;
+    		
+    		callRestWs($http,!$scope.modify?'user/add':'user/'+$scope.user_id+'/update','POST',
+    				headers,
+    				data,
+    				function(response){
+   						if (response.data.resultCode==RESULT_OK){
+   							$translate('INS.OK')
+   		    	          		.then(function (translatedValue) {
+   		    	              		$scope.infoMessage=translatedValue;
+   		    	          	});				
+   							
+   							$scope.modify=true;
+   							
+   							callRestWs($http,'user/getByUserId?userId='+$scope.userId,'GET',
+   				    				headers,
+   				    				{},
+   				    				function(response){
+   				   						if (response.data.resultCode==RESULT_OK){
+   				   							$scope.user_id=response.data.user.id;
+   				   						}
+   				   						else
+   				   						{
+   				   							manageError($scope,response.data.resultCode,response.data.resultDesc);
+   				   						}
+   				   					}, 
+   				   					function(data, status, headers, config){
+   				   							manageError($scope,status,data);
+   				   					});
+   							
+   						}
+   						else
+   						{
+   							manageError($scope,response.data.resultCode,response.data.resultDesc);
+   						}
+   					}, 
+   					function(data, status, headers, config){
+   							manageError($scope,status,data);
+   					});
+    			
 		}// end onSubmit
     	
 		$scope.onReset = function() {
-			$scope.userId='';
-			$scope.name='';
-			$scope.pwd='';
-			$scope.confPwd='';
-			$scope.selectedRole='';
-			$scope.selectedLanguage='';
-			
+			resetForm($scope);
 		}// end onReset
-    	
 		
-	});   
+		
+		$scope.editUser = function(id){
+			$scope.modify=true;
+			$scope.showList=false;
+	    	
+			loadCombos($http,$scope);
+			readUser($http,$scope,id);
+		}
+		
+	}); 
+	
 	   
 	setMenuCntl(app);
-		
 
+function readUser($http,$scope,id){
+	var headers={"Security-Token":$scope.securityToken};
+	callRestWs($http,'user/'+id+'/get','GET',
+			headers,
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						console.log(JSON.stringify(response));
+						$scope.user_id=response.data.user.id;
+						$scope.userId=response.data.user.userId;
+						$scope.name=response.data.user.name;
+						$scope.selectedRole=response.data.user.roleId;
+						$scope.selectedLanguage=response.data.user.languageId;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+}
+
+function loadCombos($http,$scope){
+	
+	callRestWs($http,'language/getLanguageAll','GET',
+			{"Security-Token":$scope.securityToken},
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//alert (JSON.stringify(response));
+						$scope.languages=response.data.languages;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+
+
+	callRestWs($http,'user/getRoleAll','GET',
+			{"Security-Token":$scope.securityToken},
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//alert (JSON.stringify(response));
+						$scope.roles=response.data.roles;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+
+}
+
+
+
+function resetForm($scope){
+
+	$scope.user_id='';
+	$scope.userId='';
+	$scope.name='';
+	$scope.pwd='';
+	$scope.confPwd='';
+	$scope.selectedRole='';
+	$scope.selectedLanguage='';
+	$scope.errorMessage="";
+	$scope.infoMessage="";
+	
+}
+	
 </script>
 
 </body>

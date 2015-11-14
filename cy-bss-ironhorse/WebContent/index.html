@@ -68,8 +68,8 @@
 		var user_id=getLocalStorageItem("org.cysoft.bss.ih.user.id");
 		
 		callRestWs($http,'user/'+user_id+'/get','GET',
-				'"Security-Token": "'+$scope.securityToken+'"',
-				'',
+				{"Security-Token": $scope.securityToken},
+				{},
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
 							$scope.user=response.data.user;

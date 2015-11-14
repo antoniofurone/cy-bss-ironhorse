@@ -37,8 +37,8 @@ function getLanguage(){
 function callRestWs($http,endPoint,method,headers,data,success,error){
 	var request = '{"method": "'+method+'","url": "';
 	request+=getLocalStorageItem("org.cysoft.bss.ih.coreurl")+'/rest/'+endPoint+'",'; 
-	request+='"headers": {'+headers+'},';
-	request+='"data": {'+data+'}}';
+	request+='"headers": '+JSON.stringify(headers)+',';
+	request+='"data": '+JSON.stringify(data)+'}';
 	
 	console.log("request="+request);
 	
@@ -49,15 +49,15 @@ function callRestWs($http,endPoint,method,headers,data,success,error){
 			function(response){
 				success(response);
 			}, 
-			function(response){
-				error(response);
+			function(data, status, headers, config){
+				error(data, status, headers, config);
 			});
 }
 
 
+
+
 function setMenuCntl(app) {
-	
-	
 	
 	app.controller('menuCtrl', function($scope, $http, $translate) {
 		var userRole=getLocalStorageItem('org.cysoft.bss.ih.user.role');
@@ -68,8 +68,8 @@ function setMenuCntl(app) {
 		 $scope.onLogOff = function() {
 			 $scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 			 callRestWs($http,'/cybss-auth/logOff','GET',
-						'"Security-Token": "'+$scope.securityToken+'"',
-						'',
+					 {"Security-Token": $scope.securityToken},
+					 {},
 						function(response){
 								if (response.data.resultCode==RESULT_OK){
 									setLocalStorageItem("org.cysoft.bss.ih.securityToken",'');
@@ -81,8 +81,8 @@ function setMenuCntl(app) {
 									alert(response.data.resultCode+'-'+response.data.resultDesc);
 								}
 							}, 
-							function(response){
-									alert(response.status+'-'+response.data);
+							function(data, status, headers, config){
+									alert(status+'-'+data);
 							});
 			 
 		 }
