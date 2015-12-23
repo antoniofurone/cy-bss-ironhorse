@@ -67,13 +67,13 @@ function setMenuCntl(app) {
 		
 		 $scope.onLogOff = function() {
 			 $scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
-			 callRestWs($http,'/cybss-auth/logOff','GET',
+			 callRestWs($http,'cybss-auth/logOff','GET',
 					 {"Security-Token": $scope.securityToken},
 					 {},
 						function(response){
 								if (response.data.resultCode==RESULT_OK){
 									setLocalStorageItem("org.cysoft.bss.ih.securityToken",'');
-									$("#callPage").attr("action","logOn.html");
+									$("#callPage").attr("action","/cy-bss-ironhorse/html/logOn.html");
 		   	       		 			$("#callPage").submit();
 								}
 								else

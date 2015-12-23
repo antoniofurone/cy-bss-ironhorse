@@ -3,16 +3,19 @@ var menuMapTranslation={
 			{
 				"MENU.ADMIN":"Administration",
 				"MENU.ADMIN.USER":"Manage users",
-				"MENU.ADMIN.PROFILE":"Your Profile"
 				
-				
+				"MENU.OPERATION":"Operation",
+				"MENU.OPERATION.TTMS":"TTMS"
+					
 			},
 		"it":
 			{
 				"MENU.ADMIN":"Amministrazione",
 				"MENU.ADMIN.USER":"Gestione utenti",
-				"MENU.ADMIN.PROFILE":"Il tuo profilo"
 				
+				"MENU.OPERATION":"Operation",
+				"MENU.OPERATION.TTMS":"TTMS"
+					 
 			}
 		};
 

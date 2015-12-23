@@ -1,23 +1,27 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid" ng-app="pageApp" ng-controller="menuCtrl">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Iron Horse</a>
+      <a class="navbar-brand" href="#"><strong>Iron Horse</strong></a>
     </div>
     <div ng-show="userRole">
       <ul class="nav navbar-nav">
-        <li class="active" ng-show="userRole != 'undefined'"><a href="index.html">Home</a></li>
+        <li ng-show="userRole != 'undefined'"><a href="/cy-bss-ironhorse/index.html">Home</a></li>
         <li class="dropdown" ng-show="userRole != 'undefined'">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'MENU.ADMIN' | irtranslate }}
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li ng-show="userRole == 'Super Administrator' || userRole == 'Administrator'">
-            	<a href="user.html">{{'MENU.ADMIN.USER' | irtranslate }}</a>
+            	<a href="/cy-bss-ironhorse/html/admin/user.html">{{'MENU.ADMIN.USER' | irtranslate }}</a>
             </li>
-            <!-- 
-            <li>
-            	<a href="profile.html">{{'MENU.ADMIN.PROFILE' | irtranslate }}</a>
+          </ul>
+        </li>
+        <li class="dropdown" ng-show="userRole != 'undefined'">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'MENU.OPERATION' | irtranslate }}
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li ng-show="userRole == 'Super Administrator' || userRole == 'Administrator'">
+            	<a href="/cy-bss-ironhorse/html/operation/ttms.html">{{'MENU.OPERATION.TTMS' | irtranslate }}</a>
             </li>
-            -->
           </ul>
         </li>
         <li><a href="#" ng-click="onLogOff()" ng-show="userRole != 'undefined'">LogOff</a></li> 
