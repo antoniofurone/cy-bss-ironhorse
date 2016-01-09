@@ -5,6 +5,7 @@ var ROLE_ADMIN="Administrator";
 var ROLE_USER="User";
 var ROLE_PARTNER="Partner";
 
+var CORE_URL="http://localhost:8080/cy-bss-core";
 
 
 function getLocalStorageItem(paramName){ 

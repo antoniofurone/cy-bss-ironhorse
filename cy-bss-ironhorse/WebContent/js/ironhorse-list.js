@@ -1,10 +1,10 @@
 	angular.module('irlist',[])
 	.factory('irticketstatus',function($http,$q){
-		return function(securityToken){
+		return function(securityToken,languageCode){
 			
 			var deferred = $q.defer();
 			callRestWs($http,'ticket/getStatusAll','GET',
-					{"Security-Token":securityToken},
+					{"Security-Token":securityToken,"Language":languageCode},
 					{},
 					function(response){
 							deferred.resolve(response);						
@@ -16,11 +16,11 @@
 		} 
 	})
 	.factory('irticketcategory',function($http,$q){
-		return function(securityToken){
+		return function(securityToken,languageCode){
 			
 			var deferred = $q.defer();
 			callRestWs($http,'ticket/getCategoryAll','GET',
-					{"Security-Token":securityToken},
+					{"Security-Token":securityToken,"Language":languageCode},
 					{},
 					function(response){
 							deferred.resolve(response);						

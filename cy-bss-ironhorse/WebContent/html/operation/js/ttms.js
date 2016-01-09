@@ -124,7 +124,7 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 				//alert(query);
 				
 				callRestWs($http,'ticket/find'+query,'GET',
-						{"Security-Token":$scope.securityToken},
+						headers,
 						{},
 						function(response){
 								deferred.resolve(response);

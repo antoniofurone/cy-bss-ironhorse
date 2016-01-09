@@ -80,7 +80,12 @@
 		
        	app.controller('logonCtrl', function($scope, $http,$translate) {
     	$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
-    	   
+    	
+    	if ($scope.coreUrl==undefined || $scope.coreUrl=='undefined' || $scope.coreUrl==''){
+    		$scope.coreUrl=CORE_URL;
+    		setLocalStorageItem("org.cysoft.bss.ih.coreurl",$scope.coreUrl);
+    	}
+    	
 	    $scope.onSubmit = function() {
 	    		$scope.errorMessage="";
 	    		
