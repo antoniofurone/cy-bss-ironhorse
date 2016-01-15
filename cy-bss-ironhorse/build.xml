@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="cy-bss-ironhorse" default="default">
+<property environment="env"/>
+<property name="dist.dir" value="dist"/>
+<property name="dist.webContent.dir" value="${dist.dir}/WebContent"/>
+<property name="deploydir" value="${dist.dir}"/>
+<echo>-- Start Display Property --</echo>
+<echo>Java Home: ${env.JAVA_HOME}</echo>
+<echo>Directory destinazione: ${dist.dir} --</echo>
+<echo>Location war: ${deploydir}/${ant.project.name}.war --</echo>
+<echo>Directory deploy: ${deploydir}</echo>
+<echo>-- End Display Property --</echo>
+	 						
+
+<target name="default" depends="setup,buildwar"/> 
+
+<target name="setup">
+	<echo>-- 1. Setup --</echo>
+	<delete dir="${dist.dir}"/>
+	<mkdir dir="${dist.dir}"/>
+	<copy todir="${dist.webContent.dir}">
+		<fileset dir="WebContent">
+			<exclude name="**/.*"/>
+		</fileset>
+	</copy>
+</target>				
+	
+<target name="buildwar">
+	<echo>-- 3. Build War --</echo>
+	<war basedir="${dist.webContent.dir}" destfile="${deploydir}/${ant.project.name}.war" webxml="${dist.webContent.dir}/WEB-INF/web.xml">
+	<exclude name="WEB-INF/**"/>
+	<webinf dir="${dist.webContent.dir}/WEB-INF/">
+	<include name="**/*.*"/>
+		<exclude name="**/.*"/>
+	</webinf>
+	</war>
+</target>	
+
+</project>
