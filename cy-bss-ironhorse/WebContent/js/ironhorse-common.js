@@ -7,6 +7,9 @@ var ROLE_PARTNER="Partner";
 
 var CORE_URL="http://localhost:8080/cy-bss-core";
 
+var URBANBOT_DEFAULT_LATITUDE=40.706160;
+var URBANBOT_DEFAULT_LONGITUDE=17.658472;
+
 
 function getLocalStorageItem(paramName){ 
 	if (typeof(Storage) !== "undefined") 
@@ -93,4 +96,11 @@ function setMenuCntl(app) {
 
 function manageError($scope,status,data){
 		$scope.errorMessage=status+" - "+data;	
+}
+
+function dateToStringDDMMYYYY(date){
+	var year=date.getFullYear().toString();
+	var month=(date.getMonth()+1).toString();
+	var day=date.getDate().toString();
+	return (day.length==2?day:"0"+day)+"/"+month+"/"+year;
 }

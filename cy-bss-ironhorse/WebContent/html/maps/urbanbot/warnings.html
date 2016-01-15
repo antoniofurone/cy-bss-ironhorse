@@ -16,6 +16,11 @@
        width: 700px
 </style>
    
+<style>
+   #loadBar {
+       width: 700px
+</style>
+   
 <script src="../../../js/jquery/1.11.3/jquery.min.js"></script>
 <script src="../../../js/bootstrap.min.js"></script> 
 <script src="../../../js/angularjs/1.3.15/angular.min.js"></script>
@@ -35,6 +40,21 @@
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	
 	<h4><span class="label label-default">{{'PAGE.TITLE' | translate }}</span></h4>
+	
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+	<div id="mapPlaceholder" ng-show="tickets.length>0">
+			If you don't see map, it's possible you are off-line...
+	</div>
+	
+	<div id="loadBar" class="progress" ng-show="tickets.length>0">
+      <div class="progress-bar progress-bar-striped active" role="progressbar"
+          aria-valuenow="{{loadProgress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{loadProgress}}%">
+       {{loadProgress}}% [{{count}}/{{tickets.length}}]
+      </div>
+ 	</div>
+ 	 
 	<form novalidate name="warnSearch" id="warnSearch" class="form-inline" role="form" method="post">
 	
 	<div class="form-group form-group-sm">
@@ -76,9 +96,9 @@
 	</button>		
 	
 	</form>
-<div class="col-sm-8 alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
-<div class="col-sm-8 alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
+	
+			
 </div>
 <script src="../../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
 
@@ -99,6 +119,9 @@ $('#datepickerTo').datepicker({
 });
 
 
+
+
+
 var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irlist'])
 		.config(function($translateProvider) {
 	     	$translateProvider
@@ -108,7 +131,10 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	     		'STATUS.LABEL':'Status',
 	     		'DATEFROM.LABEL':'From',
 	     		'DATETO.LABEL':'To',
-	     		'SEARCH.BUTTON':'Update Map'
+	     		'SEARCH.BUTTON':'Update Map',
+	     		'NOWARNS.MESSAGE':'Warnings not found',
+	     		'TYPE.LABEL':'Type',
+	     		'OPEN.LABEL':'Open'
 	     	  })
     		  
     		.translations('it',{
@@ -117,7 +143,10 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
     			'STATUS.LABEL':'Stato',
     			'DATEFROM.LABEL':'Dal',
     			'DATETO.LABEL':'Al',
-    			'DATETO.LABEL':'Aggiorna Mappa'
+    			'DATETO.LABEL':'Aggiorna Mappa',
+    			'NOWARNS.MESSAGE':'Nessuna segnalazione trovata',
+    			'TYPE.LABEL':'Tipo',
+    			'OPEN.LABEL':'Apri'
     		  });
 	     	
 	     	
@@ -125,9 +154,54 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	 	});
 	 	
 	 	
-app.controller('pageCtrl', function($q,$scope,$http,$translate,irticketstatus,irticketcategory) {
+app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irticketstatus,irticketcategory) {
 		
 	$scope.coreUrl=CORE_URL;
+	$scope.loadProgress=0;
+	
+	var currentDate_30=new Date();
+	currentDate_30.setDate(currentDate_30.getDate()-30);
+	
+	$scope.dateFrom=dateToStringDDMMYYYY(currentDate_30);
+	
+	var pinImageRed=undefined;
+	var pinImageGreen=undefined;
+	var pinImageOrange=undefined;
+	var pinImageGray=undefined;
+	var pinImageGray=undefined;
+    var center_coords=undefined;
+	
+	var pinShadow=undefined;
+	if (typeof google==='object' && typeof google.maps==='object'){
+		
+		center_coords = new google.maps.LatLng(URBANBOT_DEFAULT_LATITUDE, URBANBOT_DEFAULT_LONGITUDE);
+			
+		pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000",
+		        new google.maps.Size(21, 34),
+		        new google.maps.Point(0,0),
+		        new google.maps.Point(10, 34));
+		    
+		pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00",
+		        new google.maps.Size(21, 34),
+		        new google.maps.Point(0,0),
+		        new google.maps.Point(10, 34));
+
+		pinImageOrange = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFA500",
+		        new google.maps.Size(21, 34),
+		        new google.maps.Point(0,0),
+		        new google.maps.Point(10, 34));
+		        
+		pinImageGray = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|808080",
+		        new google.maps.Size(21, 34),
+		        new google.maps.Point(0,0),
+		        new google.maps.Point(10, 34));
+
+		
+		pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+		        new google.maps.Size(40, 37),
+		        new google.maps.Point(0, 0),
+		        new google.maps.Point(12, 35));
+	}
 	
 	irticketstatus($scope.securityToken,languageCode).then(function(response) {
 		if (response.data.resultCode==RESULT_OK){
@@ -183,20 +257,158 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irticketstatus,ir
 		};
 	// end $search	
 	
-	$search().then(function(response) {
-		if (response.data.resultCode==RESULT_OK){
-			alert (JSON.stringify(response));
-			//$scope.tickets=response.data.tickets;
-		}
-		else
-		{
-			manageError($scope,response.data.resultCode,response.data.resultDesc);
-		}
-    }, function(data, status, headers, config) {
-    	manageError($scope,status,data);
-    });
+	
+	var $setMarker= function(map,ticket) {
+		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};		
+		callRestWs($http,'ticket/'+ticket.id+'/get','GET',
+			headers,
+			{},
+			function(response){
+				ticket=response.data.ticket;
+				console.log("ticket="+JSON.stringify(ticket));
+				callRestWs($http,'ticket/'+ticket.id+'/getFiles','GET',
+						{"Security-Token":$scope.securityToken},
+						{},
+						function(response){
+							var files=response.data.files;
+							console.log("files="+JSON.stringify(files));
+							
+							if (typeof google==='object' && typeof google.maps==='object'){
+								var position=undefined;
+								
+								var min = .999999;
+								var max = 1.000001;
+								
+								if (ticket.locationId==0 || ticket.location==undefined)
+									position=new google.maps.LatLng(URBANBOT_DEFAULT_LATITUDE*(Math.random()*(max - min) + min), 
+											URBANBOT_DEFAULT_LONGITUDE*(Math.random()*(max - min) + min));
+								else
+									position=new google.maps.LatLng(ticket.location.latitude*(Math.random()*(max - min) + min),
+											ticket.location.longitude*(Math.random()*(max - min) + min));
+								
+								var pinImage=pinImageOrange;
+								var textColor='Orange';
+								if (ticket.statusId==2){
+									pinImage=pinImageRed;
+									textColor='Red';
+								}
+								if (ticket.statusId==3){
+									pinImage=pinImageGreen;
+									textColor='Green';
+								}
+								if (ticket.statusId==4){
+									pinImage=pinImageGray;
+									textColor='Gray';
+								}
+							
+								var person=(ticket.personId==0?'':(ticket.personFirstName==undefined 
+										|| ticket.personFirstName=='null'?'':'['+ticket.personFirstName+']'));
+								var contentString = '<div id="content">'+
+								  '<p style="color:'+textColor+';"><strong>'+ticket.text+'</strong></p>';
+								  
+								if (files.length>0){
+									contentString+='<table border=1><tr><th>Content</th><th>'+$filter('translate')('TYPE.LABEL') +'</th><th></th></tr>';  
+									for(var k in files){
+										contentString+='<tr><td>'+files[k].contentType+'</td>'+
+											'<td>'+files[k].fileType+'</td>'+
+											'<td><a href="'+$scope.coreUrl+'/fileservice/file/'+files[k].id+'/download">'+$filter('translate')('OPEN.LABEL')+'</a></td>'+
+											'</tr>';
+											
+									}
+									contentString+='</table>'				
+								}
+								contentString+='</div>';
+								
+							    
+							    var infowindow = new google.maps.InfoWindow({
+							    	    content: contentString
+							    	  });
+  							
+								var marker = new google.maps.Marker({
+					                position: position, 
+					                map: map,
+					                icon: pinImage,
+					                shadow: pinShadow,
+					                title: '#'+ticket.id +' '+person 
+					            });
+								
+								marker.addListener('click', function() {
+								    infowindow.open(map, marker);
+								  });
+							}		
+							
+							}, 
+							function(data, status, headers, config){
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							});
+			}, 
+			function(data, status, headers, config){
+				manageError($scope,response.data.resultCode,response.data.resultDesc);	
+			});
+		
+		
+	};
 	
 	
+	$scope.onSearch = function() {
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		$scope.loadProgress=0;
+		
+		if (!navigator.geolocation){
+			alert("Geolocation API not supported.");
+			return;
+		}
+        	
+		
+		$search().then(function(response) {
+			if (response.data.resultCode==RESULT_OK){
+				//alert (JSON.stringify(response));
+				$scope.tickets=response.data.tickets;
+				console.log("ticket.length="+$scope.tickets.length);
+				if ($scope.tickets.length>0){
+					
+					var map = undefined;
+					if (typeof google==='object' && typeof google.maps==='object'){
+						
+						var mapOptions = {
+				                zoom: 11,
+				                center: center_coords,
+				                mapTypeControl: true,
+				                mapTypeId: google.maps.MapTypeId.ROADMAP
+				            	};
+						map = new google.maps.Map(
+				                document.getElementById("mapPlaceholder"), mapOptions
+				                );
+					}
+					
+					$scope.count=0;
+					for(var i in $scope.tickets){
+						$setMarker(map,$scope.tickets[i]);
+						$scope.count++;
+						$scope.loadProgress=$scope.count/$scope.tickets.length*100;
+						}
+				}
+				else
+					{
+					$translate('NOWARNS.MESSAGE')
+	    	          .then(function (translatedValue) {
+	    	              $scope.errorMessage=translatedValue;
+	    	          });
+					}
+				
+			}
+			else
+			{
+				manageError($scope,response.data.resultCode,response.data.resultDesc);
+			}
+	    }, function(data, status, headers, config) {
+	    	manageError($scope,status,data);
+	    });
+		}
+	// end onSearch
+	
+	$scope.onSearch();
 });
 </script>
 
