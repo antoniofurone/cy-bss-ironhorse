@@ -79,53 +79,53 @@
 	 	});
 		
        	app.controller('logonCtrl', function($scope, $http,$translate) {
-    	$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
     	
-    	if ($scope.coreUrl==undefined || $scope.coreUrl=='undefined' || $scope.coreUrl==''){
-    		$scope.coreUrl=CORE_URL;
-    		setLocalStorageItem("org.cysoft.bss.ih.coreurl",$scope.coreUrl);
-    	}
-    	
-	    $scope.onSubmit = function() {
+       		$scope.coreUrl=CORE_URL;
+	       	var coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
+	    	
+	    	if (coreUrl==undefined || coreUrl=='undefined' || coreUrl=='' || $scope.coreUrl!=coreUrl)
+	    		setLocalStorageItem("org.cysoft.bss.ih.coreurl",$scope.coreUrl);
+	    	
+		    $scope.onSubmit = function() {
+		    		$scope.errorMessage="";
+		    		
+		    		if (!$scope.logon.$valid)
+		    			return;
+		    		
+		    		
+		    		callRestWs($http,'cybss-auth/logOn','POST',
+		    				{"Security-Token": $scope.securityToken},
+		    				{"userId":$scope.userId,"pwd":$scope.pwd},
+		    				function(response){
+		   						if (response.data.resultCode==RESULT_OK){
+		   							
+		   							setLocalStorageItem("org.cysoft.bss.ih.securityToken", response.data.securityToken);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.id", response.data.user.id);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.userId", response.data.user.userId);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.roleId", response.data.user.roleId);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.role", response.data.user.role);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.languageId", response.data.user.languageId);
+		   							setLocalStorageItem("org.cysoft.bss.ih.user.languageCode", response.data.user.languageCode);
+		   	       			 		
+		   							$("#logon").attr("action","../index.html");
+		   	       		 			$("#logon").submit();
+		   						}
+		   						else
+		   						{
+		   							manageError($scope,response.data.resultCode,response.data.resultDesc);
+		   						}
+		   					}, 
+		   					function(data, status, headers, config){
+		   							manageError($scope,status,data);
+		   					});
+		    		
+	    		}
+	    	 
+			$scope.onReset = function() {
+	    		$scope.userId="";
+	    		$scope.pwd="";
 	    		$scope.errorMessage="";
-	    		
-	    		if (!$scope.logon.$valid)
-	    			return;
-	    		
-	    		
-	    		callRestWs($http,'cybss-auth/logOn','POST',
-	    				{"Security-Token": $scope.securityToken},
-	    				{"userId":$scope.userId,"pwd":$scope.pwd},
-	    				function(response){
-	   						if (response.data.resultCode==RESULT_OK){
-	   							
-	   							setLocalStorageItem("org.cysoft.bss.ih.securityToken", response.data.securityToken);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.id", response.data.user.id);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.userId", response.data.user.userId);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.roleId", response.data.user.roleId);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.role", response.data.user.role);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.languageId", response.data.user.languageId);
-	   							setLocalStorageItem("org.cysoft.bss.ih.user.languageCode", response.data.user.languageCode);
-	   	       			 		
-	   							$("#logon").attr("action","../index.html");
-	   	       		 			$("#logon").submit();
-	   						}
-	   						else
-	   						{
-	   							manageError($scope,response.data.resultCode,response.data.resultDesc);
-	   						}
-	   					}, 
-	   					function(data, status, headers, config){
-	   							manageError($scope,status,data);
-	   					});
-	    		
-    		}
-    	 
-		$scope.onReset = function() {
-    		$scope.userId="";
-    		$scope.pwd="";
-    		$scope.errorMessage="";
-    	}
+	    	}
 		
        });   
        

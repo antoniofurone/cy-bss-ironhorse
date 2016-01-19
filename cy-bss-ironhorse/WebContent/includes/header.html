@@ -10,6 +10,9 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'MENU.ADMIN' | irtranslate }}
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li ng-show="userRole == 'userRole != 'undefined'">
+            	<a href="/cy-bss-ironhorse/html/admin/changePwd.html">{{'MENU.ADMIN.CHPWD' | irtranslate }}</a>
+            </li>
             <li ng-show="userRole == 'Super Administrator' || userRole == 'Administrator'">
             	<a href="/cy-bss-ironhorse/html/admin/user.html">{{'MENU.ADMIN.USER' | irtranslate }}</a>
             </li>
