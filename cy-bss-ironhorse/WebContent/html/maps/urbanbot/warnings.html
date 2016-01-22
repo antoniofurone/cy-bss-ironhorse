@@ -144,7 +144,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
     			'STATUS.LABEL':'Stato',
     			'DATEFROM.LABEL':'Dal',
     			'DATETO.LABEL':'Al',
-    			'DATETO.LABEL':'Aggiorna Mappa',
+    			'SEARCH.BUTTON':'Aggiorna Mappa',
     			'NOWARNS.MESSAGE':'Nessuna segnalazione trovata',
     			'TYPE.LABEL':'Tipo',
     			'OPEN.LABEL':'Apri'
@@ -300,16 +300,19 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 						
 						
 						if (files.length>0){
-							contentString+='<table border=1>';
+							contentString+='<table border="1">';
 							//contentString+='<tr><th>Content</th><th>'+$filter('translate')('TYPE.LABEL') +'</th><th></th></tr>';  
 							for(var k in files){
-								contentString+='<tr valign="top"><td>'+files[k].contentType+'</td>'+
+								contentString+='<tr valign="top">'+
 									'<td>'+files[k].fileType+'</td>'+
 									'<td><a href="'+$scope.coreUrl+'/fileservice/file/'+files[k].id+'/download">'+$filter('translate')('OPEN.LABEL')+'</a></td>';
+								
 								if (files[k].fileType=='Photo')
 									contentString+='<td><img width="50" src="'+$scope.coreUrl+'/fileservice/file/'+files[k].id+'/download"></td>';
 								else
 									contentString+='<td></td>';
+								
+								contentString+='<td>'+files[k].contentType+'</td>';
 								contentString+='</tr>';
 									
 							}
