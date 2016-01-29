@@ -94,7 +94,7 @@
 		    		
 		    		
 		    		callRestWs($http,'cybss-auth/logOn','POST',
-		    				{"Security-Token": $scope.securityToken},
+		    				{},
 		    				{"userId":$scope.userId,"pwd":$scope.pwd},
 		    				function(response){
 		   						if (response.data.resultCode==RESULT_OK){
@@ -107,8 +107,30 @@
 		   							setLocalStorageItem("org.cysoft.bss.ih.user.languageId", response.data.user.languageId);
 		   							setLocalStorageItem("org.cysoft.bss.ih.user.languageCode", response.data.user.languageCode);
 		   	       			 		
-		   							$("#logon").attr("action","../index.html");
-		   	       		 			$("#logon").submit();
+		   							$scope.securityToken= response.data.securityToken;
+		   							callRestWs($http,'app/getByName?name=Urbanbot','GET',
+		   									{"Security-Token":$scope.securityToken},
+		   				    				{},
+		   				    				function(response){
+		   				   						if (response.data.resultCode==RESULT_OK){
+		   				   							var app=response.data.app;
+		   				   							if (app==undefined || app==null)
+		   				   								setLocalStorageItem("org.cysoft.bss.ih.urbanbotmenu", 'N');
+		   				   							else
+		   				   								setLocalStorageItem("org.cysoft.bss.ih.urbanbotmenu", 'Y');
+		   				   							
+		   				   							$("#logon").attr("action","../index.html");
+		   				   	       		 			$("#logon").submit();
+		   				   						}
+		   				   						else
+		   				   						{
+		   				   							manageError($scope,response.data.resultCode,response.data.resultDesc);
+		   				   						}
+		   				   					}, 
+		   				   					function(data, status, headers, config){
+		   				   							manageError($scope,status,data);
+		   				   					});
+		   				    		
 		   						}
 		   						else
 		   						{

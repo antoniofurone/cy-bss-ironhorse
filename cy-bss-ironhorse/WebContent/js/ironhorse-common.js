@@ -44,7 +44,7 @@ function callRestWs($http,endPoint,method,headers,data,success,error){
 	request+='"headers": '+JSON.stringify(headers)+',';
 	request+='"data": '+JSON.stringify(data)+'}';
 	
-	console.log("request="+request);
+	console.log('request='+request);
 	
 	//alert(request);
 	
@@ -67,9 +67,13 @@ function setMenuCntl(app) {
 		var userRole=getLocalStorageItem('org.cysoft.bss.ih.user.role');
 		if (userRole!=undefined)
 			$scope.userRole=userRole;
-		console.log("user role="+$scope.userRole);
 		
-		 $scope.onLogOff = function() {
+		console.log('user role='+$scope.userRole);
+		$scope.urbanbotMenu=getLocalStorageItem("org.cysoft.bss.ih.urbanbotmenu");
+		console.log('urbanbotMenu='+$scope.urbanbotMenu);
+		
+		
+		$scope.onLogOff = function() {
 			 $scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 			 callRestWs($http,'cybss-auth/logOff','GET',
 					 {"Security-Token": $scope.securityToken},

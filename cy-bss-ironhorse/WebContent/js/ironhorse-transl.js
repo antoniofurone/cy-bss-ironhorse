@@ -6,8 +6,12 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Change Password",
 				
 				"MENU.OPERATION":"Operation",
-				"MENU.OPERATION.TTMS":"TTMS"
-					
+				"MENU.OPERATION.TTMS":"TTMS",
+				
+				"MENU.MAPS":"Maps",
+				"MENU.MAPS.URBANBOT.WARN":"Warnings",
+				"MENU.MAPS.URBANBOT.STORIES":"Stories",
+				"MENU.MAPS.URBANBOT.SITES":"Tourist Sites"
 			},
 		"it":
 			{
@@ -16,8 +20,13 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Modifica Password",
 				
 				"MENU.OPERATION":"Operation",
-				"MENU.OPERATION.TTMS":"TTMS"
+				"MENU.OPERATION.TTMS":"TTMS",
 					 
+				"MENU.MAPS":"Mappe",
+				"MENU.MAPS.URBANBOT.WARN":"Segnalazioni",
+				"MENU.MAPS.URBANBOT.STORIES":"Storie",
+				"MENU.MAPS.URBANBOT.SITES":"Siti Turistici"
+		
 			}
 		};
 

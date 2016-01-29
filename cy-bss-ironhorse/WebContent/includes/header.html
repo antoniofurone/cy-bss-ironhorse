@@ -10,7 +10,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'MENU.ADMIN' | irtranslate }}
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li ng-show="userRole == 'userRole != 'undefined'">
+            <li ng-show="userRole != 'undefined'">
             	<a href="/cy-bss-ironhorse/html/admin/changePwd.html">{{'MENU.ADMIN.CHPWD' | irtranslate }}</a>
             </li>
             <li ng-show="userRole == 'Super Administrator' || userRole == 'Administrator'">
@@ -26,6 +26,21 @@
             	<a href="/cy-bss-ironhorse/html/operation/ttms.html">{{'MENU.OPERATION.TTMS' | irtranslate }}</a>
             </li>
           </ul>
+        </li>
+        <li class="dropdown" ng-show="userRole != 'undefined' && urbanbotMenu=='Y'">
+        	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Urbanbot
+        	<span class="caret"></span></a>
+        	<ul class="dropdown-menu">
+        		<li>
+            		<a href="/cy-bss-ironhorse/html/maps/urbanbot/warnings.html" target="_blank">{{'MENU.MAPS.URBANBOT.WARN' | irtranslate }}</a>
+            	</li>
+            	<li>
+            		<a href="/cy-bss-ironhorse/html/maps/urbanbot/stories.html" target="_blank">{{'MENU.MAPS.URBANBOT.STORIES' | irtranslate }}</a>
+            	</li>
+            	<li>
+            		<a href="/cy-bss-ironhorse/html/maps/urbanbot/touristSites.html" target="_blank">{{'MENU.MAPS.URBANBOT.SITES' | irtranslate }}</a>
+            	</li>
+            </ul>	
         </li>
         <li><a href="#" ng-click="onLogOff()" ng-show="userRole != 'undefined'">LogOff</a></li> 
       </ul>
