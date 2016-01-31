@@ -63,6 +63,12 @@
 
 	app.controller('pageCtrl', function($scope, $http,$translate,$window) {
 	
+		$scope.coreUrl=CORE_URL;
+       	var coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
+    	
+    	if (coreUrl==undefined || coreUrl=='undefined' || coreUrl=='' || $scope.coreUrl!=coreUrl)
+    		setLocalStorageItem("org.cysoft.bss.ih.coreurl",$scope.coreUrl);
+    	
 		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 		$scope.showWelcome=false;
 		

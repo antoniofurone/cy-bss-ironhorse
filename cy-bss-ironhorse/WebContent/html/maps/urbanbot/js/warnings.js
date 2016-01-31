@@ -117,7 +117,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 			//alert (JSON.stringify(response));
 			$scope.states=response.data.ticketStates;
 			
-			irticketcategory($scope.securityToken).then(function(response) {
+			irticketcategory($scope.securityToken,languageCode).then(function(response) {
     			if (response.data.resultCode==RESULT_OK){
 					//alert (JSON.stringify(response));
 					$scope.categories=response.data.ticketCategories;
