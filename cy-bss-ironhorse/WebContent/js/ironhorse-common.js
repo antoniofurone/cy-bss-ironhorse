@@ -72,7 +72,6 @@ function setMenuCntl(app) {
 		$scope.urbanbotMenu=getLocalStorageItem("org.cysoft.bss.ih.urbanbotmenu");
 		console.log('urbanbotMenu='+$scope.urbanbotMenu);
 		
-		
 		$scope.onLogOff = function() {
 			 $scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 			 callRestWs($http,'cybss-auth/logOff','GET',
@@ -95,6 +94,7 @@ function setMenuCntl(app) {
 			 
 		 }
 		
+		
 	});  
 }
 
@@ -108,3 +108,4 @@ function dateToStringDDMMYYYY(date){
 	var day=date.getDate().toString();
 	return (day.length==2?day:"0"+day)+"/"+month+"/"+year;
 }
+

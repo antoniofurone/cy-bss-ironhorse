@@ -5,6 +5,9 @@ var menuMapTranslation={
 				"MENU.ADMIN.USER":"Manage users",
 				"MENU.ADMIN.CHPWD":"Change Password",
 				
+				"MENU.ENTITY":"Entity",
+				"MENU.ENTITY.PERSON":"Person",
+				
 				"MENU.OPERATION":"Operation",
 				"MENU.OPERATION.TTMS":"TTMS",
 				
@@ -18,6 +21,9 @@ var menuMapTranslation={
 				"MENU.ADMIN":"Amministrazione",
 				"MENU.ADMIN.USER":"Gestione utenti",
 				"MENU.ADMIN.CHPWD":"Modifica Password",
+				
+				"MENU.ENTITY":"Entita'",
+				"MENU.ENTITY.PERSON":"Persona",
 				
 				"MENU.OPERATION":"Operation",
 				"MENU.OPERATION.TTMS":"TTMS",

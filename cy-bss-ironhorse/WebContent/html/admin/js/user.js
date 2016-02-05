@@ -89,7 +89,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	$scope.onBack = function() {
 		resetForm($scope);
 		$scope.showList=true;
-		search($http,$scope);
+		if ($scope.users!=undefined)
+			search($http,$scope);
 	}
 	
 	$scope.onNew = function() {
