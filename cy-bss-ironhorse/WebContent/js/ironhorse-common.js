@@ -58,6 +58,25 @@ function callRestWs($http,endPoint,method,headers,data,success,error){
 			});
 }
 
+function callFileServiceWs($http,endPoint,method,headers,data,success,error){
+	var request = '{"method": "'+method+'","url": "';
+	request+=getLocalStorageItem("org.cysoft.bss.ih.coreurl")+'/fileservice/'+endPoint+'",'; 
+	request+='"headers": '+JSON.stringify(headers)+',';
+	request+='"data": '+JSON.stringify(data)+'}';
+	
+	console.log('request='+request);
+	
+	//alert(request);
+	
+	var reqObj=JSON.parse(request);
+   	$http(reqObj).then(
+			function(response){
+				success(response);
+			}, 
+			function(data, status, headers, config){
+				error(data, status, headers, config);
+			});
+}
 
 
 

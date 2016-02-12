@@ -7,6 +7,7 @@ var menuMapTranslation={
 				
 				"MENU.ENTITY":"Entity",
 				"MENU.ENTITY.PERSON":"Person",
+				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
 				"MENU.OPERATION.TTMS":"TTMS",
@@ -24,6 +25,7 @@ var menuMapTranslation={
 				
 				"MENU.ENTITY":"Entita'",
 				"MENU.ENTITY.PERSON":"Persona",
+				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
 				"MENU.OPERATION.TTMS":"TTMS",

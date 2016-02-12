@@ -173,8 +173,9 @@
 			<table class="table-condensed table-bordered table-striped">
 				<tbody>
 			    	<tr class="small" ng-repeat="file in files">
-			    		<td><a href="{{coreUrl+'/fileservice/file/'+file.id+'/download'}}"><span class="glyphicon glyphicon-open">{{'OPEN.LABEL' | translate }}</span></a></td>
+			    		<td><a ng-show="file.visibility=='P'" href="{{coreUrl+'/fileservice/file/'+file.id+'/download'}}"><span class="glyphicon glyphicon-open">{{'OPEN.LABEL' | translate }}</span></a></td>
 			    		<td>{{ file.contentType }}</td>
+			    		<td>{{ file.fileType }}</td>
 			    		<td>{{ file.note }}</td>
 			    	</tr>
 			    </tbody>		  		

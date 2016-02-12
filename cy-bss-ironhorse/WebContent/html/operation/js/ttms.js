@@ -276,7 +276,12 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 				                    map: map,
 				                    title: $scope.ticket.text
 				                    });
+				            
+				                google.maps.event.addDomListener(window, 'resize', function() {
+									map.setCenter(coords);
+									});
 							}
+							
 			            }
 			            else
 			            {

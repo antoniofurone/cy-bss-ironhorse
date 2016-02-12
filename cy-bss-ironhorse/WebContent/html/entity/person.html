@@ -25,6 +25,10 @@
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
 	
+	<div class="col-sm-8 alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="col-sm-8 alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+	
 	<form novalidate name="personForm" id="personForm" class="form-inline" role="form" method="post">
 	
 	<div id='list' ng-show="detail">
@@ -38,38 +42,102 @@
 		</br></br>
 				
 		<div class="form-group form-group-sm">
-			<label for="code">{{'CODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="code" id="code" type="text" ng-model="code" size="15" required/></div>
+			<label for="_code">{{'CODE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="15" required/></div>
 		</div>
       		
 		<div class="form-group form-group-sm">
-			<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="firstName" id="firstName" type="text" ng-model="firstName" size="30" required/></div>
+			<label for="_firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_firstName" id="_firstName" type="text" ng-model="_firstName" size="30" required/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
-			<label for="secondName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="secondName" id="secondName" type="text" ng-model="secondName" size="30" required/></div>
+			<label for="_secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_secondName" id="_secondName" type="text" ng-model="_secondName" size="30" required/></div>
 		</div>
       	
+      	<div class="form-group form-group-sm">
+			<label for="_selectedGender">{{'GENDER.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedGender" name="_selectedGender" class="form-control" ng-model="_selectedGender">
+		        	 <option value=""> </option>
+		        	 <option value="M">{{'MALE.GENDER' | translate }}</option>
+		        	 <option value="F">{{'FEMALE.GENDER' | translate }}</option>
+		        </select>
+		   	</div>
+		</div>
+			
+      	<div class="form-group form-group-sm">
+			<label for="_address">{{'ADDRESS.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_address" id="_address" type="text" ng-model="_address" size="40"/></div>
+		</div>
+      	
+      	<div class="form-group form-group-sm">
+			<label for="_zip">{{'ZIP.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_zip" id="_zip" type="text" ng-model="_zip" size="10"/></div>
+		</div>
+      	
+      	<div class="form-group form-group-sm">
+			<label for="_selectedCityId">{{'CITY.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedCityId" name="_selectedCityId" class="form-control" ng-model="_selectedCityId">
+		        	 <option value=""> </option>
+		        </select>
+		   	</div>
+		</div>
+		
+      	<div class="form-group form-group-sm">
+			<label for="_fiscalCode">{{'FISCALCODE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_fiscalCode" id="_fiscalCode" type="text" ng-model="_fiscalCode" size="16"/></div>
+		</div>
+      	
+      	<div class="form-group form-group-sm">
+			<label for="_birthDay">{{'BIRTHDAY.LABEL' | translate }}:</label>
+			<div>
+			<div class="input-group date" id="datepickerBirth">
+	           <input class="form-control" type="text" name="_birthDay" id="_birthDay" type="text"  ng-model="_birthDay"/>
+	           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	        </div>
+	        </div>	
+		</div>
+	
+		<div class="form-group form-group-sm">
+			<label for="_selectedBornCityId">{{'BORNCITY.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedBornCityId" name="_selectedBornCityId" class="form-control" ng-model="_selectedBornCityId">
+		        	 <option value=""> </option>
+		        </select>
+		   	</div>
+		</div>
+		
+		<h6>
+			<span class="label label-warning" ng-show="personForm._code.$error.required" translate>CODE.REQUIRED</span>
+    		<span class="label label-warning" ng-show="personForm._firstName.$error.required" translate>FIRSTNAME.REQUIRED</span>
+    		<span class="label label-warning" ng-show="personForm._secondName.$error.required" translate>SECONDNAME.REQUIRED</span>
+		</h6>
+		
+      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
+		<button type="button" ng-show="!modify" class="btn btn-sm btn-info" ng-click="onReset()" translate>RESET.BUTTON</button>
+		
+      	
 	</div>
+	<!--  end detail -->
 	
 	<div ng-show="!detail">
 		<h4><span class="label label-default">{{'PERSON.TITLE' | translate }}</span></h4>
 	
-		<form novalidate name="personSearch" id="personSearch" class="form-inline" role="form" method="post">
 			<div class="form-group form-group-sm">
-				<label for="text">{{'CODE.LABEL' | translate }}:</label>
+				<label for="code">{{'CODE.LABEL' | translate }}:</label>
 				<input class="form-control" type="text" name="code" id="code" type="text"  ng-model="code">
 			</div>
 		
 			<div class="form-group form-group-sm">
-				<label for="text">{{'FIRSTNAME.LABEL' | translate }}:</label>
+				<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
 				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  ng-model="firstName">
 			</div>
 			
 			<div class="form-group form-group-sm">
-				<label for="text">{{'SECONDNAME.LABEL' | translate }}:</label>
+				<label for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
 				<input class="form-control" type="text" name="secondName" id="secondName" type="text"  ng-model="secondName">
 			</div>
 			
@@ -83,7 +151,6 @@
 			</button>
 				
 			
-		</form>
 		
 		<div class="col-sm-8 alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
 		<div class="col-sm-8 alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
@@ -129,12 +196,25 @@
 	</table>
 	
 	</div>
+	<!-- end list -->
+	
+	
 	</form>
 	
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
 <script>
+var languageCode=getLanguage();
+
+
+$('#datepickerBirth').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('datepickerBirth:'+e.date);
+});
+
+
 var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch'])
 .config(function($translateProvider) {
  	$translateProvider
@@ -152,8 +232,18 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'EDIT.BUTTON':'Edit',
  		'DELETE.BUTTON':'Delete',
  		'PERSON.TITLE':'Person',
- 		'NEW.TITLE':'Nuova',
- 		'MODIFY.TITLE':'Modifica'
+ 		'NEW.TITLE':'New',
+ 		'GENDER.LABEL':'Gender',
+ 		'MALE.GENDER':'Male',
+ 		'FEMALE.GENDER':'Female',
+ 		'BIRTHDAY.LABEL':'Birth Day',
+ 		'BORNCITY.LABEL':'Born City',
+ 		'MODIFY.TITLE':'Change',
+ 		'CODE.REQUIRED':'Code is required',
+ 		'FIRSTNAME.REQUIRED':'First name is required',
+ 		'SECONDNAME.REQUIRED':'Second name is required',
+ 		'SUBMIT.BUTTON':'Submit',
+	    'RESET.BUTTON': 'Reset'
  	  })
 	  
 	.translations('it',{
@@ -170,8 +260,18 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'EDIT.BUTTON':'Modifica',
  		'DELETE.BUTTON':'Cancella',
  		'PERSON.TITLE':'Persona',
- 		'NEW.TITLE':'New',
- 		'MODIFY.TITLE':'Change'
+ 		'GENDER.LABEL':'Sesso',
+ 		'MALE.GENDER':'Maschio',
+ 		'FEMALE.GENDER':'Femmina',
+ 		'BIRTHDAY.LABEL':'Data di nascita',
+ 		'NEW.TITLE':'Nuova',
+ 		'BORNCITY.LABEL':'Città di nascita',
+ 		'MODIFY.TITLE':'Modifica',
+ 		'CODE.REQUIRED':'Codice obbligatorio',
+ 		'FIRSTNAME.REQUIRED':'Nome obbligatorio',
+ 		'SECONDNAME.REQUIRED':'Cognome obbligatorio',
+ 		'SUBMIT.BUTTON':'Submit',
+	    'RESET.BUTTON': 'Reset'
  	  });
  	
  	

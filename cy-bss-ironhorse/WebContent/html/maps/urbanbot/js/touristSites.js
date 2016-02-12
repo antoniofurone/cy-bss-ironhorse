@@ -103,15 +103,19 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 					if (files.length>0){
 						contentString+='<table border=1>';
 						for(var k in files){
-							contentString+='<tr class="small" valign="top">'+
-								'<td  style="padding: 2px;"><a href="'+$scope.coreUrl+'/fileservice/file/'+
-									files[k].id+'/download"><span class="glyphicon glyphicon-open">'+$filter('translate')('OPEN.LABEL')+'</span></a></td>';
+							
+							contentString+='<tr class="small" valign="top"><td  style="padding: 2px;">';
+							if (files[k].visibility=='P')
+								contentString+='<a href="'+$scope.coreUrl+'/fileservice/file/'+
+										files[k].id+'/download"><span class="glyphicon glyphicon-open">'+$filter('translate')('OPEN.LABEL')+'</span></a>';
+							contentString+='</td>';
+							
 							//contentString+='<td style="padding: 2px;">'+files[k].contentType+'</td>';
 							contentString+='<td style="padding: 2px;">'+files[k].fileType+'</td>';
 							contentString+='<td style="padding: 2px;">'+files[k].note+'</td>';
 							
 							
-							if (files[k].fileType=='Photo')
+							if (files[k].fileType=='Photo' && files[k].visibility=='P')
 								contentString+='<td><img width="40" src="'+$scope.coreUrl+'/fileservice/file/'+files[k].id+'/download"></td>';
 							else
 								contentString+='<td></td>';

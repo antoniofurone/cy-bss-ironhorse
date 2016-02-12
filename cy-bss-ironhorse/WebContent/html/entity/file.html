@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Iron Horse - File</title>
+	
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/bootstrap-theme.css" type="text/css"/>
+	
+	<script src="../../js/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script> 
+	<script src="../../js/angularjs/1.3.15/angular.min.js"></script>
+	<script src="../../js/angular-translate/2.8.1/angular-translate.min.js"></script>
+	<script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+	
+	
+	<script src="../../js/ironhorse-common.js"></script>
+	<script src="../../js/ironhorse-transl.js"></script>
+	<script src="../../js/ironhorse-search.js"></script>
+	
+</head>
+<body>
+	<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+		<div class="page-header" ng-include="'../../includes/header.html'" ></div>	
+		
+		<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+		<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+		
+		<form novalidate name="fileForm" id="fileForm" class="form-inline" role="form" method="post">
+			<h4><span class="label label-default">{{'FILE.TITLE' | translate }}</span></h4>
+	
+			<div class="form-group form-group-sm">
+				<label for="name">{{'NAME.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
+			</div>
+			<div class="form-group form-group-sm">
+				<label for="type">{{'TYPE.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="type" id="type" type="text"  ng-model="type">
+			</div>
+			<div class="form-group form-group-sm">
+				<label for="entity">{{'ENTITY.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="entity" id="entity" type="text"  ng-model="entity">
+			</div>
+		
+			<div class="form-group form-group-sm">
+			<label for="visibility">{{'VISIBILITY.LABEL' | translate }}:</label>
+				<select id="visibility" name="visibility" class="form-control" ng-model="visibility">
+		        	 <option value=""> </option>
+		        	 <option value="P">{{'PUBLIC.VISIBILITY' | translate }}</option>
+		        	 <option value="R">{{'RESERVED.VISIBILITY' | translate }}</option>
+		        </select>
+		   	</div>
+			
+			<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
+				<span class="glyphicon glyphicon-search"></span>
+				{{'SEARCH.BUTTON' | translate }}
+			</button>
+		
+		</form>
+		
+		<br><br>
+		
+		<table class="table table-bordered table-striped" ng-show="files.length>0">
+		<thead>
+			<tr class="info small">
+			<th></th>
+	    	<th>Id</th>
+			<th>{{'NAME.LABEL' | translate }}</th>
+			<th>{{'LENGTH.LABEL' | translate }}</th>
+			<th>{{'TYPE.LABEL' | translate }}</th>
+			<th>{{'ENTITY.LABEL' | translate }}</th>
+			<th>{{'ENTITY_ID.LABEL' | translate }}</th>
+			<th>{{'CONTENT_TYPE.LABEL' | translate }}</th>
+			<th>{{'NOTE.LABEL' | translate }}</th>
+			<th></th>
+	     	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr class="small" ng-repeat="file in files">
+	    		<td>
+	    			<a href="{{coreUrl+'/fileservice/file/'+securityToken+'/'+file.id+'/download'}}">
+	      				<span class="glyphicon glyphicon-open">{{'OPEN.LABEL' | translate }}</span>
+	      			</a>
+	    		</td>
+	    		<td>{{ file.id }}</td>
+	    		<td>{{ file.name }}</td>
+	    		<td>{{ file.length }}</td>
+	    		<td>{{ file.fileType}}</td>
+	    		<td>{{ file.entityName }}</td>
+	    		<td>{{ file.entityId==0?'':file.entityId }}</td>
+	    		<td>{{ file.contentType }}</td>
+	    		<td>{{ file.note }}</td>
+	    		
+	    		<td> 
+	      			<button class="btn btn-info btn-xs" ng-click="makePublic(file.id)" ng-show="file.visibility=='R'">
+	      			<span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;{{'MAKEPUBLIC.BUTTON' | translate }}
+	      			</button>
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="makeReserved(file.id)" ng-show="file.visibility=='P'">
+	      			<span class="glyphicon glyphicon glyphicon-off"></span>&nbsp;&nbsp;{{'MAKERESERVED.BUTTON' | translate }}
+	      			</button>
+	      			
+	      			&nbsp;&nbsp;
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="deleteFile(file.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    			
+	    			
+	    		</td>
+	    	</tr>
+	    </tbody>		  		
+	      	
+	</table>
+				
+		
+	</div>
+	
+	<script>
+	
+	var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch'])
+	.config(function($translateProvider) {
+	 	$translateProvider
+	 	.translations('en',{
+	 		'SEARCH.BUTTON':'Search',
+	 		'FILE.TITLE':'File',
+	 		'NAME.LABEL':'Name',
+	 		'TYPE.LABEL':'Type',
+	 		'LENGTH.LABEL':'Size (Byte)',
+	 		'ENTITY.LABEL':'Entity',
+	 		'ENTITY_ID.LABEL':'Entity Id',
+	 		'CONTENT_TYPE.LABEL':'Content Type',
+	 		'VISIBILITY.LABEL':'Visibility',
+	 		'NOTE.LABEL':'Note',
+	 		'OPEN.LABEL':'Open',
+	 		'PUBLIC.VISIBILITY':'Public',
+	 		'RESERVED.VISIBILITY':'Protected',
+	 		'MAKEPUBLIC.BUTTON':'Publish',
+	 		'MAKERESERVED.BUTTON':'Protect',
+	 		'DELETE.BUTTON':'Delete'
+	 	  })
+		  
+		.translations('it',{
+			'SEARCH.BUTTON':'Ricerca',
+			'FILE.TITLE':'File',
+			'NAME.LABEL':'Nome',
+			'TYPE.LABEL':'Tipo',
+			'LENGTH.LABEL':'Dim (Byte)',
+			'ENTITY.LABEL':'Entità',
+			'ENTITY_ID.LABEL':'Id Entità',
+			'CONTENT_TYPE.LABEL':'Content Type',
+			'NOTE.LABEL':'Note',
+			'OPEN.LABEL':'Apri',
+			'VISIBILITY.LABEL':'Visibilità',
+			'PUBLIC.VISIBILITY':'Pubblico',
+			'RESERVED.VISIBILITY':'Protetto',
+			'MAKEPUBLIC.BUTTON':'Pubblica',
+	 		'MAKERESERVED.BUTTON':'Proteggi',
+	 		'DELETE.BUTTON':'Cancella'
+		  });
+	 	
+	 	
+	 	 $translateProvider.preferredLanguage(getLanguage());
+		});
+
+	
+	app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson) {
+		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
+		$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
+		
+		$search=function(){
+			var query="?name="+($scope.name!=undefined?encodeURIComponent($scope.name):'');
+			query+="&type="+($scope.type!=undefined?encodeURIComponent($scope.type):'');
+			query+="&entity="+($scope.entity!=undefined?encodeURIComponent($scope.entity):'');
+			query+="&visibility="+($scope.visibility!=undefined?encodeURIComponent($scope.visibility):'');
+			
+			var deferred = $q.defer();
+			
+			callFileServiceWs($http,'file/find'+query,'GET',
+					{},
+					{},
+					function(response){
+							deferred.resolve(response);
+						}, 
+						function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);
+						});
+			return deferred.promise;
+		};
+		
+		
+		$scope.onSearch = function() {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$search().then(function(response) {
+    			if (response.data.resultCode==RESULT_OK){
+					//alert (JSON.stringify(response));
+					$scope.files=response.data.files;
+				}
+				else
+				{
+					manageError($scope,response.data.resultCode,response.data.resultDesc);
+				}
+    	    }, function(data, status, headers, config) {
+    	    	manageError($scope,status,data);
+    	    });
+			
+			};
+			
+			$scope.makePublic = function(fileId) {
+				$scope.errorMessage="";
+				$scope.infoMessage="";
+				
+				var headers={"Security-Token":$scope.securityToken};
+				
+				callFileServiceWs($http,'file/'+fileId+'/makePublic','GET',
+						headers,
+						{},
+						function(response){
+							if (response.data.resultCode==RESULT_OK){
+								$search().then(function(response) {
+					    			if (response.data.resultCode==RESULT_OK){
+										//alert (JSON.stringify(response));
+										$scope.files=response.data.files;
+									}
+									else
+									{
+										manageError($scope,response.data.resultCode,response.data.resultDesc);
+									}
+					    	    }, function(data, status, headers, config) {
+					    	    	manageError($scope,status,data);
+					    	    });				
+							}
+							else
+							{
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							}	
+						}, 
+						function(data, status, headers, config){
+							manageError($scope,status,data);
+						});
+			};
+				
+
+			$scope.makeReserved = function(fileId) {
+				$scope.errorMessage="";
+				$scope.infoMessage="";
+				
+				var headers={"Security-Token":$scope.securityToken};
+				
+				callFileServiceWs($http,'file/'+fileId+'/makeReserved','GET',
+						headers,
+						{},
+						function(response){
+							if (response.data.resultCode==RESULT_OK){
+								$search().then(function(response) {
+					    			if (response.data.resultCode==RESULT_OK){
+										//alert (JSON.stringify(response));
+										$scope.files=response.data.files;
+									}
+									else
+									{
+										manageError($scope,response.data.resultCode,response.data.resultDesc);
+									}
+					    	    }, function(data, status, headers, config) {
+					    	    	manageError($scope,status,data);
+					    	    });				
+							}
+							else
+							{
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							}	
+						}, 
+						function(data, status, headers, config){
+							manageError($scope,status,data);
+						});
+			};
+
+			
+			$scope.deleteFile = function(fileId) {
+				$scope.errorMessage="";
+				$scope.infoMessage="";
+				
+				var headers={"Security-Token":$scope.securityToken};
+				
+				callFileServiceWs($http,'file/'+fileId+'/remove','GET',
+						headers,
+						{},
+						function(response){
+							if (response.data.resultCode==RESULT_OK){
+								$search().then(function(response) {
+					    			if (response.data.resultCode==RESULT_OK){
+										//alert (JSON.stringify(response));
+										$scope.files=response.data.files;
+									}
+									else
+									{
+										manageError($scope,response.data.resultCode,response.data.resultDesc);
+									}
+					    	    }, function(data, status, headers, config) {
+					    	    	manageError($scope,status,data);
+					    	    });				
+							}
+							else
+							{
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							}	
+						}, 
+						function(data, status, headers, config){
+							manageError($scope,status,data);
+						});
+			};
+
+
+			
+	});
+
+	setMenuCntl(app);
+	</script>
+	
+</body>
+</html>
