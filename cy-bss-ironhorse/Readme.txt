@@ -7,7 +7,7 @@ Installation
 2) go under WebContent/js/ironhorse-common.js and change the cy-bss-core URL:
 	var CORE_URL="http://localhost:8080/cy-bss-core";
 3) after cy-bss-core installation, from root folder of project (contains build.xml) run ant;
-6) Deploy cy-bss-core.war to Tomcat.
+4) Deploy cy-bss-core.war to Tomcat.
 
 Try App
 -------
