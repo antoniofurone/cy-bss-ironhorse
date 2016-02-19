@@ -5,9 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Iron Horse - Person</title>
 	
+	<link rel="shortcut icon" href="../../images/cy.ico" type="image/x-icon" />
+	
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../../css/bootstrap-theme.css" type="text/css"/>
+	<link rel="shortcut icon" href="../../images/cy.ico">
 	
 	<script src="../../js/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../../js/bootstrap.min.js"></script> 
@@ -19,14 +22,15 @@
 	<script src="../../js/ironhorse-common.js"></script>
 	<script src="../../js/ironhorse-transl.js"></script>
 	<script src="../../js/ironhorse-search.js"></script>
+	<script src="../../js/ironhorse-list.js"></script>
 	
 </head>
 <body>
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
 	
-	<div class="col-sm-8 alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
-	<div class="col-sm-8 alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
 	
 	<form novalidate name="personForm" id="personForm" class="form-inline" role="form" method="post">
@@ -82,6 +86,7 @@
 			<div>
 				<select id="_selectedCityId" name="_selectedCityId" class="form-control" ng-model="_selectedCityId">
 		        	 <option value=""> </option>
+		        	 <option ng-repeat="city in cities" value="{{city.id}}">{{city.name}}</option>
 		        </select>
 		   	</div>
 		</div>
@@ -106,6 +111,7 @@
 			<div>
 				<select id="_selectedBornCityId" name="_selectedBornCityId" class="form-control" ng-model="_selectedBornCityId">
 		        	 <option value=""> </option>
+		             <option ng-repeat="city in cities" value="{{city.id}}">{{city.name}}</option>
 		        </select>
 		   	</div>
 		</div>
@@ -149,11 +155,6 @@
 				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;
 				{{'NEW.BUTTON' | translate }}
 			</button>
-				
-			
-		
-		<div class="col-sm-8 alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
-		<div class="col-sm-8 alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 		
 		<br><br>
 		<table class="table table-bordered table-striped" ng-show="persons.length>0">
@@ -177,7 +178,7 @@
 	    		<td>{{ person.secondName }}</td>
 	    		<td>{{ person.address }}</td>
 	    		<td>{{ person.city }}</td>
-	    		<td>{{ person.zip }}</td>
+	    		<td>{{ person.zipCode }}</td>
 	    		<td>{{ person.fiscalCode }}</td>
 	    		
 	    		<td> 
@@ -204,148 +205,8 @@
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script>
-var languageCode=getLanguage();
+<script src="js/person.js"></script>
 
-
-$('#datepickerBirth').datepicker({
-    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
-  }).on("changeDate", function(e){
-   console.log('datepickerBirth:'+e.date);
-});
-
-
-var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch'])
-.config(function($translateProvider) {
- 	$translateProvider
- 	.translations('en',{
- 		'SEARCH.BUTTON':'Search',
- 		'BACK.BUTTON':'Back',
- 		'CODE.LABEL':'Code',
- 		'FIRSTNAME.LABEL':'First Name',
- 		'SECONDNAME.LABEL':'Second Name',
- 		'ADDRESS.LABEL':'Address',
- 		'CITY.LABEL':'City',
- 		'ZIP.LABEL':'Zip Code',
- 		'FISCALCODE.LABEL':'Fiscal Code',
- 		'NEW.BUTTON':'New',
- 		'EDIT.BUTTON':'Edit',
- 		'DELETE.BUTTON':'Delete',
- 		'PERSON.TITLE':'Person',
- 		'NEW.TITLE':'New',
- 		'GENDER.LABEL':'Gender',
- 		'MALE.GENDER':'Male',
- 		'FEMALE.GENDER':'Female',
- 		'BIRTHDAY.LABEL':'Birth Day',
- 		'BORNCITY.LABEL':'Born City',
- 		'MODIFY.TITLE':'Change',
- 		'CODE.REQUIRED':'Code is required',
- 		'FIRSTNAME.REQUIRED':'First name is required',
- 		'SECONDNAME.REQUIRED':'Second name is required',
- 		'SUBMIT.BUTTON':'Submit',
-	    'RESET.BUTTON': 'Reset'
- 	  })
-	  
-	.translations('it',{
-		'SEARCH.BUTTON':'Ricerca',
-		'BACK.BUTTON':'Indietro',
-		'CODE.LABEL':'Codice',
-		'FIRSTNAME.LABEL':'Nome',
- 		'SECONDNAME.LABEL':'Cognome',
- 		'ADDRESS.LABEL':'Indirizzo',
- 		'CITY.LABEL':'Città',
- 		'ZIP.LABEL':'Cap',
- 		'FISCALCODE.LABEL':'Codice Fiscale',
- 		'NEW.BUTTON':'Nuova',
- 		'EDIT.BUTTON':'Modifica',
- 		'DELETE.BUTTON':'Cancella',
- 		'PERSON.TITLE':'Persona',
- 		'GENDER.LABEL':'Sesso',
- 		'MALE.GENDER':'Maschio',
- 		'FEMALE.GENDER':'Femmina',
- 		'BIRTHDAY.LABEL':'Data di nascita',
- 		'NEW.TITLE':'Nuova',
- 		'BORNCITY.LABEL':'Città di nascita',
- 		'MODIFY.TITLE':'Modifica',
- 		'CODE.REQUIRED':'Codice obbligatorio',
- 		'FIRSTNAME.REQUIRED':'Nome obbligatorio',
- 		'SECONDNAME.REQUIRED':'Cognome obbligatorio',
- 		'SUBMIT.BUTTON':'Submit',
-	    'RESET.BUTTON': 'Reset'
- 	  });
- 	
- 	
- 	 $translateProvider.preferredLanguage(getLanguage());
-	});
-
-
-app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson) {
-	$scope.detail=false;
-	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
-	
-	
-	$search=function(){
-		irperson($scope.code,$scope.firstName,$scope.secondName,$scope.securityToken).then(function(response) {
-			if (response.data.resultCode==RESULT_OK){
-					//alert (JSON.stringify(response));
-					$scope.persons=response.data.persons;
-				}
-			else
-				{
-					manageError($scope,response.data.resultCode,response.data.resultDesc);
-				}
-			}, function(data, status, headers, config) {
-    	    	manageError($scope,status,data);
-    	    });
-	}
-	
-	$resetform=function(){
-		
-	}
-
-	$scope.onSearch = function() {
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$search();
-		
-		}
-	
-	$scope.onBack = function() {
-		$resetform();
-		$scope.detail=false;
-		if ($scope.persons!=undefined)
-			$search();
-	}
-	
-	
-	$scope.onNew = function() {
-		$scope.detail=true;
-		$scope.modify=false;
-	
-	}
-	
-	$scope.onSubmit = function() {
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-	}
-	
-	$scope.onReset = function() {
-		resetform();
-	}
-	
-	$scope.editPerson = function(id){
-		$scope.modify=true;
-		$scope.detail=true;
-	}
-	
-	$scope.deletePerson = function(id){
-		var headers={"Security-Token":$scope.securityToken};
-	}
-	
-	});
-
-setMenuCntl(app);
 
 </script>
 </body>

@@ -118,7 +118,7 @@ function setMenuCntl(app) {
 }
 
 function manageError($scope,status,data){
-		$scope.errorMessage=status+" - "+data;	
+		$scope.errorMessage=status+" - "+JSON.stringify(data);	
 }
 
 function dateToStringDDMMYYYY(date){

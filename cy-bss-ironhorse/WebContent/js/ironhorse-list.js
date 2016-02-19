@@ -78,4 +78,19 @@
 			return deferred.promise;
 			}
 	})	
+	.factory('ircities',function($http,$q){
+		return function(securityToken){
+			var deferred = $q.defer();
+			callRestWs($http,'city/getCityAll','GET',
+					{"Security-Token":securityToken},
+					{},
+					function(response){
+							deferred.resolve(response);						
+					}, 
+					function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);	
+			});
+			return deferred.promise;
+			}
+	})	
 	;
