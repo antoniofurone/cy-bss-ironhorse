@@ -9,7 +9,7 @@ var CORE_URL="http://localhost:8080/cy-bss-core";
 
 var URBANBOT_DEFAULT_LATITUDE=40.706160;
 var URBANBOT_DEFAULT_LONGITUDE=17.658472;
-
+var LOCATION_DEFAULT_LANGUAGE='it';
 
 function getLocalStorageItem(paramName){ 
 	if (typeof(Storage) !== "undefined") 

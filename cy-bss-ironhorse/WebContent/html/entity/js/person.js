@@ -38,6 +38,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'INS.OK': 'Person inserted !',
 		'UPD.OK': 'Person changed !',
 		'SUBMIT.BUTTON':'Submit',
+		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Person ?',
 	    'RESET.BUTTON': 'Reset'
  	  })
 	  
@@ -68,6 +69,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'INS.OK': 'Persona inserita !',
 		'UPD.OK': 'Persona modificata !',
 		'SUBMIT.BUTTON':'Submit',
+		'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare la Persona ?',
 	    'RESET.BUTTON': 'Reset'
  	  });
  	
@@ -152,7 +154,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope._code=='' || $scope._firstName=='' || $scope._secondName=='')
+		if ($scope._code=='' || $scope._code==undefined 
+			|| $scope._firstName=='' ||  $scope._firstName==undefined
+			|| $scope._secondName=='' || $scope._secondName==undefined)
 			return;
 	
 		var headers={"Security-Token":$scope.securityToken};
@@ -248,22 +252,29 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'person/'+id+'/remove','GET',
-				headers,
-				{},
-				function(response){
-						if (response.data.resultCode==RESULT_OK){
-							$search();							
-						}
-						else
-						{
-							manageError($scope,response.data.resultCode,response.data.resultDesc);
-						}
-					}, 
-					function(data, status, headers, config){
-							manageError($scope,status,data);
-					});
+		$translate('DELETECONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'person/'+id+'/remove','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								$search();							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 		});
+		
 	}
 	
 	});

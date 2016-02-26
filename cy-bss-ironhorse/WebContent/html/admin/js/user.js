@@ -34,6 +34,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		    'SECONDNAME.LABEL':'Second Name',    		    
 			'PERSON.LABEL':'Person',
 			'SETPERSON.BUTTON':'Set Person',
+			'DELETECONFIRM.MESSAGE': 'Are you sure to delete User?',
 			'PERSON.REQUIRED':'Person required'
 		  })
 		  
@@ -68,6 +69,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		    'SECONDNAME.LABEL':'Cognome',
 			'PERSON.LABEL':'Persona',
 			'SETPERSON.BUTTON':'Associa Persona',
+			'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'utente?",
 			'PERSON.REQUIRED':'Persona obbligatoria'
 		  });
      	
@@ -259,22 +261,30 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	}
 	
 	$scope.deleteUser = function(id){
-		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'user/'+id+'/remove','GET',
-				headers,
-				{},
-				function(response){
-						if (response.data.resultCode==RESULT_OK){
-							search($http,$scope);							
-						}
-						else
-						{
-							manageError($scope,response.data.resultCode,response.data.resultDesc);
-						}
-					}, 
-					function(data, status, headers, config){
-							manageError($scope,status,data);
-					});
+		
+		$translate('DELETECONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'user/'+id+'/remove','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								search($http,$scope);							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 			});
+		
 	}
 	// deleteUser
 	

@@ -62,7 +62,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 	$scope.loadProgress=0;
 	
 	var currentDate_30=new Date();
-	currentDate_30.setDate(currentDate_30.getDate()-30);
+	currentDate_30.setDate(currentDate_30.getDate()-90);
 	
 	$scope.dateFrom=dateToStringDDMMYYYY(currentDate_30);
 	

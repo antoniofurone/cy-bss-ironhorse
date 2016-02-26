@@ -142,6 +142,7 @@
 	 		'RESERVED.VISIBILITY':'Protected',
 	 		'MAKEPUBLIC.BUTTON':'Publish',
 	 		'MAKERESERVED.BUTTON':'Protect',
+	 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete File ?',
 	 		'DELETE.BUTTON':'Delete'
 	 	  })
 		  
@@ -161,6 +162,7 @@
 			'RESERVED.VISIBILITY':'Protetto',
 			'MAKEPUBLIC.BUTTON':'Pubblica',
 	 		'MAKERESERVED.BUTTON':'Proteggi',
+	 		'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare il File ?',
 	 		'DELETE.BUTTON':'Cancella'
 		  });
 	 	
@@ -287,37 +289,40 @@
 				$scope.errorMessage="";
 				$scope.infoMessage="";
 				
-				var headers={"Security-Token":$scope.securityToken};
-				
-				callFileServiceWs($http,'file/'+fileId+'/remove','GET',
-						headers,
-						{},
-						function(response){
-							if (response.data.resultCode==RESULT_OK){
-								$search().then(function(response) {
-					    			if (response.data.resultCode==RESULT_OK){
-										//alert (JSON.stringify(response));
-										$scope.files=response.data.files;
-									}
-									else
-									{
-										manageError($scope,response.data.resultCode,response.data.resultDesc);
-									}
-					    	    }, function(data, status, headers, config) {
-					    	    	manageError($scope,status,data);
-					    	    });				
-							}
-							else
-							{
-								manageError($scope,response.data.resultCode,response.data.resultDesc);
-							}	
-						}, 
-						function(data, status, headers, config){
-							manageError($scope,status,data);
-						});
+				$translate('DELETECONFIRM.MESSAGE')
+         		.then(function (translatedValue) {
+         			if (!confirm(translatedValue))
+        				return;
+         			var headers={"Security-Token":$scope.securityToken};
+    				callFileServiceWs($http,'file/'+fileId+'/remove','GET',
+    						headers,
+    						{},
+    						function(response){
+    							if (response.data.resultCode==RESULT_OK){
+    								$search().then(function(response) {
+    					    			if (response.data.resultCode==RESULT_OK){
+    										//alert (JSON.stringify(response));
+    										$scope.files=response.data.files;
+    									}
+    									else
+    									{
+    										manageError($scope,response.data.resultCode,response.data.resultDesc);
+    									}
+    					    	    }, function(data, status, headers, config) {
+    					    	    	manageError($scope,status,data);
+    					    	    });				
+    							}
+    							else
+    							{
+    								manageError($scope,response.data.resultCode,response.data.resultDesc);
+    							}	
+    						}, 
+    						function(data, status, headers, config){
+    							manageError($scope,status,data);
+    						});
+         			
+         		});
 			};
-
-
 			
 	});
 

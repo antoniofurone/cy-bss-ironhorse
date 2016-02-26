@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Iron Horse - Location</title>
+	
+	<link rel="shortcut icon" href="../../images/cy.ico" type="image/x-icon" />
+	
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/bootstrap-theme.css" type="text/css"/>
+	<link rel="shortcut icon" href="../../images/cy.ico">
+	
+	<script src="../../js/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script> 
+	<script src="../../js/angularjs/1.3.15/angular.min.js"></script>
+	<script src="../../js/angular-translate/2.8.1/angular-translate.min.js"></script>
+	<script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+	
+	
+	<script src="../../js/ironhorse-common.js"></script>
+	<script src="../../js/ironhorse-transl.js"></script>
+	<script src="../../js/ironhorse-search.js"></script>
+	<script src="../../js/ironhorse-list.js"></script>
+	
+	
+</head>
+<body>
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
+
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+	<form novalidate name="locationForm" id="locationForm" class="form-inline" role="form" method="post">
+	<div id='list' ng-show="detail">
+		<div ng-show="!modify"><h4><span class="label label-default">{{'NEW.TITLE' | translate }}</span></h4></div>
+		<div ng-show="modify"><h4><span class="label label-default">{{'MODIFY.TITLE' | translate }}</span></h4></div>
+	
+		<button type="button" class="btn btn-info btn-sm" ng-click="onBack()">
+			<span class="glyphicon glyphicon-circle-arrow-left"></span>
+				{{'BACK.BUTTON' | translate }}
+		</button>
+		</br></br>
+				
+		<div class="form-group form-group-sm">
+			<label for="_name">{{'NAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="30" required/></div>
+		</div>
+      	<div class="form-group form-group-sm">
+			<label for="_latitude">{{'LATITUDE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_latitude" id="_latitude" type="number" ng-model="_latitude" size="15" step="0.000001" required/></div>
+		</div>
+      	
+      	<div class="form-group form-group-sm">
+			<label for="_longitude">{{'LONGITUDE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_longitude" id="_longitude" type="number" ng-model="_longitude" size="15" step="0.000001" required/></div>
+		</div>
+      	
+      	<div class="form-group form-group-sm">
+			<label for="_locationType">{{'LOCATIONTYPE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_locationType" id="_locationType" type="text" ng-model="_locationType" size="20"/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_creationDate">{{'CREATIONDATE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_creationDate" id="_creationDate" type="text" ng-model="_creationDate" size="20" readonly/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_personFirstName">{{'PERSONFIRSTNAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_personFirstName" id="_personFirstName" type="text" ng-model="_personFirstName" size="25" readonly/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_personFirstName">{{'PERSONSECONDNAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_personSecondName" id="_personSecondName" type="text" ng-model="_personSecondName" size="25" readonly/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_userName">{{'USERNAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_userName" id="_userName" type="text" ng-model="_userName" size="25" readonly/></div>
+		</div>
+		
+		</br>
+		<div class="form-group form-group-sm">
+      		<label for="_description">{{'DESC.LABEL' | translate }}:</label>
+			<div><textarea class="form-control" rows="8" cols="90" ng-model="_description"></textarea></div>
+		</div>
+		</br>
+		
+		<div class="form-group form-group-sm">
+			<label for="_address">{{'ADDRESS.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_address" id=_address" type="text" ng-model="_address" size="35"/></div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_zipCode">{{'ZIPCODE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_zipCode" id=_zipCode" type="text" ng-model="_zipCode" size="10"/></div>
+		</div>
+		
+	
+		<div class="form-group form-group-sm">
+			<label for="_selectedCityId">{{'CITY.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedCityId" name="_selectedCityId" class="form-control" ng-model="_selectedCityId">
+		        	 <option value=""> </option>
+		        	 <option ng-repeat="city in cities" value="{{city.id}}">{{city.name}}</option>
+		        </select>
+		   	</div>
+		</div>
+		
+		<h6>
+			<span class="label label-warning" ng-show="locationForm._name.$error.required" translate>NAME.REQUIRED</span>
+    		<span class="label label-warning" ng-show="locationForm._latitude.$error.required || locationForm._latitude.$error.number" translate>LATITUDE.REQUIRED</span>
+    		<span class="label label-warning" ng-show="locationForm._longitude.$error.required || locationForm._longitude.$error.number" translate>LONGITUDE.REQUIRED</span>
+		</h6>
+		
+      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
+		
+		
+		<div ng-show="modify">
+		<h5><span class="label label-default">{{'ATTACCHEDFILES.LABEL' | translate }}</span></h5>
+		<table class="table-condensed table-bordered table-striped">
+			<thead ng-show="files.length>0">
+				<tr class="info small">
+				<th></th>
+				<th>{{'FILENAME.LABEL' | translate }}</th>
+				<th>{{'FILETYPE.LABEL' | translate }}</th>
+				<th>{{'FILESIZE.LABEL' | translate }}</th>
+				<th>{{'CONTENTTYPE.LABEL' | translate }}</th>
+				<th>{{'NOTE.LABEL' | translate }}</th>
+				<th></th>
+				</tr>
+		    </thead>
+		    <tbody>
+		    	<tr class="small" ng-repeat="file in files">
+		    		<td>
+		    		<a href="{{coreUrl+'/fileservice/file/'+securityToken+'/'+file.id+'/download'}}">
+	      				<span class="glyphicon glyphicon-open">{{'OPEN.LABEL' | translate }}</span>
+	      			</a>
+					</td>
+		    		<td>{{ file.name }}</td>
+		    		<td>{{ file.fileType }}</td>
+		    		<td>{{ file.length }}</td>
+		    		<td>{{ file.contentType }}</td>
+		    		<td>{{ file.note }}</td>
+		    		<td>
+		    			<button class="btn btn-info btn-xs" ng-click="deleteFile(file.id)">
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      				</button>
+	    			</td>
+		    	</tr>
+		    </tbody>		  		
+		      	
+		</table>
+		
+		<div class="form-group form-group-sm">
+			<label for="_fileName">{{'FILENAME.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_fileName" id="_fileName" type="text" ng-model="_fileName" size="20"/></div>
+		</div>
+		
+		<div class="form-group"> 
+			<label for="file">File:</label>
+			<div>
+				<input class="form-control" type="file" file-model="file"/>
+			</div>	
+	    </div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_fileType">{{'FILETYPE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_fileType" id="_fileType" type="text" ng-model="_fileType" size="20"/></div>
+		</div>
+		
+      	<div class="form-group form-group-sm">
+			<label for="_fileNote">{{'NOTE.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_fileNote" id="_fileNote" type="text" ng-model="_fileNote" size="30"/></div>
+		</div>
+		<h6>
+		
+		</h6>
+		<button type="button" class="btn btn-sm btn-info" ng-click="uploadFile()" translate>ADDFILE.BUTTON</button>
+		
+		</div>
+		<!-- end files -->
+		
+	
+	</div>
+	<!--  end detail -->
+	
+	<div ng-show="!detail">
+		<h4><span class="label label-default">Location</span></h4>
+		
+		<div class="form-group form-group-sm">
+				<label for="name">{{'NAME.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
+		</div>
+		
+		<div class="form-group form-group-sm">
+				<label for="locationType">{{'LOCATIONTYPE.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="locationType" id="locationType" type="text"  ng-model="locationType">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="dateFrom">{{'DATEFROM.LABEL' | translate }}:</label>
+			<div class="input-group date" id="datepickerFrom">
+            <input class="form-control" type="text" name="dateFrom" id="dateFrom" type="text"  ng-model="dateFrom">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          	</div>	
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="dateTo">{{'DATETO.LABEL' | translate }}:</label>
+			
+			<div class="input-group date" id="datepickerTo">
+            <input class="form-control" type="text" name="dateTo" id="dateTo" type="text"  ng-model="dateTo">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          	</div>	
+		</div>
+		
+		
+		<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
+				<span class="glyphicon glyphicon-search"></span>
+				{{'SEARCH.BUTTON' | translate }}
+		</button>
+		<button type="button" class="btn btn-sm btn-info" ng-click="onNew()">
+				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;
+				{{'NEW.BUTTON' | translate }}
+		</button>
+		
+		<br><br>
+		<table class="table table-bordered table-striped" ng-show="locations.length>0">
+		<thead>
+			<tr class="info small"><th>Id</th>
+			<th>{{'NAME.LABEL' | translate }}</th>
+			<th>{{'CREATIONDATE.LABEL' | translate }}</th>
+			<th>{{'DESC.LABEL' | translate }}</th>
+			<th>{{'LOCATIONTYPE.LABEL' | translate }}</th>
+			<th>{{'LATITUDE.LABEL' | translate }}</th>
+			<th>{{'LONGITUDE.LABEL' | translate }}</th>
+			<th></th>
+	     	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr class="small" ng-repeat="loc in locations">
+	    		<td>{{ loc.id }}</td>
+	    		<td>{{ loc.name }}</td>
+	    		<td>{{ loc.creationDate }}</td>
+	    		<td>{{ loc.description.length>80?loc.description.substring(0,80)+' [...]':loc.description }}</td>
+	    		<td>{{ loc.locationType }}</td>
+	    		<td>{{ loc.latitude }}</td>
+	    		<td>{{ loc.longitude }}</td>
+	    		
+	    		<td> 
+	      			<button class="btn btn-info btn-xs" ng-click="editLoc(loc.id)">
+	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
+	      			</button>
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="deleteLoc(loc.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    			
+	    		</td>
+	    	</tr>
+	    </tbody>		  		
+	      	
+	</table>
+	
+	</div>
+	<!-- end list -->
+		
+	</form>
+</div>
+
+<script>
+
+	var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
+	
+	$('#datepickerFrom').datepicker({
+	      autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+	    }).on("changeDate", function(e){
+	     console.log('datepickerFrom:'+e.date);
+	});
+	
+	$('#datepickerTo').datepicker({
+	      autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+	    }).on("changeDate", function(e){
+	     console.log('datepickerTo:'+e.date);
+		});
+
+	
+	var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch','irlist'])
+	.config(function($translateProvider) {
+	 	$translateProvider
+	 	.translations('en',{
+	 		'SEARCH.BUTTON':'Search',
+	 		'NEW.BUTTON':'Nuova',
+	 		'BACK.BUTTON':'Back',
+	 		'ADDFILE.BUTTON':'Add File',
+	 		'NEW.TITLE':'New',
+	 		'MODIFY.TITLE':'Change',
+	 		'NAME.LABEL':'Name',
+	 		'PERSONFIRSTNAME.LABEL':'Person First Name',
+	 		'PERSONSECONDNAME.LABEL':'Person Second Name',
+	 		'USERNAME.LABEL':'UserName',
+	 		'LOCATIONTYPE.LABEL':'Type',
+	 		'CREATIONDATE.LABEL':'Creation Date',
+	 		'DESC.LABEL':'Description',
+	 		'LATITUDE.LABEL':'Latitude',
+	 		'LONGITUDE.LABEL':'Longitude',
+	 		'CITY.LABEL':'City',
+	 		'NAME.REQUIRED':'Name is required',
+	 		'LATITUDE.REQUIRED':'Latitude is required and numeric',
+	 		'LONGITUDE.REQUIRED':'Longitude is required and numeric',
+	 		'DATEFROM.LABEL':'From',
+     		'DATETO.LABEL':'To',
+     		'ADDRESS.LABEL':'Address',
+     		'ZIPCODE.LABEL':'Zip Code',
+     		'INS.OK': 'Location inserted !',
+			'UPD.OK': 'Location changed !',
+			'DELETECONFIRM.MESSAGE': 'Are you sure to delete Location?',
+			'ATTACCHEDFILES.LABEL':'Files',	
+			'OPEN.LABEL':'Open',
+			'FILENAME.LABEL':'File Name',
+			'FILETYPE.LABEL':'Type',
+			'FILESIZE.LABEL':'File Size',
+			'CONTENTTYPE.LABEL':'Content Type',
+			'NOTE.LABEL':'Note',
+			'DELETEFILECONFIRM.MESSAGE': 'Are you sure to delete File?',
+     		'EDIT.BUTTON':'Edit',
+     		'SUBMIT.BUTTON':'Submit',
+     		'DELETE.BUTTON':'Delete'
+     		
+     	  })
+		  
+		.translations('it',{
+			'SEARCH.BUTTON':'Ricerca',
+			'NEW.BUTTON':'New',
+			'BACK.BUTTON':'Indietro',
+			'ADDFILE.BUTTON':'Aggiungi File',
+			'NEW.TITLE':'Nuova',
+	 		'MODIFY.TITLE':'Modifica',
+	 		'NAME.LABEL':'Nome',
+	 		'PERSONFIRSTNAME.LABEL':'Nome Persona',
+	 		'PERSONSECONDNAME.LABEL':'Cognome Persona',
+	 		'USERNAME.LABEL':'UserName',
+	 		'LOCATIONTYPE.LABEL':'Tipo',
+	 		'CREATIONDATE.LABEL':'Data Creazione',
+	 		'DESC.LABEL':'Descrizione',
+	 		'LATITUDE.LABEL':'Latitudine',
+	 		'LONGITUDE.LABEL':'Longitudine',
+	 		'DATEFROM.LABEL':'Dal',
+     		'DATETO.LABEL':'Al',
+     		'ADDRESS.LABEL':'Indirizzo',
+     		'ZIPCODE.LABEL':'Cap',
+     		'CITY.LABEL':'Città',
+     		'NAME.REQUIRED':'Nome obbligatorio',
+	 		'LATITUDE.REQUIRED':'Latitudine obbligatoria e numerica',
+	 		'LONGITUDE.REQUIRED':'Longitudine obbligatoria e numerica',
+	 		'INS.OK': 'Location inserita !',
+			'UPD.OK': 'Location modificata !',
+			'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare la Location ?',
+			'ATTACCHEDFILES.LABEL':'Files',
+			'OPEN.LABEL':'Apri',
+			'FILENAME.LABEL':'Nome File',
+			'FILETYPE.LABEL':'Tipo',
+			'FILESIZE.LABEL':'Dimensioni',
+			'CONTENTTYPE.LABEL':'Content Type',
+			'NOTE.LABEL':'Nota',
+			'DELETEFILECONFIRM.MESSAGE': 'Sei sicuro di cancellare il File ?',
+			'EDIT.BUTTON':'Edit',
+	 		'SUBMIT.BUTTON':'Submit',
+     		'DELETE.BUTTON':'Delete'
+     	  });
+	 	
+	 	
+	 	 $translateProvider.preferredLanguage(getLanguage());
+		});
+
+	app.directive('fileModel', ['$parse', function ($parse) {
+	    return {
+	        restrict: 'A',
+	        link: function(scope, element, attrs) {
+	            var model = $parse(attrs.fileModel);
+	            var modelSetter = model.assign;
+	            
+	            element.bind('change', function(){
+	                scope.$apply(function(){
+	                    modelSetter(scope, element[0].files[0]);
+	                });
+	            });
+	        }
+	    };
+	}]);
+	
+	
+	app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(uploadUrl,$scope){
+	    	var file = $scope.file;
+	        console.log('file is ' );
+	        console.dir(file);
+	        var name = $scope._fileName;
+	        console.log('file name = '+name);
+	        var fileType = $scope._fileType;
+	        console.log('file type = '+fileType);
+	        var entityName = 'Location';
+	        console.log('entity name = '+entityName);
+	        var entityId = $scope.locationId;
+	        console.log('entity id = '+entityId);
+	        var note = $scope._fileNote;
+	        console.log('note = '+note);
+	        
+	    	
+	    	var fd = new FormData();
+	    	fd.append('file', file);
+	        if (name!=undefined)
+	    		fd.append('name', name);
+	        if (fileType!=undefined)
+	        	fd.append('fileType', fileType);
+	        if (entityName!=undefined)
+	        	fd.append('entityName', entityName);
+	        fd.append('entityId', entityId);
+	        if (note!=undefined)
+	        	fd.append('note', note);
+	        
+	        
+	        $http.post(uploadUrl, fd, {
+	            transformRequest: angular.identity,
+	            headers: {'Content-Type': undefined, 'Security-Token':$scope.securityToken}
+	        })
+	        .success(function(response){
+	        	$scope._fileName='';
+	        	$scope._fileType='';
+	        	$scope._fileNote='';
+	        	$scope.file='';
+	        	
+	        	var headers={"Security-Token":$scope.securityToken};
+				
+				callRestWs($http,'location/'+$scope.locationId+'/getFiles','GET',
+						{"Security-Token":$scope.securityToken},
+						{},
+						function(response){
+							$scope.files=response.data.files;
+					}, 
+					function(data, status, headers, config){
+						manageError($scope,status,data);
+					});
+		
+			
+	        })
+	        .error(function(data, status, headers, config){
+	        	$scope.errorMessage=status+" "+data;
+	        });
+	    }
+	    
+	    this.makeOperation = function(removeUrl,$scope){
+	    	var request = '{"method": "GET","url": "'+removeUrl+'", "headers": {"Security-Token": "'+$scope.securityToken+'"}}';
+			$http(JSON.parse(request)).then(
+	    			function(response){
+	    				$scope.response=JSON.stringify(response);
+	    			}, 
+	    			function(data, status, headers, config){
+	    				$scope.errorMessage=status+" "+data;
+	    	});
+	    }
+	    
+	}]);
+
+	
+	app.controller('pageCtrl', function($q,$scope,$http,$translate,ircities,fileUpload) {
+		$scope.detail=false;
+		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
+		$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
+		
+		ircities($scope.securityToken).then(function(response) {
+			if (response.data.resultCode==RESULT_OK){
+				//alert (JSON.stringify(response));
+				$scope.cities=response.data.cities;
+			}
+			else
+			{
+				manageError($scope,response.data.resultCode,response.data.resultDesc);
+			}
+	    }, function(data, status, headers, config) {
+	    	manageError($scope,status,data);
+	    });
+		
+		$scope.uploadFile = function(){
+		       	$scope.errorMessage='';
+		       	$scope.result='';
+		       	
+		    	var uploadUrl = "/cy-bss-core/fileservice/file/upload";
+		        fileUpload.uploadFileToUrl(uploadUrl,$scope);
+		        
+					
+		 };
+		   
+		
+		$search=function(){
+			var query="?name="+($scope.name!=undefined?encodeURIComponent($scope.name):'');
+			query+="&locationType="+($scope.locationType!=undefined?encodeURIComponent($scope.locationType):'');
+			query+="&fromDate="+($scope.dateFrom!=undefined?encodeURIComponent($scope.dateFrom):'');
+			query+="&toDate="+($scope.dateTo!=undefined?encodeURIComponent($scope.dateTo):'');
+			
+			callRestWs($http,'location/find'+query,'GET',
+					{"Security-Token":$scope.securityToken,"Language":LOCATION_DEFAULT_LANGUAGE},
+					{},
+					function(response){
+						if (response.data.resultCode==RESULT_OK){
+							//alert (JSON.stringify(response));
+							$scope.locations=response.data.locations;
+						}
+					else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}					
+					}, 
+					function(data, status, headers, config){
+						manageError($scope,status,data);	
+			});
+		}
+		
+		var $locationFiles=function(id) {
+			var deferred = $q.defer();
+			var headers={"Security-Token":$scope.securityToken};
+			
+			callRestWs($http,'location/'+id+'/getFiles','GET',
+					{"Security-Token":$scope.securityToken},
+					{},
+					function(response){
+							deferred.resolve(response);
+						}, 
+						function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);
+						});
+			return deferred.promise;
+		}
+		
+		
+		
+		$scope.onSearch = function() {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$search();
+			
+			}
+		
+		
+		$scope.onBack = function() {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$scope.detail=false;
+			if ($scope.locations!=undefined)
+				$search();
+		}
+		
+		$scope.onNew = function() {
+			$scope.detail=true;
+			$scope.modify=false;
+			
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			
+			$scope.locationId=0;
+			$scope._name='';
+			$scope._latitude='';
+			$scope._longitude='';
+			$scope._locationType='';
+			$scope._creationDate='';
+			$scope._personFirstName='';
+			$scope._personSecondName='';
+			$scope._userName='';
+			$scope._description='';
+			$scope._address='';
+			$scope._zipCode='';
+			$scope._selectedCityId='';
+			
+			$scope._fileName='';
+        	$scope._fileType='';
+        	$scope._fileNote='';
+        	$scope.file='';
+        	$scope.files=undefined;
+			
+			}
+		
+		
+		$scope.onSubmit = function() {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			
+			if ($scope._name=='' || $scope._name==undefined 
+				|| $scope._latitude=='' || $scope._latitude==undefined || $scope.locationForm._latitude.$error.number
+				|| $scope._longitude=='' || $scope._longitude==undefined || $scope.locationForm._longitude.$error.number)
+				return;
+		
+			//alert('onSubmit !'+$scope._name+"-"+ $scope._latitude+"-"+$scope._longitude);
+			
+			
+			var headers={"Security-Token":$scope.securityToken};
+			var data = {};
+			data['name']=$scope._name;
+			data['latitude']=$scope._latitude;
+			data['longitude']=$scope._longitude;
+			if ($scope._locationType!=undefined && $scope._locationType!='')
+				data['locationType']=$scope._locationType;
+			if ($scope._description!=undefined && $scope._description!='')
+				data['description']=$scope._description;
+			if ($scope._address!=undefined && $scope._address!='')
+				data['address']=$scope._address;
+			if ($scope._zipCode!=undefined && $scope._zipCode!='')
+				data['zipCode']=$scope._zipCode;
+			if ($scope._selectedCityId!=undefined && $scope._selectedCityId!='')
+				data['cityId']=$scope._selectedCityId;
+			
+			
+			callRestWs($http,!$scope.modify?'location/add':'location/'+$scope.locationId+'/update','POST',
+					headers,
+					data,
+					function(response){
+						if (response.data.resultCode==RESULT_OK){
+							
+							if (!$scope.modify){
+	   							$translate('INS.OK')
+	   		    	          		.then(function (translatedValue) {
+	   		    	              		$scope.infoMessage=translatedValue;
+	   		    	          	});
+	   							$scope.locationId=response.data.location.id;
+							}
+							else {
+								$translate('UPD.OK')
+		    	          		.then(function (translatedValue) {
+		    	              		$scope.infoMessage=translatedValue;
+		    	          		});
+							}
+							$scope.modify=true;
+						}
+						else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+					function(data, status, headers, config){
+							manageError($scope,status,data);
+					});
+		
+		}
+		
+		
+		$scope.editLoc = function(id){
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$scope.modify=true;
+			$scope.detail=true;
+			
+			var headers={"Security-Token":$scope.securityToken,"Language":LOCATION_DEFAULT_LANGUAGE};
+			callRestWs($http,'location/'+id+'/get','GET',
+				headers,
+				{},
+				function(response){
+						if (response.data.resultCode==RESULT_OK){
+							//console.log(JSON.stringify(response));
+							$scope.locationId=response.data.location.id;
+							$scope._creationDate=response.data.location.creationDate;
+							$scope._description=response.data.location.description;
+							$scope._name=response.data.location.name;
+							$scope._locationType=response.data.location.locationType;
+							$scope._address=response.data.location.address;
+							$scope._selectedCityId=response.data.location.cityId==0?'':response.data.location.cityId;
+							$scope._zipCode=response.data.location.zipCode;
+							$scope._personFirstName=response.data.location.personFirstName;
+							$scope._personSecondName=response.data.location.personSecondName;
+							$scope._latitude=response.data.location.latitude;
+							$scope._longitude=response.data.location.longitude;
+							$scope._userName=response.data.location.userName;
+							
+							
+							$locationFiles(id).then(function(response) {
+				    			if (response.data.resultCode==RESULT_OK){
+									//alert (JSON.stringify(response));
+									$scope.files=response.data.files;
+								}
+								else
+								{
+									manageError($scope,response.data.resultCode,response.data.resultDesc);
+								}
+				    	    }, function(data, status, headers, config) {
+				    	    	manageError($scope,status,data);
+				    	    });
+						}
+						else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+					function(data, status, headers, config){
+							manageError($scope,status,data);
+					});
+		}
+		
+		
+		$scope.deleteLoc = function(id){
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$translate('DELETECONFIRM.MESSAGE')
+         		.then(function (translatedValue) {
+         			if (!confirm(translatedValue))
+        				return;
+        			
+         			var headers={"Security-Token":$scope.securityToken};
+        			callRestWs($http,'location/'+id+'/remove','GET',
+        					headers,
+        					{},
+        					function(response){
+        							if (response.data.resultCode==RESULT_OK){
+        								$search();							
+        							}
+        							else
+        							{
+        								manageError($scope,response.data.resultCode,response.data.resultDesc);
+        							}
+        						}, 
+        						function(data, status, headers, config){
+        								manageError($scope,status,data);
+        						});
+         	});
+		}
+		
+		$scope.deleteFile = function(fileId) {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$translate('DELETEFILECONFIRM.MESSAGE')
+     		.then(function (translatedValue) {
+     			if (!confirm(translatedValue))
+    				return;
+     			var headers={"Security-Token":$scope.securityToken};
+				callFileServiceWs($http,'file/'+fileId+'/remove','GET',
+						headers,
+						{},
+						function(response){
+							if (response.data.resultCode==RESULT_OK){
+								
+								$locationFiles($scope.locationId).then(function(response) {
+					    			if (response.data.resultCode==RESULT_OK){
+										//alert (JSON.stringify(response));
+										$scope.files=response.data.files;
+									}
+									else
+									{
+										manageError($scope,response.data.resultCode,response.data.resultDesc);
+									}
+					    	    }, function(data, status, headers, config) {
+					    	    	manageError($scope,status,data);
+					    	    });
+								
+								
+							}
+							else
+							{
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							}	
+						}, 
+						function(data, status, headers, config){
+							manageError($scope,status,data);
+						});
+     			
+     		});
+		};
+
+
+	});
+
+	setMenuCntl(app);
+</script>
+	
+</body>
+</html>
