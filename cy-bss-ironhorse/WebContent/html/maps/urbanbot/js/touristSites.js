@@ -34,13 +34,20 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator'])
 	     	
 	     	 $translateProvider.preferredLanguage(getLanguage());
 	 	});
+
+app.filter('replaceURLWithHTMLLinks', function () {
+	   return function (text) {
+	      //your date parser here
+		   return replaceURLWithHTMLLinks(text);
+	   };
+	});
 	 	
 app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 	
 	$scope.coreUrl=CORE_URL;
    	var coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
 	
-	if (coreUrl==undefined || coreUrl=='undefined' || coreUrl=='' || $scope.coreUrl!=coreUrl)
+   	if (coreUrl==undefined || coreUrl=='undefined' || coreUrl=='' || $scope.coreUrl!=coreUrl)
 		setLocalStorageItem("org.cysoft.bss.ih.coreurl",$scope.coreUrl);
 		
 	$scope.loadProgress=0;
@@ -91,7 +98,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 					
 					var contentString = '<div id="content" style="overflow:auto; width:280px;height:140px;">';
 					contentString+='<p><strong>#'+location.id+' '+location.name+'</strong><br>';
-					contentString+=''+location.description+'</p>';
+					contentString+=''+replaceURLWithHTMLLinks(location.description)+'</p>';
 					
 					
 					if (files.length>0){

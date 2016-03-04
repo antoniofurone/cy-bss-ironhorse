@@ -3,9 +3,14 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">	
-<title>Tourist Sites Map</title>
+<title>Stories Map</title>
 
 <link rel="shortcut icon" href="../../../images/cy.ico" type="image/x-icon" />
+
+<link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+
 
 <link rel="stylesheet" href="../../../css/bootstrap.min.css">
 <link rel="stylesheet" href="../../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
@@ -34,9 +39,8 @@
 <script src="../../../js/ironhorse-transl.js"></script>
 <script src="../../../js/ironhorse-list.js"></script>
 
-<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
-
+<script type='text/javascript' src='http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js?2'></script>
+<script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
 	
 </head>
 <body>
@@ -44,7 +48,6 @@
 <div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
 	
 	<h4><span class="label label-default">{{'PAGE.TITLE' | translate }}</span></h4>
-	
 	
 	<div id="mapPlaceholder">
 			If you don't see map, it's possible you are off-line...
@@ -60,23 +63,51 @@
       </div>	
  	</div>
  	
- 	<table class="table table-bordered table-striped" ng-show="locations.length>0 && !detail">
+ 	
+	<form novalidate name="warnSearch" id="warnSearch" class="form-inline" role="form" method="post">
+	
+	<div class="form-group form-group-sm">
+		<label for="dateFrom">{{'DATEFROM.LABEL' | translate }}:</label>
+		<div class="input-group date" id="datepickerFrom">
+           <input class="form-control" type="text" name="dateFrom" id="dateFrom" type="text"  ng-model="dateFrom">
+           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>	
+	</div>
+	<div class="form-group form-group-sm">
+		<label for="dateTo">{{'DATETO.LABEL' | translate }}:</label>
+		
+		<div class="input-group date" id="datepickerTo">
+           <input class="form-control" type="text" name="dateTo" id="dateTo" type="text"  ng-model="dateTo">
+           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>	
+	</div>
+	
+	
+	<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
+			<span class="glyphicon glyphicon-search"></span>
+			{{'SEARCH.BUTTON' | translate }}
+	</button>		
+	
+	</form>
+	
+	<br>
+	<table class="table table-bordered table-striped" ng-show="locations.length>0 && !detail">
 		<thead>
 			<tr class="info small"><th>Id</th>
-			<th>{{'NAME.LABEL' | translate }}</th>
 			<th>{{'TEXT.LABEL' | translate }}</th>
 			<th>{{'DATECRE.LABEL' | translate }}</th>
+			<th>{{'OWNER.LABEL' | translate }}</th>
 			<th></th>
 	     	</tr>
 	    </thead>
 	    <tbody>
 	    	<tr class="small" ng-repeat="loc in locations | orderBy:'creationDate'">
 	    		<td>{{ loc.id }}</td>
-	    		<td>{{ loc.name }}</td>
-	    		<td>{{ loc.description.length>100?loc.description.substring(0,100)+' [...]':loc.description }}</td>
+	    		<td>{{ loc.description.length>60?loc.description.substring(0,60)+' [...]':loc.description }}</td>
 	    		<td>{{ loc.creationDate }}</td>
+	    		<td>{{ loc.personFirstName }} {{ loc.personSecondName }}</td>
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="showSite(loc.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="showStory(loc.id)">
 	      			<span class="glyphicon glyphicon-zoom-in"></span>&nbsp;
 	      			</button>
 	    		</td>
@@ -99,20 +130,20 @@
 		<table class="table-condensed table-bordered">
 			<tbody>
 			<tr class="small">
-	    	<td class="alert alert-default" >{{location.description}}
-	    	</td>
+	    	<td class="alert alert-default">{{location.description}}</td>
 	    	</tr>
 	    	<tr class="small">
 	    		<td>
 	    		<div class="form-group form-group-sm">
-					<label>{{'NAME.LABEL' | translate }}:</label>
-					<label class="label label-warning">{{location.name }}</label>
-				</div>	
-				<div class="form-group form-group-sm">
 					<label>{{'DATECRE.LABEL' | translate }}:</label>
 					<label class="label label-info">{{location.creationDate }}</label>
 				</div>	
-	    		</td>	
+	    		
+				<div class="form-group form-group-sm">
+					<label>{{'OWNER.LABEL' | translate }}:</label>
+					<label class="label label-info">{{ ((location.personFirstName==''||location.personFirstName==undefined)&&(location.personSecondName==''||location.personSecondName==undefined))?'-':location.personFirstName+' '+location.personSecondName}}</label>
+				</div>
+				</td>	
 	    	</tr>
 	    	</tbody>
 		</table>
@@ -133,10 +164,10 @@
 		</div>
 
 	</div>
- 	
+	
 			
 </div>
 <script src="../../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script src="js/touristSites.js"></script>
+<script src="js/storiesOSM.js"></script>
 </body>
 </html>

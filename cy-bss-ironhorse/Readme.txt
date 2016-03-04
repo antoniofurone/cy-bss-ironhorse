@@ -1,5 +1,5 @@
 Cy-bss-ironhorse is a GUI (Web) of cy-bss-core (https://github.com/antoniofurone/cy-bss-core.git). 
-The app is based on html5, AngularJS, Bootstrap and Google Maps.
+The app is based on html5, AngularJS, Bootstrap, Leaflet, OpenStreetMap, MapQuest and Google Maps.
 
 Installation
 ------------ 

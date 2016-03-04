@@ -128,3 +128,7 @@ function dateToStringDDMMYYYY(date){
 	return (day.length==2?day:"0"+day)+"/"+month+"/"+year;
 }
 
+function replaceURLWithHTMLLinks(text) {
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
+    return text.replace(exp,"<a href='$1' target='_blank'>$1</a>"); 
+}

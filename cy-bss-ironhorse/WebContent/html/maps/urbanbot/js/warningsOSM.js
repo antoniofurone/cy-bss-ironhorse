@@ -13,9 +13,6 @@ $('#datepickerTo').datepicker({
 });
 
 
-
-
-
 var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irlist'])
 		.config(function($translateProvider) {
 	     	$translateProvider
@@ -73,45 +70,47 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 	
 	$scope.dateFrom=dateToStringDDMMYYYY(currentDate_30);
 	
-	var pinImageRed=undefined;
-	var pinImageGreen=undefined;
-	var pinImageOrange=undefined;
-	var pinImageGray=undefined;
-	var pinImageGray=undefined;
-    var center_coords=undefined;
+	var markerIconRed=undefined;
+	var markerIconGreen=undefined;
+	var markerIconOrange=undefined;
+	var markerIconGray=undefined;
+	var map=undefined;
 	
-	var pinShadow=undefined;
-	if (typeof google==='object' && typeof google.maps==='object'){
+	if (typeof L==='object'){
+		markerIconRed = L.icon({
+			  iconUrl: '/cy-bss-ironhorse/html/maps/images/pin24_red.png',
+			  iconRetinaUrl: '/cy-bss-ironhorse/html/maps/images/pin48_red.png',
+			  iconSize: [29, 24],
+			  iconAnchor: [9, 21],
+			  popupAnchor: [0, -14]
+			});
 		
-		center_coords = new google.maps.LatLng(URBANBOT_DEFAULT_LATITUDE, URBANBOT_DEFAULT_LONGITUDE);
-			
-		pinImageRed = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000",
-		        new google.maps.Size(21, 34),
-		        new google.maps.Point(0,0),
-		        new google.maps.Point(10, 34));
-		    
-		pinImageGreen = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|00FF00",
-		        new google.maps.Size(21, 34),
-		        new google.maps.Point(0,0),
-		        new google.maps.Point(10, 34));
-
-		pinImageOrange = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFA500",
-		        new google.maps.Size(21, 34),
-		        new google.maps.Point(0,0),
-		        new google.maps.Point(10, 34));
-		        
-		pinImageGray = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|808080",
-		        new google.maps.Size(21, 34),
-		        new google.maps.Point(0,0),
-		        new google.maps.Point(10, 34));
-
+		markerIconGreen = L.icon({
+			  iconUrl: '/cy-bss-ironhorse/html/maps/images/pin24_green.png',
+			  iconRetinaUrl: '/cy-bss-ironhorse/html/maps/images/pin48_green.png',
+			  iconSize: [29, 24],
+			  iconAnchor: [9, 21],
+			  popupAnchor: [0, -14]
+			});
 		
-		pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-		        new google.maps.Size(40, 37),
-		        new google.maps.Point(0, 0),
-		        new google.maps.Point(12, 35));
+		markerIconOrange = L.icon({
+			  iconUrl: '/cy-bss-ironhorse/html/maps/images/pin24_orange.png',
+			  iconRetinaUrl: '/cy-bss-ironhorse/html/maps/images/pin48_orange.png',
+			  iconSize: [29, 24],
+			  iconAnchor: [9, 21],
+			  popupAnchor: [0, -14]
+			});
+		
+		markerIconGray = L.icon({
+			  iconUrl: '/cy-bss-ironhorse/html/maps/images/pin24_gray.png',
+			  iconRetinaUrl: '/cy-bss-ironhorse/html/maps/images/pin48_gray.png',
+			  iconSize: [29, 24],
+			  iconAnchor: [9, 21],
+			  popupAnchor: [0, -14]
+			});
 	}
 	
+		
 	irticketstatus($scope.securityToken,languageCode).then(function(response) {
 		if (response.data.resultCode==RESULT_OK){
 			//alert (JSON.stringify(response));
@@ -168,19 +167,21 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 	
 	var infoWindow = undefined;
 	
-	var $setContentMarker = function(map,marker,ticket){
+	var $setContentMarker = function(markerClusters,ticket){
 		
+		var markerIcon=markerIconOrange;
 		var textColor='Orange';
+		
 		if (ticket.statusId==2){
-			pinImage=pinImageRed;
+			markerIcon=markerIconRed;
 			textColor='Red';
 		}
 		if (ticket.statusId==3){
-			pinImage=pinImageGreen;
+			markerIcon=markerIconGreen;
 			textColor='Green';
 		}
 		if (ticket.statusId==4){
-			pinImage=pinImageGray;
+			markerIcon=markerIconGray;
 			textColor='Gray';
 		}
 		
@@ -227,15 +228,26 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 						
 						contentString+='</div>';
 						
-						marker.content=contentString;
+						var min = .999999;
+						var max = 1.000001;
+						var latitude=undefined;
+						var longitude=undefined;
 						
-						infoWindow = new google.maps.InfoWindow();
+						if (ticket.locationId==0 || ticket.location==undefined){
+							latitude=URBANBOT_DEFAULT_LATITUDE*(Math.random()*(max - min) + min);
+							longitude=URBANBOT_DEFAULT_LONGITUDE*(Math.random()*(max - min) + min);
+						}
+						else {
+							latitude=ticket.location.latitude*(Math.random()*(max - min) + min);
+							longitude=ticket.location.longitude*(Math.random()*(max - min) + min);
+						}
+					
+						var popup = contentString;
+						var m = L.marker( [latitude, longitude], {icon: markerIcon} )
+		                  .bindPopup( popup );
 						
-						google.maps.event.addListener(marker, 'click', function(){
-							infoWindow.close();
-							infoWindow.setContent(this.content); 
-							infoWindow.open(map, this);
-							});
+						markerClusters.addLayer( m );
+							
 					}
 					else
 					{
@@ -269,90 +281,34 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 				$scope.tickets=response.data.tickets;
 				console.log("ticket.length="+$scope.tickets.length);
 				
+				if (typeof L==='object'){
+					if (map!=undefined)
+						map.remove();
 					
-				if (typeof google==='object' && typeof google.maps==='object'){
-					
-					var mapOptions = {
-			                zoom: 11,
-			                center: center_coords,
-			                 mapTypeControl: true,
-			                 //mapTypeId: google.maps.MapTypeId.ROADMAP
-			                 mapTypeId:google.maps.MapTypeId.HYBRID
-			            	};
-					var map = new google.maps.Map(
-			                document.getElementById("mapPlaceholder"), mapOptions
-			                );
-					google.maps.event.addDomListener(window, 'resize', function() {
-						map.setCenter(center_coords);
+					map = L.map( 'mapPlaceholder', {
+						  center: [ URBANBOT_DEFAULT_LATITUDE,URBANBOT_DEFAULT_LONGITUDE],
+						  minZoom: 2,
+						  zoom: 11
 						});
 					
 					
+					L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+						  attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
+						  subdomains: ['otile1','otile2','otile3','otile4']
+						}).addTo( map );	
+						
 					$scope.count=0;
-					var marker_list = [];
-					var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+					var markerClusters = L.markerClusterGroup();
 					for(var i in $scope.tickets){
 						
 						var ticket=$scope.tickets[i];
-									
-						var position=undefined;
+						$setContentMarker(markerClusters,ticket);
 						
-						var min = .999999;
-						var max = 1.000001;
-						
-						if (ticket.locationId==0 || ticket.location==undefined)
-							position=new google.maps.LatLng(URBANBOT_DEFAULT_LATITUDE*(Math.random()*(max - min) + min), 
-									URBANBOT_DEFAULT_LONGITUDE*(Math.random()*(max - min) + min));
-						else
-							position=new google.maps.LatLng(ticket.location.latitude*(Math.random()*(max - min) + min),
-									ticket.location.longitude*(Math.random()*(max - min) + min));
-						
-						var pinImage=pinImageOrange;
-						var textColor='Orange';
-						if (ticket.statusId==2){
-							pinImage=pinImageRed;
-							textColor='Red';
-						}
-						if (ticket.statusId==3){
-							pinImage=pinImageGreen;
-							textColor='Green';
-						}
-						if (ticket.statusId==4){
-							pinImage=pinImageGray;
-							textColor='Gray';
-						}
-					
-						var person=(ticket.personId==0?'':(ticket.personFirstName==undefined 
-								|| ticket.personFirstName=='null'?'':'['+ticket.personFirstName+']'));
-						
-						var marker = new google.maps.Marker({
-			                position: position, 
-			                map: map,
-			                icon: pinImage,
-			                shadow: pinShadow,
-			                title: '#'+ticket.id +' '+person 
-			            });
-						
-						$setContentMarker(map,marker,ticket);
-						
-						marker_list.push(marker);
-						 
 						$scope.count++;
 						$scope.loadProgress=$scope.count/$scope.tickets.length*100;
-								
-					} // for
-					
-					markerCluster = new MarkerClusterer(map, marker_list, {
-					    gridSize:3,
-					    minimumClusterSize: 2,
-					    calculator: function(markers, numStyles) {
-					    return {
-					    	text: markers.length,
-					    	index: numStyles
-					    };
-					    }
-					});
-				} //google
-				
+					}
+					map.addLayer( markerClusters );
+				} // end L===
 				
 			if ($scope.tickets.length==0){
 				

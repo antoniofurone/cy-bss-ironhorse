@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+<title>Warnings Map</title>
+
+<link rel="shortcut icon" href="../../../images/cy.ico" type="image/x-icon" />
+
+<link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+	
+<link rel="stylesheet" href="../../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
+<link rel="stylesheet" href="../../../css/bootstrap-theme.css" type="text/css"/>
+<link rel="shortcut icon" href="../../../images/cy.ico">	
+
+<style>
+   #mapPlaceholder {
+       height: 450px;
+       width: 100%
+</style>
+   
+<style>
+   #loadBar {
+       width: 100%
+</style>
+   
+<script src="../../../js/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script> 
+
+
+<script src="../../../js/angularjs/1.3.15/angular.min.js"></script>
+<script src="../../../js/angular-translate/2.8.1/angular-translate.min.js"></script>
+<script src="../../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+
+<script src="../../../js/ironhorse-common.js"></script>
+<script src="../../../js/ironhorse-transl.js"></script>
+<script src="../../../js/ironhorse-list.js"></script>
+
+<script type='text/javascript' src='http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js?2'></script>
+<script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
+	
+</head>
+<body>
+
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+	
+	<h4><span class="label label-default">{{'PAGE.TITLE' | translate }}</span></h4>
+	
+	
+	<div id="mapPlaceholder">
+			If you don't see map, it's possible you are off-line...
+	</div>
+	
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+	<div id="loadBar" class="progress" ng-show="tickets.length>0">
+      <div class="progress-bar progress-bar-striped active" role="progressbar"
+          aria-valuenow="{{loadProgress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{loadProgress}}%">
+       {{loadProgress}}% [{{count}}/{{tickets.length}}]
+      </div>
+ 	</div>
+ 	 
+	<form novalidate name="warnSearch" id="warnSearch" class="form-inline" role="form" method="post">
+	
+	<div class="form-group form-group-sm">
+		<label for="selectedCategory">{{'CATEGORY.LABEL' | translate }}:</label>
+		<select id="selectedCategory" name="selectedCategory" class="form-control" ng-model="selectedCategory">
+			<option value=""></option>
+			<option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
+		</select>
+	</div>
+		
+	<div class="form-group form-group-sm">
+		<label for="selectedStatus">{{'STATUS.LABEL' | translate }}:</label>
+		<select id="selectedStatus" name="selectedStatus" class="form-control" ng-model="selectedStatus">
+			<option value=""></option>
+			<option ng-repeat="status in states" value="{{status.id}}">{{status.name}}</option>
+		</select>
+	</div>
+	
+	<div class="form-group form-group-sm">
+		<label for="dateFrom">{{'DATEFROM.LABEL' | translate }}:</label>
+		<div class="input-group date" id="datepickerFrom">
+           <input class="form-control" type="text" name="dateFrom" id="dateFrom" type="text"  ng-model="dateFrom">
+           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>	
+	</div>
+	<div class="form-group form-group-sm">
+		<label for="dateTo">{{'DATETO.LABEL' | translate }}:</label>
+		
+		<div class="input-group date" id="datepickerTo">
+           <input class="form-control" type="text" name="dateTo" id="dateTo" type="text"  ng-model="dateTo">
+           <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>	
+	</div>
+	
+	
+	<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
+			<span class="glyphicon glyphicon-search"></span>
+			{{'SEARCH.BUTTON' | translate }}
+	</button>		
+	
+	</form>
+	<br>
+	<table class="table table-bordered table-striped" ng-show="tickets.length>0 && !detail">
+		<thead>
+			<tr class="info small"><th>Id</th>
+			<th>{{'TEXT.LABEL' | translate }}</th>
+			<th>{{'DATECRE.LABEL' | translate }}</th>
+			<th>{{'STATUS.LABEL' | translate }}</th>
+			<th>{{'CATEGORY.LABEL' | translate }}</th>
+			<th>{{'OWNER.LABEL' | translate }}</th>
+			<th></th>
+	     	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr class="small" ng-repeat="ticket in tickets | orderBy:'creationDate'">
+	    		<td>{{ ticket.id }}</td>
+	    		<td>{{ ticket.text.length>25?ticket.text.substring(0,25)+' [...]':ticket.text }}</td>
+	    		<td>{{ ticket.creationDate }}</td>
+	    		<td>{{ ticket.statusName }}</td>
+	    		<td>{{ ticket.categoryName }}</td>
+	    		<td>{{ ticket.personFirstName }} {{ ticket.personSecondName }}</td>
+	    		<td> 
+	      			<button class="btn btn-info btn-xs" ng-click="showTicket(ticket.id)">
+	      			<span class="glyphicon glyphicon-zoom-in"></span>&nbsp;
+	      			</button>
+	    		</td>
+	    	</tr>
+	    </tbody>		  		
+	      	
+	</table>
+	
+	
+	<!--  div detail -->
+	<div ng-show="detail">
+		<button type="button" class="btn btn-info btn-xs" ng-click="onBack()">
+			<span class="glyphicon glyphicon-circle-arrow-left"></span>
+			{{'BACK.BUTTON' | translate }}
+		</button>
+	
+		<br><br>
+		
+		<form novalidate class="form-inline" role="form" method="post">
+		<table class="table-condensed table-bordered">
+			<tbody>
+			<tr class="small">
+	    	<td class="alert alert-default">{{ticket.text}}</td>
+	    	</tr>
+	    	<tr class="small">
+	    		<td>
+	    		<div class="form-group form-group-sm">
+					<label>{{'DATECRE.LABEL' | translate }}:</label>
+					<label class="label label-info">{{ticket.creationDate }}</label>
+				</div>	
+	    		<div class="form-group form-group-sm">
+					<label>{{'CATEGORY.LABEL' | translate }}:</label>
+					<label class="label label-info">{{(ticket.categoryName==''||ticket.categoryName==undefined)?'-':ticket.categoryName }}</label>
+				</div>	
+				<div class="form-group form-group-sm">
+					<label>{{'STATUS.LABEL' | translate }}:</label>
+					<label class="label label-info">{{ticket.statusName}}</label>
+				</div>	
+				<div class="form-group form-group-sm">
+					<label>{{'OWNER.LABEL' | translate }}:</label>
+					<label class="label label-info">{{ ((ticket.personFirstName==''||ticket.personFirstName==undefined)&&(ticket.personSecondName==''||ticket.personSecondName==undefined))?'-':ticket.personFirstName+' '+ticket.personSecondName}}</label>
+				</div>
+				</td>	
+	    	</tr>
+	    	</tbody>
+		</table>
+		</form>
+		
+		<div ng-show="files.length>0">
+			<table class="table-condensed table-bordered table-striped">
+				<tbody>
+			    	<tr class="small" ng-repeat="file in files">
+			    		<td><a ng-show="file.visibility=='P'" href="{{coreUrl+'/fileservice/file/'+file.id+'/download'}}"><span class="glyphicon glyphicon-open">{{'OPEN.LABEL' | translate }}</span></a></td>
+			    		<td>{{ file.contentType }}</td>
+			    		<td>{{ file.fileType }}</td>
+			    		<td>{{ file.note }}</td>
+			    	</tr>
+			    </tbody>		  		
+			      	
+			</table>
+		</div>
+
+	</div>
+			
+</div>
+<script src="../../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
+<script src="js/warningsOSM.js"></script>
+
+</body>
+</html>

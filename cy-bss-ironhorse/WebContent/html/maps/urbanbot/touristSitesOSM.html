@@ -7,6 +7,10 @@
 
 <link rel="shortcut icon" href="../../../images/cy.ico" type="image/x-icon" />
 
+<link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+    
 <link rel="stylesheet" href="../../../css/bootstrap.min.css">
 <link rel="stylesheet" href="../../../css/bootstrap-datepicker/1.3.0/datepicker.min.css" type="text/css"/>
 <link rel="stylesheet" href="../../../css/bootstrap-theme.css" type="text/css"/>
@@ -34,9 +38,8 @@
 <script src="../../../js/ironhorse-transl.js"></script>
 <script src="../../../js/ironhorse-list.js"></script>
 
-<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
-
+<script type='text/javascript' src='http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js?2'></script>
+<script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
 	
 </head>
 <body>
@@ -47,7 +50,7 @@
 	
 	
 	<div id="mapPlaceholder">
-			If you don't see map, it's possible you are off-line...
+		If you don't see map, it's possible you are off-line...
 	</div>
 	
 	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
@@ -137,6 +140,6 @@
 			
 </div>
 <script src="../../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script src="js/touristSites.js"></script>
+<script src="js/touristSitesOSM.js"></script>
 </body>
 </html>
