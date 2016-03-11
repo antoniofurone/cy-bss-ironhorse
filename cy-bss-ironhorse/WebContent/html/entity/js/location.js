@@ -104,9 +104,9 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 			'DELETEFILECONFIRM.MESSAGE': 'Sei sicuro di cancellare il File ?',
 			'ADDLANGUAGE.BUTTON':'Aggiungi Lingua',
 			'REMOVELANGUAGE.BUTTON':'Cancella Lingua',
-			'EDIT.BUTTON':'Edit',
+			'EDIT.BUTTON':'Modifica',
 	 		'SUBMIT.BUTTON':'Submit',
-     		'DELETE.BUTTON':'Delete'
+     		'DELETE.BUTTON':'Cancella'
      	  });
 	 	
 	 	
@@ -490,13 +490,37 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 					data,
 					function(response){
 						if (response.data.resultCode==RESULT_OK){
+							$scope.locationId=response.data.location.id;
 							
 							if (!$scope.modify){
 	   							$translate('INS.OK')
 	   		    	          		.then(function (translatedValue) {
 	   		    	              		$scope.infoMessage=translatedValue;
+	   		    	              		
+	   		    	            var headers={"Security-Token":$scope.securityToken,"Language":LOCATION_DEFAULT_LANGUAGE};
+	   		    	 			callRestWs($http,'location/'+$scope.locationId+'/get','GET',
+	   		    	 				headers,
+	   		    	 				{},
+	   		    	 				function(response){
+	   		    	 						if (response.data.resultCode==RESULT_OK){
+	   		    	 							//console.log(JSON.stringify(response));
+	   		    	 							$scope._creationDate=response.data.location.creationDate;
+	   		    	 							$scope._personFirstName=response.data.location.personFirstName;
+	   		    	 							$scope._personSecondName=response.data.location.personSecondName;
+	   		    	 							$scope._userName=response.data.location.userName;
+	   		    	 						}
+	   		    	 						else
+	   		    	 						{
+	   		    	 							manageError($scope,response.data.resultCode,response.data.resultDesc);
+	   		    	 						}
+	   		    	 					}, 
+	   		    	 					function(data, status, headers, config){
+	   		    	 							manageError($scope,status,data);
+	   		    	 					});  		
+	   		    	              		
 	   		    	          	});
-	   							$scope.locationId=response.data.location.id;
+	   							
+	   							
 							}
 							else {
 								$translate('UPD.OK')

@@ -17,6 +17,7 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 	     	$translateProvider
 	     	.translations('en',{
 	     		'SEARCH.BUTTON':'Search',
+	     		'DELETE.BUTTON':'Delete',
 	     		'CATEGORY.LABEL':'Category',
 	     		'STATUS.LABEL':'Status',
 	     		'NEWSTATUS.LABEL':'New Status',
@@ -40,11 +41,13 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 	     		'TICKETDETAIL.TITLE':'Ticket Detail',
 	     		'CHANGESTATUS.LABEL':'Change Status',
 	     		'ATTACCHEDFILES.LABEL':'Attacched Files',
-	     		'STATUSTRACE.LABEL':'Status Trace'
-	     	  })
+	     		'STATUSTRACE.LABEL':'Status Trace',
+	     		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Ticket?'
+			  })
     		  
     		.translations('it',{
     			'SEARCH.BUTTON':'Ricerca',
+    			'DELETE.BUTTON':'Cancella',
     			'CATEGORY.LABEL':'Categoria',
     			'PERSID.LABEL':'Id Persona',
     			'STATUS.LABEL':'Stato',
@@ -68,7 +71,8 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 	     		'TICKETDETAIL.TITLE':'Dettaglio Ticket',
 	     		'CHANGESTATUS.LABEL':'Modifica Stato',
 	     		'ATTACCHEDFILES.LABEL':'File Allegati',
-	     		'STATUSTRACE.LABEL':'Trace degli Stati'
+	     		'STATUSTRACE.LABEL':'Trace degli Stati',
+	     		'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare il Ticket ?'
 	    	  });
 	     	
 	     	
@@ -346,6 +350,46 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 				$ticketDetail(id);
 			}
 		    	
+			$scope.deleteTicket = function(id){
+				$scope.errorMessage="";
+				$scope.infoMessage="";
+				
+				$translate('DELETECONFIRM.MESSAGE')
+	         		.then(function (translatedValue) {
+	         			if (!confirm(translatedValue))
+	        				return;
+	        			
+	         			var headers={"Security-Token":$scope.securityToken};
+	        			callRestWs($http,'ticket/'+id+'/remove','GET',
+	        					headers,
+	        					{},
+	        					function(response){
+	        							if (response.data.resultCode==RESULT_OK){
+	        								$search().then(function(response) {
+	        					    			if (response.data.resultCode==RESULT_OK){
+	        										//alert (JSON.stringify(response));
+	        										$scope.tickets=response.data.tickets;
+	        									}
+	        									else
+	        									{
+	        										manageError($scope,response.data.resultCode,response.data.resultDesc);
+	        									}
+	        					    	    }, function(data, status, headers, config) {
+	        					    	    	manageError($scope,status,data);
+	        					    	    });							
+	        							}
+	        							else
+	        							{
+	        								manageError($scope,response.data.resultCode,response.data.resultDesc);
+	        							}
+	        						}, 
+	        						function(data, status, headers, config){
+	        								manageError($scope,status,data);
+	        						});
+	         	});
+			}
+			
+			
 			$scope.onBack = function() {
 	    		$scope.detail=false;
 	    		$scope.errorMessage="";

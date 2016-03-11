@@ -6,6 +6,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Change Password",
 				
 				"MENU.ENTITY":"Entity",
+				"MENU.ENTITY.COMPANY":"Company",
 				"MENU.ENTITY.PERSON":"Person",
 				"MENU.ENTITY.FILE":"File",
 				
@@ -24,6 +25,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Modifica Password",
 				
 				"MENU.ENTITY":"Entita'",
+				"MENU.ENTITY.COMPANY":"Azienda",
 				"MENU.ENTITY.PERSON":"Persona",
 				"MENU.ENTITY.FILE":"File",
 				

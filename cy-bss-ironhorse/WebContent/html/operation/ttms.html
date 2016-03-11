@@ -103,8 +103,13 @@
 	    		<td>{{ ticket.personFirstName }} {{ ticket.personSecondName }}</td>
 	    		<td> 
 	      			<button class="btn btn-info btn-xs" ng-click="editTicket(ticket.id)">
-	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
+	      				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
 	      			</button>
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="deleteTicket(ticket.id)">
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    			
 	    		</td>
 	    	</tr>
 	    </tbody>		  		

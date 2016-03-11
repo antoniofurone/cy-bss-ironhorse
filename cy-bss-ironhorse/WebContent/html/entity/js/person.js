@@ -154,16 +154,19 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope._code=='' || $scope._code==undefined 
+		if (($scope.modify && ($scope._code=='' || $scope._code==undefined)) 
 			|| $scope._firstName=='' ||  $scope._firstName==undefined
 			|| $scope._secondName=='' || $scope._secondName==undefined)
 			return;
 	
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
-		data['code']=$scope._code;
+		
 		data['firstName']=$scope._firstName;
 		data['secondName']=$scope._secondName;
+		
+		if ($scope._code!=undefined && $scope._code!='')
+			data['code']=$scope._code;
 		if ($scope._selectedGender!=undefined && $scope._selectedGender!='')
 			data['gender']=$scope._selectedGender;
 		if ($scope._address!=undefined && $scope._address!='')
@@ -192,6 +195,24 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
    		    	              		$scope.infoMessage=translatedValue;
    		    	          	});
    							$scope.personId=response.data.person.id;
+   							
+   							callRestWs($http,'person/'+$scope.personId+'/get','GET',
+   									headers,
+   									{},
+   									function(response){
+   											if (response.data.resultCode==RESULT_OK){
+   												//console.log(JSON.stringify(response));
+   												$scope._code=response.data.person.code;
+   											}
+   											else
+   											{
+   												manageError($scope,response.data.resultCode,response.data.resultDesc);
+   											}
+   										}, 
+   										function(data, status, headers, config){
+   												manageError($scope,status,data);
+   										});
+   							
 						}
 						else {
 							$translate('UPD.OK')
