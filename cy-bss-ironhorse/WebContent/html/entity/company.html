@@ -91,6 +91,72 @@
 		
       	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
 	
+		<div ng-show="modify">
+		
+		<h5><span class="label label-default">{{'PERSONS.LABEL' | translate }}</span></h5>
+		
+		<table class="table-condensed table-bordered table-striped">
+			<thead ng-show="companyPersons.length>0">
+				<tr class="info small">
+				<th>{{'FIRSTNAME.LABEL' | translate }}</th>
+				<th>{{'SECONDNAME.LABEL' | translate }}</th>
+				<th>{{'ROLENAME.LABEL' | translate }}</th>
+				<th>{{'DEPTCODE.LABEL' | translate }}</th>
+				<th>{{'DEPT.LABEL' | translate }}</th>
+				<th></th>
+				</tr>
+		    </thead>
+			<tbody>
+		    	<tr class="small" ng-repeat="person in companyPersons">
+		    		<td>{{ person.personFirstName }}</td>
+		    		<td>{{ person.personSecondName }}</td>
+		    		<td>{{ person.roleName }}</td>
+		    		<td>{{ person.deptCode }}</td>
+		    		<td>{{ person.deptName }}</td>
+		    		<td>
+		    			<button class="btn btn-info btn-xs" ng-click="deleteCompanyPerson(person.personId)">
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      				</button>
+	    			</td>
+				</tr>
+			</tbody>		
+		</table>
+		
+		<div class="form-group form-group-sm">
+			<label for="_firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" size=8 name="_firstName" id="_firstName" type="text"  ng-model="_firstName">
+	    </div>
+	    <div class="form-group form-group-sm">
+			<label  for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
+		   	<input class="form-control" type="text" size=8 name="_secondName" id="_secondName" type="text"  ng-model="_secondName">
+	 	</div>
+		<button type="button" class="btn btn-sm btn-info" ng-click="onSearchPerson()">
+			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
+		</button>
+		<div class="form-group form-group-sm">
+			<label for="_selectedPerson">{{'PERSON.LABEL' | translate }}:</label>
+			<select id="_selectedPerson" name="_selectedPerson" class="form-control" ng-model="_selectedPerson" required>
+	        	 <option ng-repeat="p in persons" value="{{p.id}}">{{p.firstName+' '+p.secondName+' ['+p.code+']'}}</option>
+	        </select>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="_selectedDept">{{'DEPT.LABEL' | translate }}:</label>
+			<select id="_selectedDept" name="_selectedDept" class="form-control" ng-model="_selectedDept" required>
+	        	 <option ng-repeat="d in depts" value="{{d.id}}">{{d.name}}</option>
+	        </select>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="_selectedRole">{{'ROLENAME.LABEL' | translate }}:</label>
+			<select id="_selectedRole" name="_selectedRole" class="form-control" ng-model="_selectedRole" required>
+	        	 <option ng-repeat="r in roles" value="{{r.id}}">{{r.name}}</option>
+	        </select>
+		</div>
+		
+		<button type="button" class="btn btn-sm btn-info" ng-click="addCompanyPerson()" translate>ADDPERSON.BUTTON</button>
+		
+		
+	</div>	
+	<!-- end company persons -->
       	
 	</div>
 	<!--  end detail -->
@@ -142,11 +208,11 @@
 	    		<td>{{ company.vatCode }}</td>
 	    		
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editPerson(person.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editCompany(company.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="deletePerson(person.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteCompany(company.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      			</button>
 	    			
@@ -193,7 +259,16 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'INS.OK': 'Company inserted !',
 		'UPD.OK': 'Company changed !',
 		'MODIFY.TITLE':'Change',
- 		'SUBMIT.BUTTON':'Submit'
+		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Company ?',
+ 		'SUBMIT.BUTTON':'Submit',
+ 		'PERSONS.LABEL':'Persons',
+ 		'FIRSTNAME.LABEL':'First Name',
+ 		'SECONDNAME.LABEL':'Second Name',
+ 		'PERSON.LABEL':'Person',
+ 		'ROLENAME.LABEL':'Role',
+ 		'DEPTCODE.LABEL':'Dept Code',
+ 		'DEPT.LABEL':'Department',
+ 		'ADDPERSON.BUTTON':'Add Person'
  	  })
 	  
 	.translations('it',{
@@ -215,8 +290,16 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'INS.OK': 'Azienda inserita!',
 		'UPD.OK': 'Azienda modificata !',
 		'MODIFY.TITLE':'Modifica',
- 		'SUBMIT.BUTTON':'Conferma'
- 	
+		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Azienda ?",
+ 		'SUBMIT.BUTTON':'Conferma',
+ 		'PERSONS.LABEL':'Persone',
+ 		'FIRSTNAME.LABEL':'Nome',
+ 		'SECONDNAME.LABEL':'Cognome',
+ 		'PERSON.LABEL':'Persona',
+ 		'ROLENAME.LABEL':'Ruolo',
+ 		'DEPTCODE.LABEL':'Codice Dip',
+ 		'DEPT.LABEL':'Dipartimento',
+ 		'ADDPERSON.BUTTON':'Aggiungi Persona'
   	  });
  	
  	
@@ -331,6 +414,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 	    	          		});
 						}
 						$scope.modify=true;
+						
 					}
 					else
 					{
@@ -372,7 +456,87 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 		
 	}
 	
+	
+	$scope.editCompany = function(id){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		$scope.modify=true;
+		$scope.detail=true;
+		
+		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+		callRestWs($http,'company/'+id+'/get','GET',
+			headers,
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//console.log(JSON.stringify(response));
+						$scope.companyId=response.data.company.id;
+						$scope._code=response.data.company.code;
+						$scope._name=response.data.company.name;
+						$scope._address=response.data.company.address;
+						$scope._selectedCityId=response.data.company.cityId==0?'':response.data.company.cityId;
+						$scope._fiscalCode=response.data.company.fiscalCode;
+						$scope._vatCode=response.data.company.vatCode;
+						
+						callRestWs($http,'company/'+id+'/getPersonAll','GET',
+								headers,
+								{},
+								function(response){
+										if (response.data.resultCode==RESULT_OK){
+											//console.log(JSON.stringify(response));
+											$scope.companyPersons=response.data.companyPersons;
+										}
+										else
+										{
+											manageError($scope,response.data.resultCode,response.data.resultDesc);
+										}
+									}, 
+									function(data, status, headers, config){
+											manageError($scope,status,data);
+									});
 
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+	}
+	
+
+	$scope.deleteCompany = function(id){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		$translate('DELETECONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'company/'+id+'/remove','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								$search();							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 		});
+		
+	}
+	
 });
 
 setMenuCntl(app);
