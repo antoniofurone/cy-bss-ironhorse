@@ -42,22 +42,22 @@
 			
 			<div class="form-group form-group-sm">
 				<label for="userId">{{'USERID.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="userId" id="userId" type="text" ng-model="userId" size="30" required/></div>
+				<div><input class="form-control" name="userId" id="userId" type="text" ng-model="userId" maxlength=50 size="30" required/></div>
 			</div>
       			
       		<div class="form-group form-group-sm">
 				<label for="name">{{'NAME.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="name" id="name" type="text" ng-model="name" size="30" required/></div>
+				<div><input class="form-control" name="name" id="name" type="text" ng-model="name" size="30" maxlength=50 required/></div>
 			</div>
 			
 			<div class="form-group form-group-sm" ng-show="!modify">
 				<label for="pwd">{{'PWD.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" size="30" required/></div>
+				<div><input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" size="30" maxlength=30 required/></div>
 			</div>	
 			
 			<div class="form-group form-group-sm" ng-show="!modify">
 				<label for="confPwd">{{'CONFPWD.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" size="30" required/></div>
+				<div><input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" size="30" maxlength=30 required/></div>
       		</div>
 			
 			<div class="form-group form-group-sm">
@@ -100,12 +100,12 @@
 			
 			<div class="form-group form-group-sm">
 				<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  ng-model="firstName">
+				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  maxlength=50 ng-model="firstName">
 	       </div>
 			
 			<div class="form-group form-group-sm">
 				<label  for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
-			   	<input class="form-control" type="text" name="secondName" id="secondName" type="text"  ng-model="secondName">
+			   	<input class="form-control" type="text" name="secondName" id="secondName" type="text"  maxlength=50 ng-model="secondName">
 		    </div>
 			<button type="button" class="btn btn-sm btn-info" ng-click="onSearchPerson()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}</button>
@@ -131,7 +131,7 @@
 				
 			<div class="form-group form-group-sm">
 				<label for="userName">{{'USERNAME.LABEL' | translate }}:</label>
-				<input class="form-control" name="userName" id="userName" type="text" ng-model="userName"/>
+				<input class="form-control" name="userName" id="userName" type="text" maxlength=50 ng-model="userName"/>
 			
 				<button type="button" class="btn btn-sm btn-info" ng-click="onSearch()">
 				<span class="glyphicon glyphicon-search"></span>

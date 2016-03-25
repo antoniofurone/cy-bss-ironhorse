@@ -169,12 +169,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 	
 	var $setContentMarker = function(markerClusters,ticket){
 		
-		var markerIcon=markerIconOrange;
-		var textColor='Orange';
+		var markerIcon=markerIconRed;
+		var textColor='Red';
 		
 		if (ticket.statusId==2){
-			markerIcon=markerIconRed;
-			textColor='Red';
+			markerIcon=markerIconOrange;
+			textColor='Orange';
 		}
 		if (ticket.statusId==3){
 			markerIcon=markerIconGreen;

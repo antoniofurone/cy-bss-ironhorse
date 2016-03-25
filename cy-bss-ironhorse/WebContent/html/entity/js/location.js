@@ -83,7 +83,7 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
      		'DATETO.LABEL':'Al',
      		'ADDRESS.LABEL':'Indirizzo',
      		'ZIPCODE.LABEL':'Cap',
-     		'CITY.LABEL':'Città',
+     		'CITY.LABEL':"Citta'",
      		'NAME.REQUIRED':'Nome obbligatorio',
      		'DESCRIPTION.REQUIRED':'Descrizione obbligatoria',
 	 		'LATITUDE.REQUIRED':'Latitudine obbligatoria e numerica',

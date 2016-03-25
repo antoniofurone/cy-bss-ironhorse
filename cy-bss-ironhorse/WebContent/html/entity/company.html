@@ -46,22 +46,22 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_code">{{'CODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="15" required/></div>
+			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="15" maxlength=10 required/></div>
 		</div>
       		
 		<div class="form-group form-group-sm">
 			<label for="_name">{{'NAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="50" required/></div>
+			<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="50" maxlength=80 required/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
 			<label for="_address">{{'ADDRESS.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_address" id="_address" type="text" ng-model="_address" size="40"/></div>
+			<div><input class="form-control" name="_address" id="_address" type="text" ng-model="_address" maxlength=60 size="40"/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
 			<label for="_zip">{{'ZIP.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_zip" id="_zip" type="text" ng-model="_zip" size="10"/></div>
+			<div><input class="form-control" name="_zip" id="_zip" type="text" ng-model="_zip" maxlength=15 size="10"/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
@@ -76,12 +76,12 @@
 		
       	<div class="form-group form-group-sm">
 			<label for="_fiscalCode">{{'FISCALCODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_fiscalCode" id="_fiscalCode" type="text" ng-model="_fiscalCode" size="16"/></div>
+			<div><input class="form-control" name="_fiscalCode" id="_fiscalCode" type="text" ng-model="_fiscalCode" maxlength=30 size="16"/></div>
 		</div>
       	
 		<div class="form-group form-group-sm">
 			<label for="_vatCode">{{'VATCODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_vatCode" id="_vatCode" type="text" ng-model="_vatCode" size="11"/></div>
+			<div><input class="form-control" name="_vatCode" id="_vatCode" type="text" ng-model="_vatCode" maxlength=30 size="11"/></div>
 		</div>
       	
       	<h6>
@@ -114,7 +114,7 @@
 		    		<td>{{ person.deptCode }}</td>
 		    		<td>{{ person.deptName }}</td>
 		    		<td>
-		    			<button class="btn btn-info btn-xs" ng-click="deleteCompanyPerson(person.personId)">
+		    			<button class="btn btn-info btn-xs" ng-click="deleteCompanyPerson(person.deptId,person.personId)">
 	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      				</button>
 	    			</td>
@@ -130,7 +130,7 @@
 			<label  for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
 		   	<input class="form-control" type="text" size=8 name="_secondName" id="_secondName" type="text"  ng-model="_secondName">
 	 	</div>
-		<button type="button" class="btn btn-sm btn-info" ng-click="onSearchPerson()">
+		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchPerson()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		<div class="form-group form-group-sm">
@@ -152,7 +152,13 @@
 	        </select>
 		</div>
 		
-		<button type="button" class="btn btn-sm btn-info" ng-click="addCompanyPerson()" translate>ADDPERSON.BUTTON</button>
+		<h6>
+			<span class="label label-warning" ng-show="companyForm._selectedPerson.$error.required && modify" translate>PERSON.REQUIRED</span>
+			<span class="label label-warning" ng-show="companyForm._selectedDept.$error.required && modify" translate>DEPT.REQUIRED</span>
+  	 		<span class="label label-warning" ng-show="companyForm._selectedRole.$error.required && modify" translate>ROLE.REQUIRED</span>
+  	 	</h6>
+		
+		<button type="button" class="btn btn-xs btn-info" ng-click="addCompanyPerson()" translate>ADDPERSON.BUTTON</button>
 		
 		
 	</div>	
@@ -232,317 +238,8 @@
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script>
+<script src="js/company.js"></script>
 
-var languageCode=getLanguage();
-
-var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch','irlist'])
-.config(function($translateProvider) {
- 	$translateProvider
- 	.translations('en',{
- 		'SEARCH.BUTTON':'Search',
- 		'BACK.BUTTON':'Back',
- 		'COMPANY.TITLE':'Company',
- 		'CODE.LABEL':'Code',
- 		'NAME.LABEL':'Name',
- 		'ADDRESS.LABEL':'Address',
- 		'CITY.LABEL':'City',
- 		'ZIP.LABEL':'Zip Code',
- 		'FISCALCODE.LABEL':'Fiscal Code',
- 		'CODE.REQUIRED':'Code is required',
- 		'NAME.REQUIRED':'Name is required',
- 		'VATCODE.LABEL':'Vat Code',
- 		'EDIT.BUTTON':'Edit',
- 		'DELETE.BUTTON':'Delete',
- 		'NEW.BUTTON':'New',
- 		'NEW.TITLE':'New',
- 		'INS.OK': 'Company inserted !',
-		'UPD.OK': 'Company changed !',
-		'MODIFY.TITLE':'Change',
-		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Company ?',
- 		'SUBMIT.BUTTON':'Submit',
- 		'PERSONS.LABEL':'Persons',
- 		'FIRSTNAME.LABEL':'First Name',
- 		'SECONDNAME.LABEL':'Second Name',
- 		'PERSON.LABEL':'Person',
- 		'ROLENAME.LABEL':'Role',
- 		'DEPTCODE.LABEL':'Dept Code',
- 		'DEPT.LABEL':'Department',
- 		'ADDPERSON.BUTTON':'Add Person'
- 	  })
-	  
-	.translations('it',{
-		'SEARCH.BUTTON':'Ricerca',
-		'BACK.BUTTON':'Indietro',
- 		'COMPANY.TITLE':'Azienda',
- 		'CODE.LABEL':'Codice',
- 		'NAME.LABEL':'Nome',
- 		'ADDRESS.LABEL':'Indirizzo',
- 		'CITY.LABEL':'Città',
- 		'ZIP.LABEL':'Cap',
- 		'VATCODE.LABEL':'P.Iva',
- 		'CODE.REQUIRED':'Codice obbligatorio',
- 		'NAME.REQUIRED':'Nome obbligatorio',
- 		'EDIT.BUTTON':'Modifica',
- 		'DELETE.BUTTON':'Cancella',
- 		'NEW.BUTTON':'Nuova',
- 		'NEW.TITLE':'Nuova',
- 		'INS.OK': 'Azienda inserita!',
-		'UPD.OK': 'Azienda modificata !',
-		'MODIFY.TITLE':'Modifica',
-		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Azienda ?",
- 		'SUBMIT.BUTTON':'Conferma',
- 		'PERSONS.LABEL':'Persone',
- 		'FIRSTNAME.LABEL':'Nome',
- 		'SECONDNAME.LABEL':'Cognome',
- 		'PERSON.LABEL':'Persona',
- 		'ROLENAME.LABEL':'Ruolo',
- 		'DEPTCODE.LABEL':'Codice Dip',
- 		'DEPT.LABEL':'Dipartimento',
- 		'ADDPERSON.BUTTON':'Aggiungi Persona'
-  	  });
- 	
- 	
- 	 $translateProvider.preferredLanguage(getLanguage());
-	});
-
-app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircities) {
-	$scope.detail=false;
-	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
-	
-	ircities($scope.securityToken).then(function(response) {
-		if (response.data.resultCode==RESULT_OK){
-			//alert (JSON.stringify(response));
-			$scope.cities=response.data.cities;
-		}
-		else
-		{
-			manageError($scope,response.data.resultCode,response.data.resultDesc);
-		}
-    }, function(data, status, headers, config) {
-    	manageError($scope,status,data);
-    });
-	
-	
-	$search=function(){
-		ircompany($scope.code,$scope.name,$scope.securityToken).then(function(response) {
-			if (response.data.resultCode==RESULT_OK){
-					//alert (JSON.stringify(response));
-					$scope.companies=response.data.companies;
-				}
-			else
-				{
-					manageError($scope,response.data.resultCode,response.data.resultDesc);
-				}
-			}, function(data, status, headers, config) {
-    	    	manageError($scope,status,data);
-    	    });
-	}
-	
-	$scope.onSearch = function() {
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$search();
-		
-		}
-	
-	
-	$scope.onSubmit = function() {
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		if (($scope.modify && ($scope._code=='' || $scope._code==undefined)) 
-			|| $scope._name=='' ||  $scope._name==undefined)
-			return;
-	
-		var headers={"Security-Token":$scope.securityToken};
-		var data = {};
-		
-		data['name']=$scope._name;
-		
-		if ($scope._code!=undefined && $scope._code!='')
-			data['code']=$scope._code;
-		if ($scope._address!=undefined && $scope._address!='')
-			data['address']=$scope._address;
-		if ($scope._zip!=undefined && $scope._zip!='')
-			data['zipCode']=$scope._zip;
-		if ($scope._selectedCityId!=undefined && $scope._selectedCityId!='')
-			data['cityId']=$scope._selectedCityId;
-		if ($scope._fiscalCode!=undefined && $scope._fiscalCode!='')
-			data['fiscalCode']=$scope._fiscalCode;
-		if ($scope._vatCode!=undefined && $scope._vatCode!='')
-			data['vatCode']=$scope._vatCode;
-	
-		
-		callRestWs($http,!$scope.modify?'company/add':'company/'+$scope.companyId+'/update','POST',
-				headers,
-				data,
-				function(response){
-					if (response.data.resultCode==RESULT_OK){
-						
-						if (!$scope.modify){
-   							$translate('INS.OK')
-   		    	          		.then(function (translatedValue) {
-   		    	              		$scope.infoMessage=translatedValue;
-   		    	          	});
-   							
-   							$scope.companyId=response.data.company.id;
-   							
-   							callRestWs($http,'company/'+$scope.companyId+'/get','GET',
-   									headers,
-   									{},
-   									function(response){
-   											if (response.data.resultCode==RESULT_OK){
-   												//console.log(JSON.stringify(response));
-   												$scope._code=response.data.company.code;
-   											}
-   											else
-   											{
-   												manageError($scope,response.data.resultCode,response.data.resultDesc);
-   											}
-   										}, 
-   										function(data, status, headers, config){
-   												manageError($scope,status,data);
-   										});
-   							
-						}
-						else {
-							$translate('UPD.OK')
-	    	          		.then(function (translatedValue) {
-	    	              		$scope.infoMessage=translatedValue;
-	    	          		});
-						}
-						$scope.modify=true;
-						
-					}
-					else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, 
-				function(data, status, headers, config){
-						manageError($scope,status,data);
-				});
-		
-	}
-
-	
-	
-	$scope.onBack = function() {
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$scope.detail=false;
-		if ($scope.companies!=undefined)
-			$search();
-	}
-	
-	
-	$scope.onNew = function() {
-		$scope.detail=true;
-		$scope.modify=false;
-		
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		
-		$scope._code='';
-		$scope._name='';
-		$scope._address='';
-		$scope._selectedCityId='';
-		$scope._fiscalCode='';
-		$scope._vatCode;
-		
-	}
-	
-	
-	$scope.editCompany = function(id){
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$scope.modify=true;
-		$scope.detail=true;
-		
-		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
-		callRestWs($http,'company/'+id+'/get','GET',
-			headers,
-			{},
-			function(response){
-					if (response.data.resultCode==RESULT_OK){
-						//console.log(JSON.stringify(response));
-						$scope.companyId=response.data.company.id;
-						$scope._code=response.data.company.code;
-						$scope._name=response.data.company.name;
-						$scope._address=response.data.company.address;
-						$scope._selectedCityId=response.data.company.cityId==0?'':response.data.company.cityId;
-						$scope._fiscalCode=response.data.company.fiscalCode;
-						$scope._vatCode=response.data.company.vatCode;
-						
-						callRestWs($http,'company/'+id+'/getPersonAll','GET',
-								headers,
-								{},
-								function(response){
-										if (response.data.resultCode==RESULT_OK){
-											//console.log(JSON.stringify(response));
-											$scope.companyPersons=response.data.companyPersons;
-										}
-										else
-										{
-											manageError($scope,response.data.resultCode,response.data.resultDesc);
-										}
-									}, 
-									function(data, status, headers, config){
-											manageError($scope,status,data);
-									});
-
-					}
-					else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, 
-				function(data, status, headers, config){
-						manageError($scope,status,data);
-				});
-	}
-	
-
-	$scope.deleteCompany = function(id){
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$translate('DELETECONFIRM.MESSAGE')
- 		.then(function (translatedValue) {
- 			if (!confirm(translatedValue))
-				return;
-			
- 			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'company/'+id+'/remove','GET',
- 					headers,
- 					{},
- 					function(response){
- 							if (response.data.resultCode==RESULT_OK){
- 								$search();							
- 							}
- 							else
- 							{
- 								manageError($scope,response.data.resultCode,response.data.resultDesc);
- 							}
- 						}, 
- 						function(data, status, headers, config){
- 								manageError($scope,status,data);
- 						});
- 		});
-		
-	}
-	
-});
-
-setMenuCntl(app);
-
-
-</script>
 	
 </body>
 </html>	

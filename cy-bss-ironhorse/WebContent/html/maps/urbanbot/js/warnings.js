@@ -170,10 +170,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 	
 	var $setContentMarker = function(map,marker,ticket){
 		
-		var textColor='Orange';
+		var textColor='Red';
 		if (ticket.statusId==2){
-			pinImage=pinImageRed;
-			textColor='Red';
+			pinImage=pinImageOrange;
+			textColor='Orange';
 		}
 		if (ticket.statusId==3){
 			pinImage=pinImageGreen;
@@ -306,7 +306,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter,irtickets
 							position=new google.maps.LatLng(ticket.location.latitude*(Math.random()*(max - min) + min),
 									ticket.location.longitude*(Math.random()*(max - min) + min));
 						
-						var pinImage=pinImageOrange;
+						var pinImage=pinImageRed;
 						var textColor='Orange';
 						if (ticket.statusId==2){
 							pinImage=pinImageRed;

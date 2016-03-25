@@ -47,17 +47,17 @@
 				
 		<div class="form-group form-group-sm">
 			<label for="_code">{{'CODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="15" required/></div>
+			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="15" maxlength=50 required/></div>
 		</div>
       		
 		<div class="form-group form-group-sm">
 			<label for="_firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_firstName" id="_firstName" type="text" ng-model="_firstName" size="30" required/></div>
+			<div><input class="form-control" name="_firstName" id="_firstName" type="text" ng-model="_firstName" size="30" maxlength=50 required/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
 			<label for="_secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_secondName" id="_secondName" type="text" ng-model="_secondName" size="30" required/></div>
+			<div><input class="form-control" name="_secondName" id="_secondName" type="text" ng-model="_secondName" size="30" maxlength=50 required/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
@@ -73,12 +73,12 @@
 			
       	<div class="form-group form-group-sm">
 			<label for="_address">{{'ADDRESS.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_address" id="_address" type="text" ng-model="_address" size="40"/></div>
+			<div><input class="form-control" name="_address" id="_address" type="text" ng-model="_address" size="40" maxlength=60 /></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
 			<label for="_zip">{{'ZIP.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_zip" id="_zip" type="text" ng-model="_zip" size="10"/></div>
+			<div><input class="form-control" name="_zip" id="_zip" type="text" ng-model="_zip" size="10"  maxlength=15 /></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
@@ -93,7 +93,7 @@
 		
       	<div class="form-group form-group-sm">
 			<label for="_fiscalCode">{{'FISCALCODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_fiscalCode" id="_fiscalCode" type="text" ng-model="_fiscalCode" size="16"/></div>
+			<div><input class="form-control" name="_fiscalCode" id="_fiscalCode" type="text" ng-model="_fiscalCode"  maxlength=30 size="16"/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
@@ -133,17 +133,17 @@
 	
 			<div class="form-group form-group-sm">
 				<label for="code">{{'CODE.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="code" id="code" type="text"  ng-model="code">
+				<input class="form-control" type="text" name="code" id="code" type="text"  maxlength=50 ng-model="code">
 			</div>
 		
 			<div class="form-group form-group-sm">
 				<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  ng-model="firstName">
+				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  maxlength=50 ng-model="firstName">
 			</div>
 			
 			<div class="form-group form-group-sm">
 				<label for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="secondName" id="secondName" type="text"  ng-model="secondName">
+				<input class="form-control" type="text" name="secondName" id="secondName" type="text"  maxlength=50 ng-model="secondName">
 			</div>
 			
 			<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">

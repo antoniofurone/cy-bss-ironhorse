@@ -46,7 +46,7 @@
 				
 		<div class="form-group form-group-sm">
 			<label for="_name">{{'NAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="30" required/></div>
+			<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="30" maxlength=50 required/></div>
 		</div>
       	<div class="form-group form-group-sm">
 			<label for="_latitude">{{'LATITUDE.LABEL' | translate }}:</label>
@@ -60,7 +60,7 @@
       	
       	<div class="form-group form-group-sm">
 			<label for="_locationType">{{'LOCATIONTYPE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_locationType" id="_locationType" type="text" ng-model="_locationType" size="20"/></div>
+			<div><input class="form-control" name="_locationType" id="_locationType" type="text" ng-model="_locationType" maxlength=30 size="20"/></div>
 		</div>
 		
 		<div class="form-group form-group-sm" ng-show="modify">
@@ -86,18 +86,18 @@
 		</br>
 		<div class="form-group form-group-sm">
       		<label for="_description">{{'DESC.LABEL' | translate }}:</label>
-			<div><textarea class="form-control" rows="8" cols="90" ng-model="_description"></textarea></div>
+			<div><textarea class="form-control" rows="8" cols="90" ng-model="_description" maxlength=2500 ></textarea></div>
 		</div>
 		</br>
 		
 		<div class="form-group form-group-sm">
 			<label for="_address">{{'ADDRESS.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_address" id=_address" type="text" ng-model="_address" size="35"/></div>
+			<div><input class="form-control" name="_address" id=_address" type="text" ng-model="_address" maxlength=60 size="35"/></div>
 		</div>
 		
 		<div class="form-group form-group-sm">
 			<label for="_zipCode">{{'ZIPCODE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_zipCode" id=_zipCode" type="text" ng-model="_zipCode" size="10"/></div>
+			<div><input class="form-control" name="_zipCode" id=_zipCode" type="text" ng-model="_zipCode" maxlength=15 size="10"/></div>
 		</div>
 		
 	
@@ -157,7 +157,7 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_fileName">{{'FILENAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_fileName" id="_fileName" type="text" ng-model="_fileName" size="20"/></div>
+			<div><input class="form-control" name="_fileName" id="_fileName" type="text" ng-model="_fileName" maxlength=30 size="20"/></div>
 		</div>
 		
 		<div class="form-group"> 
@@ -169,12 +169,12 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_fileType">{{'FILETYPE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_fileType" id="_fileType" type="text" ng-model="_fileType" size="20"/></div>
+			<div><input class="form-control" name="_fileType" id="_fileType" type="text" ng-model="_fileType" maxlength=30 size="20"/></div>
 		</div>
 		
       	<div class="form-group form-group-sm">
 			<label for="_fileNote">{{'NOTE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_fileNote" id="_fileNote" type="text" ng-model="_fileNote" size="30"/></div>
+			<div><input class="form-control" name="_fileNote" id="_fileNote" type="text" ng-model="_fileNote" maxlength=500 size="30"/></div>
 		</div>
 		<h6>
 		
@@ -199,13 +199,13 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_nameLang">{{'NAME.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_nameLang" id="_nameLang" type="text" ng-model="_nameLang" size="30" required/></div>
+			<div><input class="form-control" name="_nameLang" id="_nameLang" type="text" ng-model="_nameLang" size="30" maxlength=50 required/></div>
 		</div>
       	
 		</br>
 		<div class="form-group form-group-sm">
       		<label for="_descriptionLang">{{'DESC.LABEL' | translate }}:</label>
-			<div><textarea class="form-control" name="_descriptionLang" id="_descriptionLang" rows="8" cols="90" ng-model="_descriptionLang" required></textarea></div>
+			<div><textarea class="form-control" name="_descriptionLang" id="_descriptionLang" rows="8" cols="90" ng-model="_descriptionLang" maxlength=2500 required></textarea></div>
 		</div>
 		</br>
 		<h6>
@@ -228,12 +228,12 @@
 		
 		<div class="form-group form-group-sm">
 				<label for="name">{{'NAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
+				<input class="form-control" type="text" name="name" id="name" type="text"  maxlength=50 ng-model="name">
 		</div>
 		
 		<div class="form-group form-group-sm">
 				<label for="locationType">{{'LOCATIONTYPE.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="locationType" id="locationType" type="text"  ng-model="locationType">
+				<input class="form-control" type="text" name="locationType" id="locationType" type="text" maxlength=30 ng-model="locationType">
 		</div>
 		
 		<div class="form-group form-group-sm">

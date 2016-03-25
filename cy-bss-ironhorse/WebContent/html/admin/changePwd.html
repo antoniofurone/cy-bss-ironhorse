@@ -27,7 +27,7 @@
 		<div class="form-group form-group-sm">
 			<label class="col-sm-1 control-label" translate>OLD_PWD.LABEL</label>
 			<div class="col-sm-4">
-				<input class="form-control" name="oldPwd" id="oldPwd" type="password" ng-model="oldPwd" required/>
+				<input class="form-control" name="oldPwd" id="oldPwd" type="password" ng-model="oldPwd" maxlength=30 required/>
 				<span class="help-block" ng-show="logon.oldPwd.$error.required" translate>OLD_PWD.REQUIRED</span>
       		</div>
       	</div>
@@ -35,7 +35,7 @@
       	<div class="form-group form-group-sm">
 			<label class="col-sm-1 control-label" translate>NEW_PWD.LABEL</label>
 			<div class="col-sm-4">
-				<input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" required/>
+				<input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" maxlength=30 required/>
 				<span class="help-block" ng-show="logon.pwd.$error.required" translate>NEW_PWD.REQUIRED</span>
       		</div>
 		</div>
@@ -43,7 +43,7 @@
 		<div class="form-group form-group-sm">
 			<label class="col-sm-1 control-label" translate>CONF_PWD.LABEL</label>
 			<div class="col-sm-4">
-				<input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" required/>
+				<input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" maxlength=30 required/>
 				<span class="help-block" ng-show="logon.confPwd.$error.required" translate>CONF_PWD.REQUIRED</span>
       		</div>
 		</div>
