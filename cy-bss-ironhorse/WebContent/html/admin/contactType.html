@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Iron Horse - Contact Type</title>
+	
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="shortcut icon" href="../../images/cy.ico">
+	
+	<script src="../../js/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script> 
+	<script src="../../js/angularjs/1.3.15/angular.min.js"></script>
+	<script src="../../js/angular-translate/2.8.1/angular-translate.min.js"></script>
+	
+	<script src="../../js/ironhorse-common.js"></script>
+	<script src="../../js/ironhorse-transl.js"></script>
+	<script src="../../js/ironhorse-list.js"></script>
+	<script src="../../js/ironhorse-search.js"></script>
+	
+	   
+</head>
+<body>
+
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
+	
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+		
+	<form novalidate name="contactTypeList" id="contactTypeList" class="form-inline" role="form" method="post">
+		
+		<div id='detail' ng-show="detail">
+			
+			<div ng-show="!modify"><h4><span class="label label-default">{{'NEW.TITLE' | translate }}</span></h4></div>
+			<div ng-show="modify"><h4><span class="label label-default">{{'MODIFY.TITLE' | translate }}</span></h4></div>
+			
+			<button type="button" class="btn btn-info btn-sm" ng-click="onBack()">
+			<span class="glyphicon glyphicon-circle-arrow-left"></span>
+				{{'BACK.BUTTON' | translate }}
+			</button>
+			</br></br>
+			
+			<div class="form-group form-group-sm">
+				<label for="_name">{{'NAME.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="15" maxlength=30 required/></div>
+			</div>
+			
+			<div class="form-group form-group-sm">
+				<label for="_description">{{'DESCRIPTION.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_description" id="_description" type="text" ng-model="_description" size="50" maxlength=80/></div>
+			</div>
+			
+			<div class="form-group form-group-sm">
+				<label for="_type">{{'TYPE.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_type" id="_type" type="text" ng-model="_type" size="15" maxlength=30/></div>
+			</div>
+			
+			<h6>
+			<span class="label label-warning" ng-show="contactTypeList._name.$error.required" translate>NAME.REQUIRED</span>
+    		</h6>
+			
+			<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
+			<button type="button" ng-show="!modify" class="btn btn-sm btn-info" ng-click="onReset()" translate>RESET.BUTTON</button>
+		
+		</div>	
+			
+			
+		<div id='list' ng-show="!detail">		
+			<h4><span class="label label-default">{{'CONTACTTYPE.TITLE' | translate }}</span></h4>
+				
+			<div class="form-group form-group-sm">
+				<button type="button" class="btn btn-sm btn-info" ng-click="onNew()">
+				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;
+				{{'NEW.BUTTON' | translate }}
+				</button>
+				
+			</div>
+	      	</br></br>
+			
+	      	<table class="table table-bordered table-striped" ng-show="contactTypes.length>0">
+	      		<thead><tr class="info small">
+	      			<th>{{'NAME.LABEL' | translate }}</th>
+	      			<th>{{'DESCRIPTION.LABEL' | translate }}</th>
+	      			<th>{{'TYPE.LABEL' | translate }}</th>
+	      			<th></th><th></th>
+	      		</tr></thead>
+	      		<tbody><tr class="small" ng-repeat="type in contactTypes | orderBy:'name'">
+	    		
+	    		<td>{{ type.name }}</td>
+	    		<td>{{ type.description }}</td>
+	    		<td>{{ type.type }}</td>
+	    		
+	    		<td> 
+	      			<button class="btn btn-info btn-xs" ng-click="editUser(user.id)">
+	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
+	      			</button>
+	    		</td>
+	    		<td>
+	      			<button class="btn btn-info btn-xs" ng-click="deleteUser(user.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
+	      			</button>
+	    		</td>
+	    		
+	    		
+	  			</tr></tbody>
+	   		</table>
+	      	</div>
+	      	
+      	</div>
+      	<!--  end list -->
+      	
+		
+	</form>
+
+</div>
+
+<script src="js/contactType.js"></script>
+
+</body>
+</html>	
