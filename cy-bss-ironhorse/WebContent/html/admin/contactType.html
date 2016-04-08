@@ -62,7 +62,6 @@
     		</h6>
 			
 			<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
-			<button type="button" ng-show="!modify" class="btn btn-sm btn-info" ng-click="onReset()" translate>RESET.BUTTON</button>
 		
 		</div>	
 			
@@ -93,12 +92,12 @@
 	    		<td>{{ type.type }}</td>
 	    		
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editUser(user.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editUser(type.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
 	      			</button>
 	    		</td>
 	    		<td>
-	      			<button class="btn btn-info btn-xs" ng-click="deleteUser(user.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteUser(type.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
 	      			</button>
 	    		</td>

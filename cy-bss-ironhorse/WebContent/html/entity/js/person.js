@@ -39,7 +39,13 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'UPD.OK': 'Person changed !',
 		'SUBMIT.BUTTON':'Submit',
 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Person ?',
-	    'RESET.BUTTON': 'Reset'
+	    'RESET.BUTTON': 'Reset',
+	    'CONTACTS.LABEL':'Contacts',
+	    'CONTACTTYPE.LABEL':'Contact Type',
+	    'CONTACT.LABEL': 'Contact',
+	    'CONTACTTYPE.REQUIRED':'Contact Type is rquired',
+	    'CONTACT.REQUIRED': 'Contact is required',
+	    'ADDCONTACT.BUTTON':'Add Contact'
  	  })
 	  
 	.translations('it',{
@@ -70,15 +76,21 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'UPD.OK': 'Persona modificata !',
 		'SUBMIT.BUTTON':'Submit',
 		'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare la Persona ?',
-	    'RESET.BUTTON': 'Reset'
- 	  });
+	    'RESET.BUTTON': 'Reset',
+	    'CONTACTS.LABEL':'Contatti',
+	    'CONTACTTYPE.LABEL':'Tipo Contatto',
+	    'CONTACT.LABEL': 'Contatto',
+	    'CONTACTTYPE.REQUIRED':'Tipo Contatto obbligatorio',
+	    'CONTACT.REQUIRED': 'Contatto obbligatorio',
+	    'ADDCONTACT.BUTTON':'Aggiungi Contatto'
+	  });
  	
  	
  	 $translateProvider.preferredLanguage(getLanguage());
 	});
 
 
-app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities) {
+app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities,ircontacttypes) {
 	$scope.detail=false;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
@@ -94,6 +106,41 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
     }, function(data, status, headers, config) {
     	manageError($scope,status,data);
     });
+	
+	
+	ircontacttypes($scope.securityToken).then(function(response) {
+		if (response.data.resultCode==RESULT_OK){
+			//alert (JSON.stringify(response));
+			$scope.contactTypes=response.data.contactTypes;
+		}
+		else
+		{
+			manageError($scope,response.data.resultCode,response.data.resultDesc);
+		}
+    }, function(data, status, headers, config) {
+    	manageError($scope,status,data);
+    });
+	
+	$personContacts=function(id){
+		var headers={"Security-Token":$scope.securityToken};
+		
+		callRestWs($http,'person/'+id+'/getContactAll','GET',
+				{"Security-Token":$scope.securityToken},
+				{},
+				function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//alert (JSON.stringify(response));
+						$scope.contacts=response.data.contacts;
+						}
+					else
+						{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+					});
+	};
 	
 	$search=function(){
 		irperson($scope.code,$scope.firstName,$scope.secondName,$scope.securityToken).then(function(response) {
@@ -258,6 +305,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,irperson,ircities
 						$scope._fiscalCode=response.data.person.fiscalCode;
 						$scope._birthDay=response.data.person.birthDay;
 						$scope._selectedBornCityId=response.data.person.birthCityId==0?'':response.data.person.birthCityId;
+					
+						$personContacts($scope.personId);
 					}
 					else
 					{
