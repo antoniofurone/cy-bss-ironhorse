@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Iron Horse - Person</title>
+	<title>Iron Horse - City</title>
 	
 	<link rel="shortcut icon" href="../../images/cy.ico" type="image/x-icon" />
 	
@@ -33,7 +33,7 @@
 	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
 	
-	<form novalidate name="personForm" id="personForm" class="form-inline" role="form" method="post">
+	<form novalidate name="cityForm" id="cityForm" class="form-inline" role="form" method="post">
 	
 	<div id='list' ng-show="detail">
 		<div ng-show="!modify"><h4><span class="label label-default">{{'NEW.TITLE' | translate }}</span></h4></div>
@@ -174,21 +174,23 @@
 	<!--  end detail -->
 	
 	<div ng-show="!detail">
-		<h4><span class="label label-default">{{'PERSON.TITLE' | translate }}</span></h4>
+		<h4><span class="label label-default">{{'CITY.TITLE' | translate }}</span></h4>
 	
 			<div class="form-group form-group-sm">
-				<label for="code">{{'CODE.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="code" id="code" type="text"  maxlength=50 ng-model="code">
-			</div>
-		
-			<div class="form-group form-group-sm">
-				<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  maxlength=50 ng-model="firstName">
+				<label for="name">{{'NAME.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="name" id="name" type="text"  maxlength=50 ng-model="name">
 			</div>
 			
 			<div class="form-group form-group-sm">
-				<label for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="secondName" id="secondName" type="text"  maxlength=50 ng-model="secondName">
+				<label for="stateRegion">{{'STATEREGION.LABEL' | translate }}:</label>
+				<input class="form-control" type="text" name="stateRegion" id="stateRegion" type="text"  maxlength=50 ng-model="stateRegion">
+			</div>
+			
+			<div class="form-group form-group-sm">
+				<label for="_selectedCuntry">{{'COUNTRY.LABEL' | translate }}:</label>
+				<select id="_selectedCuntry" name="_selectedCuntry" class="form-control" ng-model="_selectedCuntry">
+		        	 <option ng-repeat="country in countries" value="{{country.id}}">{{country.name}}</option>
+		        </select>
 			</div>
 			
 			<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
@@ -249,7 +251,7 @@
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script src="js/person.js"></script>
+<script src="js/city.js"></script>
 
 
 </body>

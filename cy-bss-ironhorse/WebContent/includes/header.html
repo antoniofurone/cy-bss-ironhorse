@@ -34,17 +34,23 @@
 	          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'MENU.ENTITY' | irtranslate }}
 	          <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
+	              <li ng-show="userRole != 'undefined'">
+	            	<a href="/cy-bss-ironhorse/html/entity/city.html">{{'MENU.ENTITY.CITY' | irtranslate }}</a>
+	             </li>
+	             <li ng-show="userRole != 'undefined'">
+	            	<a href="/cy-bss-ironhorse/html/entity/country.html">{{'MENU.ENTITY.COUNTRY' | irtranslate }}</a>
+	             </li>
 	             <li ng-show="userRole != 'undefined'">
 	            	<a href="/cy-bss-ironhorse/html/entity/company.html">{{'MENU.ENTITY.COMPANY' | irtranslate }}</a>
 	             </li>
 	             <li ng-show="userRole != 'undefined'">
 	            	<a href="/cy-bss-ironhorse/html/entity/file.html">{{'MENU.ENTITY.FILE' | irtranslate }}</a>
 	             </li>
-	             <li ng-show="userRole != 'undefined'">
-	            	<a href="/cy-bss-ironhorse/html/entity/person.html">{{'MENU.ENTITY.PERSON' | irtranslate }}</a>
-	             </li>
 	              <li ng-show="userRole != 'undefined'">
 	            	<a href="/cy-bss-ironhorse/html/entity/location.html">Location</a>
+	             </li>
+	             <li ng-show="userRole != 'undefined'">
+	            	<a href="/cy-bss-ironhorse/html/entity/person.html">{{'MENU.ENTITY.PERSON' | irtranslate }}</a>
 	             </li>
 	          </ul>
 	    </li>

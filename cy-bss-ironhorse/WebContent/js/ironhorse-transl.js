@@ -7,6 +7,8 @@ var menuMapTranslation={
 				"MENU.ADMIN.CONTACTTYPE":"Contact Type",
 				
 				"MENU.ENTITY":"Entity",
+				'MENU.ENTITY.CITY':"City",
+				'MENU.ENTITY.COUNTRY':"Country",
 				"MENU.ENTITY.COMPANY":"Company",
 				"MENU.ENTITY.PERSON":"Person",
 				"MENU.ENTITY.FILE":"File",
@@ -27,6 +29,8 @@ var menuMapTranslation={
 				"MENU.ADMIN.CONTACTTYPE":"Tipologie Contatti",
 				
 				"MENU.ENTITY":"Entita'",
+				'MENU.ENTITY.CITY':"Citta'",
+				'MENU.ENTITY.COUNTRY':"Paese",
 				"MENU.ENTITY.COMPANY":"Azienda",
 				"MENU.ENTITY.PERSON":"Persona",
 				"MENU.ENTITY.FILE":"File",

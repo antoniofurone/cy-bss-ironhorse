@@ -36,7 +36,14 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'ADDPERSON.BUTTON':'Add Person',
  		'PERSON.REQUIRED':'Person is required',
  		'DEPT.REQUIRED':'Dept is required',
- 		'ROLE.REQUIRED':'Role is required'
+ 		'ROLE.REQUIRED':'Role is required',
+ 		'DELETECONTACTCONFIRM.MESSAGE': 'Are you sure to delete Contact ?',
+ 		'CONTACTS.LABEL':'Contacts',
+	    'CONTACTTYPE.LABEL':'Contact Type',
+	    'CONTACT.LABEL': 'Contact',
+	    'CONTACTTYPE.REQUIRED':'Contact Type is required',
+	    'CONTACT.REQUIRED': 'Contact is required',
+	    'ADDCONTACT.BUTTON':'Add Contact'
  	  })
 	  
 	.translations('it',{
@@ -72,14 +79,21 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'ADDPERSON.BUTTON':'Aggiungi Persona',
  		'PERSON.REQUIRED':'Persona obbligatoria',
  		'DEPT.REQUIRED':'Dipartimento obbligatorio',
- 		'ROLE.REQUIRED':'Ruolo obbligatorio'
+ 		'ROLE.REQUIRED':'Ruolo obbligatorio',
+ 		'DELETECONTACTCONFIRM.MESSAGE': 'Sei sicuro di cancellare il Contatto ?',
+	    'CONTACTS.LABEL':'Contatti',
+	    'CONTACTTYPE.LABEL':'Tipo Contatto',
+	    'CONTACT.LABEL': 'Contatto',
+	    'CONTACTTYPE.REQUIRED':'Tipo Contatto obbligatorio',
+	    'CONTACT.REQUIRED': 'Contatto obbligatorio',
+	    'ADDCONTACT.BUTTON':'Aggiungi Contatto'
   	  });
  	
  	
  	 $translateProvider.preferredLanguage(getLanguage());
 	});
 
-app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircities,irperson) {
+app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircities,irperson,ircontacttypes) {
 	$scope.detail=false;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
@@ -160,6 +174,39 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 					});
 	};
 		
+	$companyContacts=function(id){
+		var headers={"Security-Token":$scope.securityToken};
+		
+		callRestWs($http,'company/'+id+'/getContactAll','GET',
+				{"Security-Token":$scope.securityToken},
+				{},
+				function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//alert (JSON.stringify(response));
+						$scope.contacts=response.data.contacts;
+						}
+					else
+						{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+					});
+	};
+	
+	ircontacttypes($scope.securityToken).then(function(response) {
+		if (response.data.resultCode==RESULT_OK){
+			//alert (JSON.stringify(response));
+			$scope.contactTypes=response.data.contactTypes;
+		}
+		else
+		{
+			manageError($scope,response.data.resultCode,response.data.resultDesc);
+		}
+    }, function(data, status, headers, config) {
+    	manageError($scope,status,data);
+    });
 	
 	$search=function(){
 		ircompany($scope.code,$scope.name,$scope.securityToken).then(function(response) {
@@ -327,6 +374,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 							$companyRole();
 						
 						$companyPerson(id);
+						$companyContacts($scope.companyId);
 						
 					}
 					else
@@ -449,6 +497,81 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 			}, function(data, status, headers, config) {
     	    	manageError($scope,status,data);
     	    });
+	}
+	
+	
+	$scope.addContact = function() {
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		if (($scope.modify && ($scope._selectedContactType=='' || $scope._selectedContactType==undefined)) 
+				|| $scope._contact=='' ||  $scope._contact==undefined)
+				return;
+		
+		var headers={"Security-Token":$scope.securityToken};
+		var data = {};
+		
+		data['contactTypeId']=$scope._selectedContactType;
+		data['entityName']='Company';
+		data['entityId']=$scope.companyId;
+		data['contact']=$scope._contact;
+	
+		callRestWs($http,'contact/add','POST',
+				headers,
+				data,
+				function(response){
+					if (response.data.resultCode==RESULT_OK){
+						$companyContacts($scope.companyId);
+						$scope._selectedContactType=undefined;
+						$scope._contact='';
+						$translate('UPD.OK')
+	    	          		.then(function (translatedValue) {
+	    	              		$scope.infoMessage=translatedValue;
+	    	          		});
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+		
+	} // end addContact
+		
+	
+	$scope.deleteContact = function(contactId) {
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		$translate('DELETECONTACTCONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'contact/'+contactId+'/remove','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								$translate('UPD.OK')
+ 		    	          		.then(function (translatedValue) {
+ 		    	              		$scope.infoMessage=translatedValue;
+ 		    	          		});
+ 								$companyContacts($scope.companyId);							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 		});
+
 	}
 	
 	

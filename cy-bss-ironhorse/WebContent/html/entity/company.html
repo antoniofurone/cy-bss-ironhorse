@@ -93,6 +93,53 @@
 	
 		<div ng-show="modify">
 		
+			<h5><span class="label label-default">{{'CONTACTS.LABEL' | translate }}</span></h5>
+			
+			<table class="table-condensed table-bordered table-striped">
+			<thead ng-show="contacts.length>0">
+				<tr class="info small">
+				<th>{{'CONTACTTYPE.LABEL' | translate }}</th>
+				<th>{{'CONTACT.LABEL' | translate }}</th>
+				<th></th>
+				</tr>
+		    </thead>
+			<tbody>
+		    	<tr class="small" ng-repeat="contact in contacts">
+		    		<td>{{ contact.contactTypeName }}</td>
+		    		<td>{{ contact.contact }}</td>
+		    		<td>
+		    			<button class="btn btn-info btn-xs" ng-click="deleteContact(contact.id)">
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      				</button>
+	    			</td>
+				</tr>
+			</tbody>		
+			</table>
+		
+			<div class="form-group form-group-sm">
+				<label for="_selectedContactType">{{'CONTACTTYPE.LABEL' | translate }}:</label>
+				<select id="_selectedContactType" name="_selectedContactType" class="form-control" ng-model="_selectedContactType" required>
+		        	 <option ng-repeat="contactType in contactTypes" value="{{contactType.id}}">{{contactType.name}}</option>
+		        </select>
+			</div>
+			
+			<div class="form-group form-group-sm">
+				<label  for="_contact">{{'CONTACT.LABEL' | translate }}:</label>
+			   	<input class="form-control" type="text" size=15 name="_contact" id="_contact" type="text" maxlength=300 ng-model="_contact" required>
+	 		</div>
+			
+			<h6>
+				<span class="label label-warning" ng-show="companyForm._selectedContactType.$error.required && modify" translate>CONTACTTYPE.REQUIRED</span>
+				<span class="label label-warning" ng-show="companyForm._contact.$error.required && modify" translate>CONTACT.REQUIRED</span>
+			</h6>
+		
+			<button type="button" class="btn btn-xs btn-info" ng-click="addContact()" translate>ADDCONTACT.BUTTON</button>
+		
+		</div>
+	
+	
+		<div ng-show="modify">
+		
 		<h5><span class="label label-default">{{'PERSONS.LABEL' | translate }}</span></h5>
 		
 		<table class="table-condensed table-bordered table-striped">

@@ -12,10 +12,6 @@ $('#datepickerTo').datepicker({
    console.log('datepickerTo:'+e.date);
 });
 
-
-
-
-
 var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irlist'])
 		.config(function($translateProvider) {
 	     	$translateProvider
