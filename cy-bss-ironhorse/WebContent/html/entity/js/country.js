@@ -16,29 +16,18 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'BACK.BUTTON':'Back',
  		'CODE.LABEL':'Code',
  		'NAME.LABEL':'Name',
- 		'STATEREGION.LABEL':'State/Region',
- 		'COUNTRY.LABEL':'Country',
- 		'LATITUDE.LABEL':'Latitude',
- 		'LONGITUDE.LABEL':'Longitude',
  		'NEW.BUTTON':'New',
  		'EDIT.BUTTON':'Edit',
  		'DELETE.BUTTON':'Delete',
- 		'CITY.TITLE':'City',
+ 		'COUNTRY.TITLE':'Coutry',
  		'NEW.TITLE':'New',
- 		'GENDER.LABEL':'Gender',
- 		'MALE.GENDER':'Male',
- 		'FEMALE.GENDER':'Female',
- 		'BIRTHDAY.LABEL':'Birth Day',
- 		'BORNCITY.LABEL':'Born City',
  		'MODIFY.TITLE':'Change',
  		'NAME.REQUIRED':'Name is required',
- 		'COUNTRY.REQUIRED':'Coutry is required',
- 		'INS.OK': 'City inserted !',
-		'UPD.OK': 'City changed !',
+ 		'CODE.REQUIRED':'Code is required',
+ 	 	'INS.OK': 'Country inserted !',
+		'UPD.OK': 'Country changed !',
 		'SUBMIT.BUTTON':'Submit',
-		'DELETECONFIRM.MESSAGE': 'Are you sure to delete City ?',
-		'LATITUDE.NUMBER':'Latitude is numeric',
- 		'LONGITUDE.NUMBER':'Longitude is numeric'
+		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Country ?'
  	  })
 	  
 	.translations('it',{
@@ -46,29 +35,18 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'BACK.BUTTON':'Indietro',
 		'CODE.LABEL':'Codice',
 		'NAME.LABEL':'Nome',
- 		'STATEREGION.LABEL':'Stato/Regione',
- 		'COUNTRY.LABEL':"Paese",
- 		'LATITUDE.LABEL':'Latitudine',
- 		'LONGITUDE.LABEL':'Longitudine',
- 		'NEW.BUTTON':'Nuova',
+ 		'NEW.BUTTON':'Nuovo',
  		'EDIT.BUTTON':'Modifica',
  		'DELETE.BUTTON':'Cancella',
- 		'CITY.TITLE':"Citta'",
- 		'GENDER.LABEL':'Sesso',
- 		'MALE.GENDER':'Maschio',
- 		'FEMALE.GENDER':'Femmina',
- 		'BIRTHDAY.LABEL':'Data di nascita',
- 		'NEW.TITLE':'Nuova',
- 		'BORNCITY.LABEL':"Citta' di nascita",
+ 		'COUNTRY.TITLE':"Paese",
+ 		'NEW.TITLE':'Nuovo',
  		'MODIFY.TITLE':'Modifica',
  		'NAME.REQUIRED':'Nome obbligatorio',
- 		'COUNTRY.REQUIRED':'Pase obbligatorio',
- 		'INS.OK': "Citta' inserita !",
-		'UPD.OK': "Citta' modificata !",
+ 		'CODE.REQUIRED':'Codice obbligatorio',
+ 		'INS.OK': "Paese inserito !",
+		'UPD.OK': "Paese modificato !",
 		'SUBMIT.BUTTON':'Submit',
-		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Citta' ?",
-		'LATITUDE.NUMBER':'Latitude numerica',
- 		'LONGITUDE.NUMBER':'Longitude numerica'
+		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Paese ?"
 		});
  	
  	
@@ -76,30 +54,17 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	});
 
 
-app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircitysearch) {
+app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountrysearch) {
 	$scope.detail=false;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
-	
-	ircountries($scope.securityToken).then(function(response) {
-		if (response.data.resultCode==RESULT_OK){
-			//alert (JSON.stringify(response));
-			$scope.countries=response.data.countries;
-		}
-		else
-		{
-			manageError($scope,response.data.resultCode,response.data.resultDesc);
-		}
-    }, function(data, status, headers, config) {
-    	manageError($scope,status,data);
-    });
 	
 	
 	$search=function(){
 		
-		ircitysearch($scope.name,$scope.stateRegion,$scope.selectedCuntry,$scope.securityToken).then(function(response) {
+		ircountrysearch($scope.name,$scope.securityToken).then(function(response) {
 			if (response.data.resultCode==RESULT_OK){
 					//alert (JSON.stringify(response));
-					$scope.cities=response.data.cities;
+					$scope.countries=response.data.countries;
 				}
 			else
 				{
@@ -124,7 +89,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 		$scope.infoMessage="";
 		
 		$scope.detail=false;
-		if ($scope.cities!=undefined)
+		if ($scope.countries!=undefined)
 			$search();
 	}
 	
@@ -139,11 +104,6 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 		
 		$scope._name='';
 		$scope._code='';
-		$scope._latitude='';
-		$scope._longitude='';
-		$scope._stateRegion='';
-		$scope._selectedCountry='';
-		
 		
 	}
 		
@@ -152,27 +112,17 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if  ($scope._name=='' || $scope._name==undefined ||  
-			 $scope._selectedCountry=='' || $scope._selectedCountry==undefined ||
-			 $scope.cityForm._latitude.$error.number ||  $scope.cityForm._longitude.$error.number)
+		if  ($scope._name=='' || $scope._name==undefined
+			 || $scope._code=='' || $scope._code==undefined)
 			return;
 	
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
 		
 		data['name']=$scope._name;
-		data['countryId']=$scope._selectedCountry;
-		if ($scope._code!=undefined && $scope._code!='')
-			data['code']=$scope._code;
-		if ($scope._stateRegion!=undefined && $scope._stateRegion!='')
-			data['stateRegion']=$scope._stateRegion;
-		if ($scope._latitude!=undefined && $scope._latitude!='')
-			data['latitude']=$scope._latitude;
-		if ($scope._longitude!=undefined && $scope._longitude!='')
-			data['longitude']=$scope._longitude;
-		
+		data['code']=$scope._code;
 				
-		callRestWs($http,!$scope.modify?'city/add':'city/'+$scope.cityId+'/update','POST',
+		callRestWs($http,!$scope.modify?'country/add':'country/'+$scope.countryId+'/update','POST',
 				headers,
 				data,
 				function(response){
@@ -183,7 +133,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
    		    	          		.then(function (translatedValue) {
    		    	              		$scope.infoMessage=translatedValue;
    		    	          	});
-   							$scope.cityId=response.data.city.id;
+   							$scope.countryId=response.data.country.id;
    						}
 						else {
 							$translate('UPD.OK')
@@ -204,7 +154,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 		
 	}
 	
-	$scope.editCity = function(id){
+	$scope.editCountry = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
@@ -212,19 +162,15 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 		$scope.detail=true;
 		
 		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'city/'+id+'/get','GET',
+		callRestWs($http,'country/'+id+'/get','GET',
 			headers,
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
 						//console.log(JSON.stringify(response));
-						$scope.cityId=response.data.city.id;
-						$scope._name=response.data.city.name;
-						$scope._stateRegion=response.data.city.stateRegion;
-						$scope._code=response.data.city.code;
-						$scope._latitude=response.data.city.latitude==0?'':response.data.city.latitude;
-						$scope._longitude=response.data.city.longitude==0?'':response.data.city.longitude;
-						$scope._selectedCountry=response.data.city.countryId==0?'':response.data.city.countryId;
+						$scope.countryId=response.data.country.id;
+						$scope._name=response.data.country.name;
+						$scope._code=response.data.country.code;
 					}
 					else
 					{
@@ -236,7 +182,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 				});
 	}
 	
-	$scope.deleteCity = function(id){
+	$scope.deleteCountry = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
@@ -246,7 +192,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircountries,ircit
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'city/'+id+'/remove','GET',
+ 			callRestWs($http,'country/'+id+'/remove','GET',
  					headers,
  					{},
  					function(response){
