@@ -5,6 +5,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.USER":"Manage users",
 				"MENU.ADMIN.CHPWD":"Change Password",
 				"MENU.ADMIN.CONTACTTYPE":"Contact Type",
+				"MENU.ADMIN.ATTRIBUTE":"Attributes",
 				
 				"MENU.ENTITY":"Entity",
 				'MENU.ENTITY.CITY':"City",
@@ -27,6 +28,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.USER":"Gestione utenti",
 				"MENU.ADMIN.CHPWD":"Modifica Password",
 				"MENU.ADMIN.CONTACTTYPE":"Tipologie Contatti",
+				"MENU.ADMIN.ATTRIBUTE":"Attributi",
 				
 				"MENU.ENTITY":"Entita'",
 				'MENU.ENTITY.CITY':"Citta'",
