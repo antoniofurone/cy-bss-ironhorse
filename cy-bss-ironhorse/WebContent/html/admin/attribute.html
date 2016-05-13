@@ -41,91 +41,40 @@
 				{{'BACK.BUTTON' | translate }}
 			</button>
 			</br></br>
-			
-			<div class="form-group form-group-sm">
-				<label for="userId">{{'USERID.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="userId" id="userId" type="text" ng-model="userId" maxlength=50 size="30" required/></div>
-			</div>
-      			
+				
       		<div class="form-group form-group-sm">
-				<label for="name">{{'NAME.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="name" id="name" type="text" ng-model="name" size="30" maxlength=50 required/></div>
+				<label for="_name">{{'NAME.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="20" maxlength=20 required/></div>
 			</div>
 			
-			<div class="form-group form-group-sm" ng-show="!modify">
-				<label for="pwd">{{'PWD.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="pwd" id="pwd" type="password" ng-model="pwd" size="30" maxlength=30 required/></div>
-			</div>	
-			
-			<div class="form-group form-group-sm" ng-show="!modify">
-				<label for="confPwd">{{'CONFPWD.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="confPwd" id="confPwd" type="password" ng-model="confPwd" size="30" maxlength=30 required/></div>
-      		</div>
-			
 			<div class="form-group form-group-sm">
-				<label for="selectedRole">{{'ROLE.LABEL' | translate }}:</label>
+				<label for="_selectedObject">{{'OBJECT.LABEL' | translate }}:</label>
 				<div>
-					<select id="selectedRole" name="selectedRole" class="form-control" ng-model="selectedRole" required>
-			        	 <option ng-repeat="r in roles" value="{{r.id}}">{{r.name}}</option>
+					<select id="_selectedObject" name="_selectedObject" class="form-control" ng-model="_selectedObject" required>
+			        	 <option ng-repeat="object in cyBssObjects" value="{{object.id}}">{{object.name}}</option>
 			        </select>
 		    	</div>
       		</div>
 			
 			<div class="form-group form-group-sm">
-				<label for="selectedLanguage">{{'LANGUAGE.LABEL' | translate }}:</label>
+				<label for="_selectedType">{{'TYPE.LABEL' | translate }}:</label>
 				<div>
-				    <select id="selectedLanguage" name="selectedLanguage" class="form-control" ng-model="selectedLanguage" required>
-			        	 <option ng-repeat="l in languages" value="{{l.id}}">{{l.name}}</option>
+					<select id="_selectedType" name="_selectedType" class="form-control" ng-model="_selectedType" required>
+			        	 <option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
 			        </select>
-				</div>
+		    	</div>
       		</div>
 			
+			
 			<h6>
-			<span class="label label-warning" ng-show="userList.userId.$error.required" translate>USER_ID.REQUIRED</span>
-    		<span class="label label-warning" ng-show="userList.name.$error.required" translate>NAME.REQUIRED</span>
-    		<span class="label label-warning" ng-show="userList.pwd.$error.required && !modify" translate>PWD.REQUIRED</span>
-			<span class="label label-warning" ng-show="userList.confPwd.$error.required && !modify" translate>CONFPWD.REQUIRED</span>
-      		<span class="label label-warning" ng-show="userList.selectedRole.$error.required" translate>ROLE.REQUIRED</span>
-      		<span class="label label-warning" ng-show="userList.selectedLanguage.$error.required" translate>LANGUAGE.REQUIRED</span>
-      		</h6>
+			<span class="label label-warning" ng-show="attributeList._name.$error.required" translate>NAME.REQUIRED</span>
+			<span class="label label-warning" ng-show="attributeList._selectedObject.$error.required" translate>OBJECT.REQUIRED</span>
+			<span class="label label-warning" ng-show="attributeList._selectedType.$error.required" translate>TYPE.REQUIRED</span>
+			
+    		</h6>
 			
 			<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
-			<button type="button" ng-show="!modify" class="btn btn-sm btn-info" ng-click="onReset()" translate>RESET.BUTTON</button>
 			
-			<div ng-show="modify">
-			</br>
-			<div class="form-group form-group-sm">
-					<label class="label label-success">{{ ((personFirstName==''||personFirstName==undefined)&&(personSecondName==''||personSecondName==undefined))?'':personFirstName+' '+personSecondName}}</label>
-					<button type="button" class="btn btn-xs btn-info" ng-show="personFirstName!=undefined && personFirstName!='' && personSecondName!=undefined && personSecondName!=''" ng-click="onRemovePerson()">
-					<span class="glyphicon glyphicon-trash"></span></button>
-			</div>
-			
-			<div class="form-group form-group-sm">
-				<label for="firstName">{{'FIRSTNAME.LABEL' | translate }}:</label>
-				<input class="form-control" type="text" name="firstName" id="firstName" type="text"  maxlength=50 ng-model="firstName">
-	       </div>
-			
-			<div class="form-group form-group-sm">
-				<label  for="secondName">{{'SECONDNAME.LABEL' | translate }}:</label>
-			   	<input class="form-control" type="text" name="secondName" id="secondName" type="text"  maxlength=50 ng-model="secondName">
-		    </div>
-			<button type="button" class="btn btn-sm btn-info" ng-click="onSearchPerson()">
-			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}</button>
-			
-			<div class="form-group form-group-sm">
-				<label for="selectedPerson">{{'PERSON.LABEL' | translate }}:</label>
-				<select id="selectedPerson" name="selectedPerson" class="form-control" ng-model="selectedPerson" required>
-		        	 <option ng-repeat="p in persons" value="{{p.id}}">{{p.firstName+' '+p.secondName+' ['+p.code+']'}}</option>
-		        </select>
-			</div>
-			<button type="button" class="btn btn-sm btn-info" ng-click="onSetPerson()" translate>SETPERSON.BUTTON</button>
-			
-			<h6>
-			    <span class="label label-warning" ng-show="userList.selectedPerson.$error.required" translate>PERSON.REQUIRED</span>
-      		</h6>
-			
-			</div> 
-			<!-- end set user -->
 		</div>
 		
 		<div id='list' ng-show="!detail">		
@@ -135,9 +84,9 @@
 				
 				<div class="form-group form-group-sm">
 				<label for="selectedObject">{{'OBJECT.LABEL' | translate }}:</label>
-				<select id="selectedObject" name="selectedObject" class="form-control" ng-model="selectedObject">
+				<select id="selectedObject" name="selectedObject" class="form-control" ng-model="selectedObject" required>
 		        	 <option value=''/>
-		        	 <option ng-repeat="object in objects" value="{{object.id}}">{{object.name}}</option>
+		        	 <option ng-repeat="object in cyBssObjects" value="{{object.id}}">{{object.name}}</option>
 		        </select>
 				</div>
 			
@@ -151,32 +100,38 @@
 				{{'NEW.BUTTON' | translate }}
 				</button>
 				
+				<h6>
+					<span class="label label-warning" ng-show="attributeList.selectedObject.$error.required" translate>OBJECT.REQUIRED</span>
+    			</h6>
+			
+				
 			</div>
 	      	</br></br>
 			
-	      	<table class="table table-bordered table-striped" ng-show="users.length>0">
+	      	<table class="table table-bordered table-striped" ng-show="attributes.length>0">
 	      		<thead><tr class="info small">
-	      			<th>UserId</th><th>User Name</th>
-	      			<th>{{'ROLE.LABEL' | translate }}</th>
-	      			<th>{{'LANGUAGE.LABEL' | translate }}</th>
-	      			<th>{{'ACTIVE.LABEL' | translate }}</th>
+	      			<th>Id</th>
+	      			<th>{{'NAME.LABEL' | translate }}</th>
+	      			<th>{{'OBJECTNAME.LABEL' | translate }}</th>
+	      			<th>{{'ENTITYNAME.LABEL' | translate }}</th>
+	      			<th>{{'TYPE.LABEL' | translate }}</th>
 	      			<th></th><th></th>
 	      		</tr></thead>
-	      		<tbody><tr class="small" ng-repeat="user in users | orderBy:'name'">
+	      		<tbody><tr class="small" ng-repeat="attribute in attributes | orderBy:'name'">
 	    		
-	    		<td>{{ user.userId }}</td>
-	    		<td>{{ user.name }}</td>
-	    		<td>{{ user.role }}</td>
-	    		<td>{{ user.languageCode }}</td>
-	    		<td>{{ user.flgActive }}</td>
+	    		<td>{{ attribute.id }}</td>
+	    		<td>{{ attribute.name }}</td>
+	    		<td>{{ attribute.objectName }}</td>
+	    		<td>{{ attribute.entityName }}</td>
+	    		<td>{{ attribute.typeName }}</td>
 	    		
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editUser(user.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editAttribute(attribute.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
 	      			</button>
 	    		</td>
 	    		<td>
-	      			<button class="btn btn-info btn-xs" ng-click="deleteUser(user.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteAttribute(attribute.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
 	      			</button>
 	    		</td>

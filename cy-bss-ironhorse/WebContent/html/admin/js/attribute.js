@@ -6,36 +6,21 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'NEW.BUTTON':'New',
      		'OBJECT.LABEL':'Object',
      		'SEARCH.TITLE':'Attributes',
-     		'NEW.TITLE':'New User',
-     		'MODIFY.TITLE':'Edit User',
-     		'USERID.LABEL':'User Id',
-     		'USER_ID.REQUIRED':'User Id required',
-     		'PWD.LABEL':'Password',
-     		'PWD.REQUIRED':'Password required',
-     		'CONFPWD.LABEL':'Confirm Password',
-     		'CONFPWD.REQUIRED':'Confirm Password required',
-     		'NAME.LABEL':'Name',
+     		'NEW.TITLE':'New Attribute',
+     		'MODIFY.TITLE':'Edit Attribute',
      		'NAME.REQUIRED':'Name required',
-     		'ROLE.LABEL':'Role',
-     		'ROLE.REQUIRED':'Role required',
-    		'LANGUAGE.LABEL':'Language',
-     		'LANGUAGE.REQUIRED':'Language required',
-			'SUBMIT.BUTTON':'Submit',
-		    'RESET.BUTTON': 'Reset',
+     		'OBJECT.REQUIRED':'Object required',
+     		'TYPE.REQUIRED':'Type required',
+     		'NAME.LABEL':'Name',
+     		'OBJECTNAME.LABEL':'Object',
+     		'ENTITYNAME.LABEL':'Entity',
+     		'TYPE.LABEL':'Type',
+     		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
-		    'PWD.DIFF': 'Password different from Confirm Password. Please Check !',
-		    'INS.OK': 'User added !',
-		    'UPD.OK': 'User updated !',
-		    'ROLE.LABEL':'Role',
+		    'INS.OK': 'Attribute added !',
+		    'UPD.OK': 'Attribute updated !',
 		    'LANGUAGE.LABEL':'Language',
-		    'ACTIVE.LABEL':'Active',
-		    'ASSOCPERSON.LABEL':'Set Person',
-		    'FIRSTNAME.LABEL':'First Name',
-		    'SECONDNAME.LABEL':'Second Name',    		    
-			'PERSON.LABEL':'Person',
-			'SETPERSON.BUTTON':'Set Person',
-			'DELETECONFIRM.MESSAGE': 'Are you sure to delete User?',
-			'PERSON.REQUIRED':'Person required'
+		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete attribute ?'
 		  })
 		  
 		.translations('it',{
@@ -43,34 +28,20 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 			'NEW.BUTTON':'Nuovo',
 			'OBJECT.LABEL':'Object',
 			'SEARCH.TITLE':'Attributi',
-			'NEW.TITLE':'Nuovo Utente',
-			'MODIFY.TITLE':'Modifica Utente',
-			'USERID.LABEL':'User Id',
-			'USER_ID.REQUIRED':'User Id obbligatorio',
-			'PWD.LABEL':'Password',
-     		'PWD.REQUIRED':'Password obbligatoria',
-    		'CONFPWD.LABEL':'Conferma Password',
-     		'CONFPWD.REQUIRED':'Conferma Password obbligatoria',
+			'NEW.TITLE':'Nuovo Attributo',
+			'MODIFY.TITLE':'Modifica Attributo',
+			'NAME.REQUIRED':'Nome obbligatorio',
+	     	'OBJECT.REQUIRED':'Oggetto obbligatorio',
+	     	'TYPE.REQUIRED':'Tipo obbligatorio',
      		'NAME.LABEL':'Nome',
-     		'NAME.REQUIRED':'Nome obbligatorio',
-    		'LANGUAGE.LABEL':'Lingua',
-     		'LANGUAGE.REQUIRED':'Lingua obbligatoria',
-			'SUBMIT.BUTTON':'Conferma',
-    		'RESET.BUTTON': 'Reset',
+     		'OBJECTNAME.LABEL':'Object',
+     		'ENTITYNAME.LABEL':'Entity',
+     		'TYPE.LABEL':'Type',
+     		'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'PWD.DIFF': 'Password differente da Confirm Password. Verifica, Grazie !',
-    		'INS.OK': 'Utente inserito !',
-    		'UPD.OK': 'Utente modificato !',
-    		'ROLE.LABEL':'Ruolo',
-    		'LANGUAGE.LABEL':'Linguaggio',
-    		'ACTIVE.LABEL':'Attivo',
-    		'ASSOCPERSON.LABEL':'Associa Persona',
-    		'FIRSTNAME.LABEL':'Nome',
-		    'SECONDNAME.LABEL':'Cognome',
-			'PERSON.LABEL':'Persona',
-			'SETPERSON.BUTTON':'Associa Persona',
-			'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'utente?",
-			'PERSON.REQUIRED':'Persona obbligatoria'
+    		'INS.OK': 'Attributo inserito !',
+    		'UPD.OK': 'Attributo modificato !',
+    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'attributo?",
 		  });
      	
      	 $translateProvider.preferredLanguage(getLanguage());
@@ -82,50 +53,81 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	$scope.showList=true;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
+	callRestWs($http,'object/getObjectAll','GET',{},{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						$scope.cyBssObjects=response.data.cyBssObjects;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+	
+	callRestWs($http,'object/getAttributeTypeAll','GET',{},{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						$scope.types=response.data.attributeTypes;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+	
+	
+	$search=function(objectId){
+		var headers={"Security-Token":$scope.securityToken};
+		callRestWs($http,'object/'+objectId+'/getAttributes','GET',
+				headers,
+				{},
+				function(response){
+						if (response.data.resultCode==RESULT_OK){
+							$scope.attributes=response.data.attributes;
+						}
+						else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+					function(data, status, headers, config){
+							manageError($scope,status,data);
+					});
+		};
+	
+	
 	$scope.onSearch = function() {
 		$scope.errorMessage="";
-		search($http,$scope);
+		
+		if ($scope.selectedObject==undefined || $scope.selectedObject=='')
+    		return;
+		
+		$search($scope.selectedObject);
 	}
 	// end search
 	
 	$scope.onBack = function() {
-		resetForm($scope);
-		$scope.showList=true;
-		if ($scope.users!=undefined)
-			search($http,$scope);
+		$scope.detail=false;
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		if ($scope.attributes!=undefined)
+			$search($scope.selectedObject);
 	}
 	
 	$scope.onNew = function() {
-		$scope.showList=false;
+		$scope.detail=true;
 		$scope.modify=false;
 		
-		resetForm($scope);
+		$scope._name='';
+		$scope._selectedObject=undefined;
+		$scope._selectedType=undefined;
 		
-		irlanguages($scope.securityToken).then(function(response) {
-			if (response.data.resultCode==RESULT_OK){
-				//alert (JSON.stringify(response));
-				$scope.languages=response.data.languages;
-			}
-			else
-			{
-				manageError($scope,response.data.resultCode,response.data.resultDesc);
-			}
-	    }, function(data, status, headers, config) {
-	    	manageError($scope,status,data);
-	    });
-		
-		iruserroles($scope.securityToken).then(function(response) {
-			if (response.data.resultCode==RESULT_OK){
-					//alert (JSON.stringify(response));
-					$scope.roles=response.data.roles;
-				}
-				else
-				{
-					manageError($scope,response.data.resultCode,response.data.resultDesc);
-				}
-	    }, function(data, status, headers, config) {
-	    	manageError($scope,status,data);
-	    });
 		
 	}
 	// end new
@@ -133,43 +135,19 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	$scope.onSubmit = function() {
 		$scope.errorMessage="";
 		$scope.infoMessage="";
-		$scope.personFirstName="";
-		$scope.personSecondName="";
 		
-		
-		if (!$scope.modify) {
-			// add
-			if ($scope.userId=='' || $scope.name=='' || $scope.pwd=='' || $scope.confPwd==''
-				|| $scope.selectedRole=='' || $scope.selectedLanguage=='' )
-    			return;
-		
-    		if ($scope.pwd!=$scope.confPwd){
-    			$translate('PWD.DIFF')
-    	          .then(function (translatedValue) {
-    	              $scope.errorMessage=translatedValue;
-    	          }); 
-    			return;
-    			}
-			}
-		else
-			{
-			// modify
-			if ($scope.userId=='' || $scope.name=='')					
-				return;
-			}
-		
+		if ($scope._name=='' || $scope._selectedObject=='' || $scope._selectedType=='')
+			return;
 		
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
-		data['userId']=$scope.userId;
-		data['name']=$scope.name;
-		data['pwd']=$scope.pwd;
-		data['roleId']=$scope.selectedRole;
-		data['languageId']=$scope.selectedLanguage;
+		data['name']=$scope._name;
+		data['typeId']=$scope._selectedType;
+		data['objectId']=$scope._selectedObject;
 		if ($scope.modify)
-			data['id']=$scope.user_id;
+			data['id']=$scope.attribute_id;
 		
-		callRestWs($http,!$scope.modify?'user/add':'user/'+$scope.user_id+'/update','POST',
+		callRestWs($http,!$scope.modify?'object/addAttribute':'object/updateAttribute','POST',
 				headers,
 				data,
 				function(response){
@@ -180,7 +158,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
    		    	          		.then(function (translatedValue) {
    		    	              		$scope.infoMessage=translatedValue;
    		    	          	});
-						}
+   							
+   							$scope.attribute_id=response.data.attribute.id;
+   						}
 						else {
 							$translate('UPD.OK')
 	    	          		.then(function (translatedValue) {
@@ -189,23 +169,6 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 						}
 						
 						$scope.modify=true;
-						
-						callRestWs($http,'user/getByUserId?userId='+$scope.userId,'GET',
-			    				headers,
-			    				{},
-			    				function(response){
-			   						if (response.data.resultCode==RESULT_OK){
-			   							$scope.user_id=response.data.user.id;
-			   						}
-			   						else
-			   						{
-			   							manageError($scope,response.data.resultCode,response.data.resultDesc);
-			   						}
-			   					}, 
-			   					function(data, status, headers, config){
-			   							manageError($scope,status,data);
-			   					});
-						
 					}
 					else
 					{
@@ -218,49 +181,34 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 			
 	}// end onSubmit
 	
-	$scope.onReset = function() {
-		resetForm($scope);
-	}// end onReset
-	
-	
-	$scope.editUser = function(id){
+	$scope.editAttribute = function(id){
 		$scope.modify=true;
-		$scope.showList=false;
-		$scope.selectedPerson=undefined;
-		$scope.persons=undefined;
-    	
-		irlanguages($scope.securityToken).then(function(response) {
-			if (response.data.resultCode==RESULT_OK){
-				//alert (JSON.stringify(response));
-				$scope.languages=response.data.languages;
-				
-				iruserroles($scope.securityToken).then(function(response) {
-	    			if (response.data.resultCode==RESULT_OK){
-							//alert (JSON.stringify(response));
-							$scope.roles=response.data.roles;
-							readUser($http,$scope,id);
+		$scope.detail=true;
+		    	
+		var headers={"Security-Token":$scope.securityToken};
+		callRestWs($http,'object/'+id+'/getAttribute','GET',
+				headers,
+				{},
+				function(response){
+						if (response.data.resultCode==RESULT_OK){
+							$scope._name=response.data.attribute.name;
+							$scope._selectedObject=response.data.attribute.objectId;
+							$scope._selectedType=response.data.attribute.typeId;
+							$scope.attribute_id=response.data.attribute.id;
 						}
 						else
 						{
 							manageError($scope,response.data.resultCode,response.data.resultDesc);
 						}
-			    }, function(data, status, headers, config) {
-	    	    	manageError($scope,status,data);
-	    	    });
-	    		
-			}
-			else
-			{
-				manageError($scope,response.data.resultCode,response.data.resultDesc);
-			}
-	    }, function(data, status, headers, config) {
-	    	manageError($scope,status,data);
-	    });
+					}, 
+					function(data, status, headers, config){
+							manageError($scope,status,data);
+					});
 		
 		
 	}
 	
-	$scope.deleteUser = function(id){
+	$scope.deleteAttribute = function(id){
 		
 		$translate('DELETECONFIRM.MESSAGE')
  		.then(function (translatedValue) {
@@ -268,12 +216,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'user/'+id+'/remove','GET',
+ 			callRestWs($http,'object/'+id+'/removeAttribute','GET',
  					headers,
  					{},
  					function(response){
  							if (response.data.resultCode==RESULT_OK){
- 								search($http,$scope);							
+ 								$search($scope.selectedObject);							
  							}
  							else
  							{
@@ -286,136 +234,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
  			});
 		
 	}
-	// deleteUser
-	
-	
-	$scope.onSearchPerson=function(){
-		
-		irperson('',$scope.firstName,$scope.secondName,$scope.securityToken).then(function(response) {
-				if (response.data.resultCode==RESULT_OK){
-						//alert (JSON.stringify(response));
-						$scope.persons=response.data.persons;
-					}
-				else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, function(data, status, headers, config) {
-	    	    	manageError($scope,status,data);
-	    	    });
-	
-	
-	}
-	// onSearchPerson
-	
-	
-	$scope.onSetPerson=function(){
-		if ($scope.selectedPerson=='' || $scope.selectedPerson==undefined)					
-			return;
-	
-		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'user/'+$scope.user_id+'/addPerson/'+$scope.selectedPerson,'GET',
-				headers,
-				{},
-				function(response){
-						if (response.data.resultCode==RESULT_OK){
-							readUser($http,$scope,$scope.user_id)
-						}
-						else
-						{
-							manageError($scope,response.data.resultCode,response.data.resultDesc);
-						}
-					}, 
-					function(data, status, headers, config){
-							manageError($scope,status,data);
-					});
-	
-	}
-	// onSetPerson
-	
-	
-	$scope.onRemovePerson=function(){
-		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'user/'+$scope.user_id+'/removePerson','GET',
-				headers,
-				{},
-				function(response){
-						if (response.data.resultCode==RESULT_OK){
-							readUser($http,$scope,$scope.user_id)
-						}
-						else
-						{
-							manageError($scope,response.data.resultCode,response.data.resultDesc);
-						}
-					}, 
-					function(data, status, headers, config){
-							manageError($scope,status,data);
-					});
-	
-	}
-	// onRemovePerson
-	
 	
 }); 
 
-   
 setMenuCntl(app);
 
-function readUser($http,$scope,id){
-	var headers={"Security-Token":$scope.securityToken};
-	callRestWs($http,'user/'+id+'/get','GET',
-			headers,
-			{},
-			function(response){
-					if (response.data.resultCode==RESULT_OK){
-						console.log(JSON.stringify(response));
-						$scope.user_id=response.data.user.id;
-						$scope.userId=response.data.user.userId;
-						$scope.name=response.data.user.name;
-						$scope.selectedRole=response.data.user.roleId;
-						$scope.selectedLanguage=response.data.user.languageId;
-						$scope.personFirstName=response.data.user.personFirstName;
-						$scope.personSecondName=response.data.user.personSecondName;
-					}
-					else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, 
-				function(data, status, headers, config){
-						manageError($scope,status,data);
-				});
-}
-
-function search($http,$scope){
-	callRestWs($http,'user/find?name='+($scope.userName!=undefined?encodeURIComponent($scope.userName):''),'GET',
-			{"Security-Token":$scope.securityToken},
-			{},
-			function(response){
-					if (response.data.resultCode==RESULT_OK){
-						//alert (JSON.stringify(response));
-						$scope.users=response.data.users;
-						//alert ($scope.users);
-					}
-					else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, 
-				function(data, status, headers, config){
-						manageError($scope,status,data);
-				});
-}	
-
-function resetForm($scope){
-	$scope.user_id='';
-	$scope.userId='';
-	$scope.name='';
-	$scope.pwd='';
-	$scope.confPwd='';
-	$scope.selectedRole='';
-	$scope.selectedLanguage='';
-	$scope.errorMessage="";
-	$scope.infoMessage="";
-	
-}

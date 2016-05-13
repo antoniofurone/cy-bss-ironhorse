@@ -19,6 +19,7 @@ var menuMapTranslation={
 				
 				"MENU.MAPS":"Maps",
 				"MENU.MAPS.URBANBOT.WARN":"Warnings",
+				"MENU.MAPS.URBANBOT.EVENTS":"Events",
 				"MENU.MAPS.URBANBOT.STORIES":"Stories",
 				"MENU.MAPS.URBANBOT.SITES":"Tourist Sites"
 			},
