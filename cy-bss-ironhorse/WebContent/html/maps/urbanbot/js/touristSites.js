@@ -209,6 +209,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 					} // for
 					
 					markerCluster = new MarkerClusterer(map, marker_list, {
+						imagePath: 'https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/images/m',
 					    gridSize:2,
 					    minimumClusterSize: 2,
 					    calculator: function(markers, numStyles) {

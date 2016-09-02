@@ -124,6 +124,7 @@
 		
       	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
 		
+		<!-- contacts -->
 		<div ng-show="modify">
 		
 			<h5><span class="label label-default">{{'CONTACTS.LABEL' | translate }}</span></h5>
@@ -169,6 +170,23 @@
 			<button type="button" class="btn btn-xs btn-info" ng-click="addContact()" translate>ADDCONTACT.BUTTON</button>
 		
 		</div>
+		<!-- end contacts -->
+		
+		<!-- properties -->
+		<div ng-show="modify">
+			<h5><span class="label label-default">{{'PROPERTIES.LABEL' | translate }}</span></h5>
+			<table class="table-condensed table-bordered table-striped">
+				<thead ng-show="contacts.length>0">
+					<tr class="info small">
+					<th>{{'CONTACTTYPE.LABEL' | translate }}</th>
+					<th>{{'CONTACT.LABEL' | translate }}</th>
+					<th></th>
+					</tr>
+			    </thead>
+			</table>		
+		
+		</div>
+		<!--  end properties -->
       	
 	</div>
 	<!--  end detail -->

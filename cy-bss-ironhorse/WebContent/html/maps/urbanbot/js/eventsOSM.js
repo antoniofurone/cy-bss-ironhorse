@@ -8,7 +8,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator'])
 	     		'DATEFROM.LABEL':'From',
 	     		'DATETO.LABEL':'To',
 	     		'SEARCH.BUTTON':'Update Map',
-	     		'NOWARNS.MESSAGE':'Sites not found',
+	     		'NOWARNS.MESSAGE':'Events not found',
 	     		'TYPE.LABEL':'Type',
 	     		'NAME.LABEL':'Name',
 	     		'TEXT.LABEL':'Description',
@@ -70,7 +70,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 		var deferred = $q.defer();
 		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
 		
-		var query="?locationType=Event";
+		var query="?locationType=EventLocation";
 		query+="&fromDate="+($scope.dateFrom!=undefined?encodeURIComponent($scope.dateFrom):'');
 		query+="&toDate="+($scope.dateTo!=undefined?encodeURIComponent($scope.dateTo):'');
 		
@@ -180,11 +180,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 						  zoom: 7
 						});
 					
-					
-					L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
-						  attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
-						  subdomains: ['otile1','otile2','otile3','otile4']
-						}).addTo( map );	
+					L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+							{attribution: 'Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'}).addTo(map);	
 						
 					$scope.count=0;
 					var markerClusters = L.markerClusterGroup();

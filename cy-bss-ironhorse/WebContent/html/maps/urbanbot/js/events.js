@@ -62,7 +62,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 		var deferred = $q.defer();
 		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
 		
-		var query="?locationType=Event";
+		var query="?locationType=EventLocation";
 		query+="&fromDate="+($scope.dateFrom!=undefined?encodeURIComponent($scope.dateFrom):'');
 		query+="&toDate="+($scope.dateTo!=undefined?encodeURIComponent($scope.dateTo):'');
 		
@@ -191,8 +191,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 						
 						var location=$scope.locations[i];
 						
-						var position=new google.maps.LatLng(location.latitude,
-									location.longitude);
+						
+						var min = .999999;
+						var max = 1.000001;
+						
+						var position=new google.maps.LatLng(location.latitude*(Math.random()*(max - min) + min),
+								location.longitude*(Math.random()*(max - min) + min));
 						
 						var marker = new google.maps.Marker({
 			                position: position, 
@@ -209,7 +213,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$filter) {
 					} // for
 					
 					markerCluster = new MarkerClusterer(map, marker_list, {
-					    gridSize:2,
+						imagePath: 'https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/images/m',
+						gridSize:2,
 					    minimumClusterSize: 2,
 					    calculator: function(markers, numStyles) {
 					    return {
