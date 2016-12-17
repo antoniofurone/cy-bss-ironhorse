@@ -23,6 +23,7 @@
 	<script src="../../js/ironhorse-transl.js"></script>
 	<script src="../../js/ironhorse-search.js"></script>
 	<script src="../../js/ironhorse-list.js"></script>
+	<script src="../../js/ironhorse-attribute.js"></script>
 	
 </head>
 <body>
@@ -136,6 +137,57 @@
 			<button type="button" class="btn btn-xs btn-info" ng-click="addContact()" translate>ADDCONTACT.BUTTON</button>
 		
 		</div>
+	
+	
+		<!-- attributes -->
+		<div ng-show="modify">
+			<h5><span class="label label-default">{{'ATTRIBUTES.LABEL' | translate }}</span></h5>
+			<table class="table-condensed table-bordered table-striped">
+				<thead ng-show="attributeValues.length>0">
+					<tr class="info small">
+					<th>{{'ATTRIBUTENAME.LABEL' | translate }}</th>
+					<th>{{'ATTRIBUTETYPE.LABEL' | translate }}</th>
+					<th>{{'ATTRIBUTEVALUE.LABEL' | translate }}</th>
+					<th></th>
+					</tr>
+			    </thead>
+			
+				<tbody>
+			    	<tr class="small" ng-repeat="attribute in attributeValues">
+			    		<td>{{ attribute.name }}</td>
+			    		<td>{{ attribute.typeName }}</td>
+			    		<td>{{ attribute.value }}</td>
+			    		<td>
+			    			<button class="btn btn-info btn-xs" ng-click="deleteAttribute(attribute.id)">
+		      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+		      				</button>
+		    			</td>
+					</tr>
+				</tbody>		
+			
+			</table>		
+		
+			<div class="form-group form-group-sm">
+				<label for="_selectedAttribute">{{'ATTRIBUTENAME.LABEL' | translate }}:</label>
+				<select id="_selectedAttribute" name="_selectedAttribute" class="form-control" ng-model="_selectedAttribute" required>
+		        	 <option ng-repeat="attribute in attributes" value="{{attribute.id}}">{{attribute.name +' >'+attribute.typeName+'<' }}</option>
+		        </select>
+			</div>
+			
+				<div class="form-group form-group-sm">
+				<label  for="_attributeValue">{{'ATTRIBUTEVALUE.LABEL' | translate }}:</label>
+			   	<input class="form-control" type="text" size=15 name="_attributeValue" id="_attributeValue" type="text" maxlength=300 ng-model="_attributeValue" required>
+	 		</div>
+			
+			<h6>
+				<span class="label label-warning" ng-show="personForm._selectedAttribute.$error.required && modify" translate>ATTRIBUTENAME.REQUIRED</span>
+				<span class="label label-warning" ng-show="personForm._attributeValue.$error.required && modify" translate>ATTRIBUTEVALUE.REQUIRED</span>
+			</h6>
+		
+			<button type="button" class="btn btn-xs btn-info" ng-click="addAttribute()" translate>ADDATTRIBUTE.BUTTON</button>
+			
+		</div>
+		<!--  end attributes -->
 	
 	
 		<div ng-show="modify">
