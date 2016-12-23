@@ -353,6 +353,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 	    	              		$scope.infoMessage=translatedValue;
 	    	          		});
 						}
+						
+						$scope.contacts=undefined;
+						$scope.attributeValues=undefined;
+						
 						$scope.modify=true;
 						
 					}
@@ -423,8 +427,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 						if ($scope.roles==undefined)
 							$companyRole();
 						
+						$scope.contancts=undefined;
+						$scope.attributeValues=undefined;
+						
 						$companyPerson(id);
 						$companyContacts($scope.companyId);
+						$companyAttributes();
 						
 					}
 					else

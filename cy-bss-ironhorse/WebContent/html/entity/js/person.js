@@ -476,6 +476,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,
 	    	              		$scope.infoMessage=translatedValue;
 	    	          		});
 						}
+						
+						$scope.contacts=undefined;
+						$scope.attributeValues=undefined;
+						
 						$scope.modify=true;
 					}
 					else
@@ -515,6 +519,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,
 						$scope._birthDay=response.data.person.birthDay;
 						$scope._selectedBornCityId=response.data.person.birthCityId==0?'':response.data.person.birthCityId;
 					
+						$scope.contacts=undefined;
+						$scope.attributeValues=undefined;
+						
 						$personContacts($scope.personId);
 						$personAttributes();
 						

@@ -13,12 +13,13 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 		});
 
 	
-	var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch','irlist'])
+	var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch','irlist',
+	                                     'irattribute'])
 	.config(function($translateProvider) {
 	 	$translateProvider
 	 	.translations('en',{
 	 		'SEARCH.BUTTON':'Search',
-	 		'NEW.BUTTON':'Nuova',
+	 		'NEW.BUTTON':'New',
 	 		'BACK.BUTTON':'Back',
 	 		'ADDFILE.BUTTON':'Add File',
 	 		'NEW.TITLE':'New',
@@ -59,7 +60,15 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 			'REMOVELANGUAGE.BUTTON':'Remove Language',
      		'EDIT.BUTTON':'Edit',
      		'SUBMIT.BUTTON':'Submit',
-     		'DELETE.BUTTON':'Delete'
+     		'DELETE.BUTTON':'Delete',
+     		'ATTRIBUTES.LABEL':'Attributes',
+    	    'ATTRIBUTENAME.LABEL':'Name',
+    	    'ATTRIBUTETYPE.LABEL':'Type',
+    	    'ATTRIBUTEVALUE.LABEL':'Value',
+    	    'ATTRIBUTENAME.REQUIRED':'Attribute Name is required',
+    	    'ATTRIBUTEVALUE.REQUIRED':'Attribute Value is required',
+    	    'ADDATTRIBUTE.BUTTON':'Add Attribute',
+    	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?"
      		
      	  })
 		  
@@ -106,7 +115,15 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 			'REMOVELANGUAGE.BUTTON':'Cancella Lingua',
 			'EDIT.BUTTON':'Modifica',
 	 		'SUBMIT.BUTTON':'Submit',
-     		'DELETE.BUTTON':'Cancella'
+     		'DELETE.BUTTON':'Cancella',
+     		'ATTRIBUTES.LABEL':'Attribute',
+    	    'ATTRIBUTENAME.LABEL':'Nome',
+    	    'ATTRIBUTETYPE.LABEL':'Tipo',
+    	    'ATTRIBUTEVALUE.LABEL':'Valore',
+    	    'ATTRIBUTENAME.REQUIRED':'Nome Attributo obbligatorio',
+    	    'ATTRIBUTEVALUE.REQUIRED':'Valore Attributo obbligatorio',
+    	    'ADDATTRIBUTE.BUTTON':'Aggiungi Attributo',
+    	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?"
      	  });
 	 	
 	 	
@@ -203,7 +220,8 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 	}]);
 
 	
-	app.controller('pageCtrl', function($q,$scope,$http,$translate,ircities,irlanguages,fileUpload) {
+	app.controller('pageCtrl', function($q,$scope,$http,$translate,ircities,irlanguages,fileUpload,
+				irgetobjectbyname,irgetattributes,irsetattributevalue,irattributevalues,irremoveattributevalue) {
 		$scope.detail=false;
 		$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 		$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
@@ -233,6 +251,37 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 	    }, function(data, status, headers, config) {
 	    	manageError($scope,status,data);
 	    });
+		
+		
+		irgetobjectbyname($scope.securityToken,"Location").then(function(response) {
+			if (response.data.resultCode==RESULT_OK){
+				//alert (JSON.stringify(response));
+				$scope.objectId=response.data.object.id;
+				
+				irgetattributes($scope.securityToken,$scope.objectId).then(function(response) {
+					if (response.data.resultCode==RESULT_OK){
+						//alert (JSON.stringify(response));
+						$scope.attributes=response.data.attributes;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+			    }, function(data, status, headers, config) {
+			    	manageError($scope,status,data);
+			    });
+				
+				
+				
+			}
+			else
+			{
+				manageError($scope,response.data.resultCode,response.data.resultDesc);
+			}
+	    }, function(data, status, headers, config) {
+	    	manageError($scope,status,data);
+	    });
+		
 		
 		
 		$scope.uploadFile = function(){
@@ -284,6 +333,89 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 						});
 			return deferred.promise;
 		}
+		
+		
+		// attributes
+		$scope.addAttribute = function() {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+		
+			
+			if (($scope.modify && ($scope._selectedAttribute=='' || $scope._selectedAttribute==undefined)) 
+					|| $scope._attributeValue=='' ||  $scope._attributeValue==undefined)
+					return;
+			
+			var headers={"Security-Token":$scope.securityToken};
+			var data = {};
+			data['objInstId']=$scope.locationId;
+			data['id']=$scope._selectedAttribute;
+			data['value']=$scope._attributeValue;
+			
+			irsetattributevalue($scope.securityToken,data).then(function(response) {
+				if (response.data.resultCode==RESULT_OK){
+					$locationAttributes();
+					$scope._selectedAttribute=undefined;
+					$scope._attributeValue='';
+					$translate('UPD.OK')
+		          		.then(function (translatedValue) {
+		              		$scope.infoMessage=translatedValue;
+		          		});
+					}
+				else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, function(data, status, headers, config) {
+	    	    	manageError($scope,status,data);
+	    	    });
+		}
+		
+		$scope.deleteAttribute = function(attributeId) {
+			$scope.errorMessage="";
+			$scope.infoMessage="";
+			
+			$translate('DELETEATTRIBUTECONFIRM.MESSAGE')
+	 		.then(function (translatedValue) {
+	 			if (!confirm(translatedValue))
+					return;
+		
+	 			irremoveattributevalue($scope.securityToken,attributeId,$scope.locationId).then(function(response) {
+	 				if (response.data.resultCode==RESULT_OK){
+	 					$locationAttributes();
+	 					$scope._selectedAttribute=undefined;
+	 					$scope._attributeValue='';
+	 					$translate('UPD.OK')
+	 		          		.then(function (translatedValue) {
+	 		              		$scope.infoMessage=translatedValue;
+	 		          		});
+	 					}
+	 				else
+	 					{
+	 						manageError($scope,response.data.resultCode,response.data.resultDesc);
+	 					}
+	 				}, function(data, status, headers, config) {
+	 	    	    	manageError($scope,status,data);
+	 	    	    });	
+	 		});
+		}
+		
+		$locationAttributes=function(){
+			var headers={"Security-Token":$scope.securityToken};
+			
+			irattributevalues($scope.securityToken,$scope.objectId,$scope.locationId).then(function(response) {
+				if (response.data.resultCode==RESULT_OK){
+					$scope.attributeValues=response.data.attributes;
+					}
+				else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, function(data, status, headers, config) {
+	    	    	manageError($scope,status,data);
+	    	    });
+		
+		};
+		// end attributes
 		
 		
 		
@@ -528,6 +660,8 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 		    	              		$scope.infoMessage=translatedValue;
 		    	          		});
 							}
+							
+							$scope.attributeValues=undefined;
 							$scope.modify=true;
 						}
 						else
@@ -586,6 +720,10 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 				    	    }, function(data, status, headers, config) {
 				    	    	manageError($scope,status,data);
 				    	    });
+							
+							attributeValues=undefined;
+							$locationAttributes();
+							
 						}
 						else
 						{
