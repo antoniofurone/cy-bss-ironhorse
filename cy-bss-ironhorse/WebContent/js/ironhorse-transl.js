@@ -6,6 +6,8 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Change Password",
 				"MENU.ADMIN.CONTACTTYPE":"Contact Type",
 				"MENU.ADMIN.ATTRIBUTE":"Attributes",
+				"MENU.ADMIN.PRODUCTCATEGORY":"Product Category",
+				"MENU.ADMIN.PRODUCTTYPE":"Product Type",
 				
 				"MENU.ENTITY":"Entity",
 				'MENU.ENTITY.CITY':"City",
@@ -30,6 +32,9 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Modifica Password",
 				"MENU.ADMIN.CONTACTTYPE":"Tipologie Contatti",
 				"MENU.ADMIN.ATTRIBUTE":"Attributi",
+				"MENU.ADMIN.PRODUCTCATEGORY":"Categoria Prodotto",
+				"MENU.ADMIN.PRODUCTTYPE":"Tipologia Prodotto",
+				
 				
 				"MENU.ENTITY":"Entita'",
 				'MENU.ENTITY.CITY':"Citta'",
