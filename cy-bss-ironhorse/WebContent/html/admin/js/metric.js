@@ -4,33 +4,31 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      	.translations('en',{
      		'SEARCH.BUTTON':'Search',
      		'NEW.BUTTON':'New',
-     		'PRODUCTTYPE.TITLE':'Product Types',
-     		'NEW.TITLE':'New Product Type',
-     		'MODIFY.TITLE':'Edit Product Type',
-     		'DESCRIPTION.LABEL':'Description',
+     		'METRIC.TITLE':'Metrics',
+     		'NEW.TITLE':'New Metric',
+     		'MODIFY.TITLE':'Edit Metric',
      		'NAME.LABEL':'Name',
      		'NAME.REQUIRED':'Name is required',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
-		    'INS.OK': 'Type added !',
-		    'UPD.OK': 'Type updated !',
-		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Type?'
+		    'INS.OK': 'Metric added !',
+		    'UPD.OK': 'Metric updated !',
+		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Metric?'
 		  })
 		  
 		.translations('it',{
 			'SEARCH.BUTTON':'Ricerca',
 			'NEW.BUTTON':'Nuovo',
-			'PRODUCTTYPE.TITLE':'Tipi di Prodotto',
-			'NEW.TITLE':'Nuovo Tipo di Prodotto',
-			'MODIFY.TITLE':'Modifica Tipo di Prodotto',
-			'DESCRIPTION.LABEL':'Descrizione',
+			'METRIC.TITLE':'Metriche',
+			'NEW.TITLE':'Nuova Metrica',
+			'MODIFY.TITLE':'Modifica Metrica',
 			'NAME.LABEL':'Nome',
 			'NAME.REQUIRED':'Nome obbligatorio',
 			'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Tipo di prodotto inserito !',
-    		'UPD.OK': 'Tipo di prodotto modificato !',
-    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Tipo di Prodotto?"
+    		'INS.OK': 'Metrica inserita !',
+    		'UPD.OK': 'Metrica modificata !',
+    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Metrica?"
 		  });
      	
      	 $translateProvider.preferredLanguage(getLanguage());
@@ -44,12 +42,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	
 	$search=function(){
 	var headers={"Security-Token":$scope.securityToken};
-	callRestWs($http,'product/getTypeAll','GET',
+	callRestWs($http,'metric/getMetricAll','GET',
 			headers,
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						$scope.types=response.data.types;
+						$scope.metrics=response.data.metrics;
 					}
 					else
 					{
@@ -80,7 +78,6 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.infoMessage="";
 		
 		$scope._name='';
-		$scope._description='';
 		
 	}
 	// end new
@@ -89,15 +86,14 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope.productTypeList._name.$error.required)
+		if ($scope.metricList._name.$error.required)
 	    	return;
 		
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
 		data['name']=$scope._name;
-		data['description']=$scope._description;
 		
-		callRestWs($http,!$scope.modify?'product/addType':'product/'+$scope.type_id+'/updateType','POST',
+		callRestWs($http,!$scope.modify?'metric/addMetric':'metric/'+$scope.metric_id+'/updateMetric','POST',
 				headers,
 				data,
 				function(response){
@@ -132,7 +128,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	}// end onSubmit
 	
 	
-	$scope.editType = function(id){
+	$scope.editMetric = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
@@ -140,14 +136,13 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.detail=true;
 		
 		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'product/'+id+'/getType','GET',
+		callRestWs($http,'metric/'+id+'/getMetric','GET',
 				headers,
 				{},
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
-							$scope.type_id=response.data.type.id;
-							$scope._name=response.data.type.name;
-							$scope._description=response.data.type.description;
+							$scope.metric_id=response.data.metric.id;
+							$scope._name=response.data.metric.name;
 						}
 						else
 						{
@@ -159,7 +154,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 					});
 	}
 	
-	$scope.deleteType = function(id){
+	$scope.deleteMetric = function(id){
 		
 		$translate('DELETECONFIRM.MESSAGE')
  		.then(function (translatedValue) {
@@ -167,7 +162,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'product/'+id+'/removeType','GET',
+ 			callRestWs($http,'metric/'+id+'/removeMetric','GET',
  					headers,
  					{},
  					function(response){
@@ -185,7 +180,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
  			});
 		
 	}
-	// deleteUser
+	// deleteMetric
 }); 
    
 setMenuCntl(app);

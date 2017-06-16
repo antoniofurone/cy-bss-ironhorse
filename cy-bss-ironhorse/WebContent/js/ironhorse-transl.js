@@ -6,6 +6,9 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Change Password",
 				"MENU.ADMIN.CONTACTTYPE":"Contact Type",
 				"MENU.ADMIN.ATTRIBUTE":"Attributes",
+				"MENU.ADMIN.CURRENCY":"Currencies",
+				"MENU.ADMIN.METRIC":"Metrics",
+				"MENU.ADMIN.SCALE":"Metric Scales",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Product Category",
 				"MENU.ADMIN.PRODUCTTYPE":"Product Type",
 				
@@ -32,6 +35,9 @@ var menuMapTranslation={
 				"MENU.ADMIN.CHPWD":"Modifica Password",
 				"MENU.ADMIN.CONTACTTYPE":"Tipologie Contatti",
 				"MENU.ADMIN.ATTRIBUTE":"Attributi",
+				"MENU.ADMIN.CURRENCY":"Valute",
+				"MENU.ADMIN.METRIC":"Metriche",
+				"MENU.ADMIN.SCALE":"Scale",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Categoria Prodotto",
 				"MENU.ADMIN.PRODUCTTYPE":"Tipologia Prodotto",
 				

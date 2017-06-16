@@ -29,7 +29,7 @@
 	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
 		
-	<form novalidate name="productTypeList" id="productTypeList" class="form-inline" role="form" method="post">
+	<form novalidate name="currencyList" id="currencyList" class="form-inline" role="form" method="post">
 		
 		<div id='detail' ng-show="detail">
 			
@@ -43,18 +43,20 @@
 			</br></br>
 			
 			<div class="form-group form-group-sm">
-				<label for="_name">{{'NAME.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="15" maxlength=30 required/></div>
+				<label for="_code">{{'CODE.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" size="5" maxlength=10 required/></div>
 			</div>
 			
 			<div class="form-group form-group-sm">
-				<label for="_description">{{'DESCRIPTION.LABEL' | translate }}:</label>
-				<div><input class="form-control" name="_description" id="_description" type="text" ng-model="_description" size="50" maxlength=80/></div>
+				<label for="_name">{{'NAME.LABEL' | translate }}:</label>
+				<div><input class="form-control" name="_name" id="_name" type="text" ng-model="_name" size="30" maxlength=30 required/></div>
 			</div>
 			
+			
 			<h6>
-			<span class="label label-warning" ng-show="productTypeList._name.$error.required" translate>NAME.REQUIRED</span>
-    		</h6>
+				<span class="label label-warning" ng-show="currencyList._code.$error.required" translate>CODE.REQUIRED</span>
+	    		<span class="label label-warning" ng-show="currencyList._name.$error.required" translate>NAME.REQUIRED</span>
+	    	</h6>
 			
 			<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
 		
@@ -62,7 +64,7 @@
 			
 			
 		<div id='list' ng-show="!detail">		
-			<h4><span class="label label-default">{{'PRODUCTTYPE.TITLE' | translate }}</span></h4>
+			<h4><span class="label label-default">{{'CURRENCY.TITLE' | translate }}</span></h4>
 				
 			<div class="form-group form-group-sm">
 				<button type="button" class="btn btn-sm btn-info" ng-click="onNew()">
@@ -73,24 +75,24 @@
 			</div>
 	      	</br></br>
 			
-	      	<table class="table table-bordered table-striped" ng-show="types.length>0">
+	      	<table class="table table-bordered table-striped" ng-show="currencies.length>0">
 	      		<thead><tr class="info small">
+	      			<th>{{'CODE.LABEL' | translate }}</th>
 	      			<th>{{'NAME.LABEL' | translate }}</th>
-	      			<th>{{'DESCRIPTION.LABEL' | translate }}</th>
 	      			<th></th><th></th>
 	      		</tr></thead>
-	      		<tbody><tr class="small" ng-repeat="type in types | orderBy:'name'">
+	      		<tbody><tr class="small" ng-repeat="currency in currencies | orderBy:'name'">
 	    		
-	    		<td>{{ type.name }}</td>
-	    		<td>{{ type.description }}</td>
+	    		<td>{{ currency.code }}</td>
+	    		<td>{{ currency.name }}</td>
 	    		
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editType(type.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editCurrency(currency.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Edit
 	      			</button>
 	    		</td>
 	    		<td>
-	      			<button class="btn btn-info btn-xs" ng-click="deleteType(type.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteCurrency(currency.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete
 	      			</button>
 	    		</td>
@@ -108,7 +110,7 @@
 
 </div>
 
-<script src="js/productType.js"></script>
+<script src="js/currency.js"></script>
 
 </body>
 </html>	

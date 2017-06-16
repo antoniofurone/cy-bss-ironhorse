@@ -4,33 +4,35 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      	.translations('en',{
      		'SEARCH.BUTTON':'Search',
      		'NEW.BUTTON':'New',
-     		'PRODUCTTYPE.TITLE':'Product Types',
-     		'NEW.TITLE':'New Product Type',
-     		'MODIFY.TITLE':'Edit Product Type',
-     		'DESCRIPTION.LABEL':'Description',
+     		'CURRENCY.TITLE':'Currencies',
+     		'NEW.TITLE':'New Currency',
+     		'MODIFY.TITLE':'Edit Currency',
+     		'CODE.LABEL':'Code',
      		'NAME.LABEL':'Name',
      		'NAME.REQUIRED':'Name is required',
+     		'CODE.REQUIRED':'Code is required',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
-		    'INS.OK': 'Type added !',
-		    'UPD.OK': 'Type updated !',
-		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Type?'
+		    'INS.OK': 'Currency added !',
+		    'UPD.OK': 'Currency updated !',
+		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Currency?'
 		  })
 		  
 		.translations('it',{
 			'SEARCH.BUTTON':'Ricerca',
 			'NEW.BUTTON':'Nuovo',
-			'PRODUCTTYPE.TITLE':'Tipi di Prodotto',
-			'NEW.TITLE':'Nuovo Tipo di Prodotto',
-			'MODIFY.TITLE':'Modifica Tipo di Prodotto',
-			'DESCRIPTION.LABEL':'Descrizione',
+			'CURRENCY.TITLE':'Valute',
+			'NEW.TITLE':'Nuova Valuta',
+			'MODIFY.TITLE':'Modifica Valuta',
+			'CODE.LABEL':'Codice',
 			'NAME.LABEL':'Nome',
+			'CODE.REQUIRED':'Codice obbligatorio',
 			'NAME.REQUIRED':'Nome obbligatorio',
 			'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Tipo di prodotto inserito !',
-    		'UPD.OK': 'Tipo di prodotto modificato !',
-    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Tipo di Prodotto?"
+    		'INS.OK': 'Valuta inserita !',
+    		'UPD.OK': 'Valuta modificata !',
+    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Valuta?"
 		  });
      	
      	 $translateProvider.preferredLanguage(getLanguage());
@@ -44,12 +46,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	
 	$search=function(){
 	var headers={"Security-Token":$scope.securityToken};
-	callRestWs($http,'product/getTypeAll','GET',
+	callRestWs($http,'metric/getCurrencyAll','GET',
 			headers,
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						$scope.types=response.data.types;
+						$scope.currencies=response.data.currencies;
 					}
 					else
 					{
@@ -79,8 +81,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
+		$scope._code='';
 		$scope._name='';
-		$scope._description='';
 		
 	}
 	// end new
@@ -89,15 +91,15 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope.productTypeList._name.$error.required)
+		if ($scope.currencyList._name.$error.required || $scope.currencyList._code.$error.required)
 	    	return;
 		
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
+		data['code']=$scope._code;
 		data['name']=$scope._name;
-		data['description']=$scope._description;
 		
-		callRestWs($http,!$scope.modify?'product/addType':'product/'+$scope.type_id+'/updateType','POST',
+		callRestWs($http,!$scope.modify?'metric/addCurrency':'metric/'+$scope.type_id+'/updateCurrency','POST',
 				headers,
 				data,
 				function(response){
@@ -132,7 +134,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	}// end onSubmit
 	
 	
-	$scope.editType = function(id){
+	$scope.editCurrency = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
@@ -140,14 +142,14 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.detail=true;
 		
 		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'product/'+id+'/getType','GET',
+		callRestWs($http,'metric/'+id+'/getCurrency','GET',
 				headers,
 				{},
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
-							$scope.type_id=response.data.type.id;
-							$scope._name=response.data.type.name;
-							$scope._description=response.data.type.description;
+							$scope.type_id=response.data.currency.id;
+							$scope._code=response.data.currency.code;
+							$scope._name=response.data.currency.name;
 						}
 						else
 						{
@@ -159,7 +161,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 					});
 	}
 	
-	$scope.deleteType = function(id){
+	$scope.deleteCurrency = function(id){
 		
 		$translate('DELETECONFIRM.MESSAGE')
  		.then(function (translatedValue) {
@@ -167,7 +169,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'product/'+id+'/removeType','GET',
+ 			callRestWs($http,'metric/'+id+'/removeCurrency','GET',
  					headers,
  					{},
  					function(response){
@@ -185,7 +187,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
  			});
 		
 	}
-	// deleteUser
+	// deleteCurrency
 }); 
    
 setMenuCntl(app);
