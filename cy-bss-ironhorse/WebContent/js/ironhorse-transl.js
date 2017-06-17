@@ -17,6 +17,7 @@ var menuMapTranslation={
 				'MENU.ENTITY.COUNTRY':"Country",
 				"MENU.ENTITY.COMPANY":"Company",
 				"MENU.ENTITY.PERSON":"Person",
+				"MENU.ENTITY.PRODUCT":"Product",
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
@@ -47,6 +48,7 @@ var menuMapTranslation={
 				'MENU.ENTITY.COUNTRY':"Paese",
 				"MENU.ENTITY.COMPANY":"Azienda",
 				"MENU.ENTITY.PERSON":"Persona",
+				"MENU.ENTITY.PRODUCT":"Prodotto",
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
