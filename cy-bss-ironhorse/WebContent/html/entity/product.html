@@ -51,19 +51,14 @@
 		</div>
       	
       	<div class="form-group form-group-sm">
-			<label for="_decription">{{'DESCRIPTION.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_description" id="_description" type="text" ng-model="_description" maxlength=500 size="80"/></div>
-		</div>
-      	
-      	<div class="form-group form-group-sm">
 			<label for="_code">{{'CODE.LABEL' | translate }}:</label>
 			<div><input class="form-control" name="_code" id="_code" type="text" ng-model="_code" maxlength=50 size="20"/></div>
 		</div>
       	
       	<div class="form-group form-group-sm">
-			<label for="_selectedCategoryId">{{'CATEGORY.LABEL' | translate }}:</label>
+			<label for="_selectedCategory">{{'CATEGORY.LABEL' | translate }}:</label>
 			<div>
-				<select id="_selectedCategoryId" name="_selectedCategoryId" class="form-control" ng-model="_selectedCategoryId" required>
+				<select id="_selectedCategory" name="_selectedCategory" class="form-control" ng-model="_selectedCategory" required>
 		        	 <option value=""> </option>
 		        	 <option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
 		        </select>
@@ -71,52 +66,83 @@
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="_selectedTypeId">{{'TYPE.LABEL' | translate }}:</label>
+			<label for="_selectedType">{{'TYPE.LABEL' | translate }}:</label>
 			<div>
-				<select id="_selectedTypeId" name="_selectedTypeId" class="form-control" ng-model="_selectedTypeId" required>
+				<select id="_selectedType" name="_selectedType" class="form-control" ng-model="_selectedType" required>
 		        	 <option value=""> </option>
 		        	 <option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
 		        </select>
 		   	</div>
 		</div>
 		
+		</br>
+		<div class="form-group form-group-sm">
+      		<label for="_description">{{'DESCRIPTION.LABEL' | translate }}:</label>
+			<div><textarea class="form-control" rows="8" cols="90" name="_description" ng-model="_description" maxlength=500 required></textarea></div>
+		</div>
+		</br>
+		
 		<h5><span class="label label-default">{{'PARENT.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
-			<label  for="productName">{{'NAME.LABEL' | translate }}:</label>
-		   	<input class="form-control" type="text" size=20 name="productName" id="productName" type="text"  ng-model="productName">
+			<div>
+				<input class="form-control" name="_parentId" id="_parentId" type="text" ng-model="_parentId" size="50" ng-show="false"/>
+				<input class="form-control" name="_parentName" id="_parentName" type="text" ng-model="_parentName" size="50" readonly/>
+				<button class="btn btn-info btn-xs" ng-click="onDeleteParent()">
+	      			<span class="glyphicon glyphicon-trash"></span>
+	      		</button>
+			</div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<input class="form-control" type="text" size=20 name="parentName" id="parentName" type="text"  ng-model="parentName">
 	 	</div>
 		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchParent()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
 		<div class="form-group form-group-sm">
-			<label for="_selectedParent">{{'PARENT.LABEL' | translate }}:</label>
 			<select id="_selectedParent" name="_selectedParent" class="form-control" ng-model="_selectedParent" required>
 	        	 <option ng-repeat="parent in parents" value="{{parent.id}}">{{parent.name}}</option>
 	        </select>
+	        <button class="btn btn-info btn-xs" ng-click="onUpdateParent()">
+	    		<span class="glyphicon glyphicon-pencil"></span>
+	      	</button>
+	        
 		</div>
 		
 		<h5><span class="label label-default">{{'PRODUCER.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
-			<label  for="producerName">{{'NAME.LABEL' | translate }}:</label>
-		   	<input class="form-control" type="text" size=20 name="producerName" id="producerName" type="text"  ng-model="producerName">
+			<div>
+				<input class="form-control" name="_producerId" id="_producerId" type="text" ng-model="_producerId" size="50"  ng-show="false"/>
+				<input class="form-control" name="_producerName" id="_producerName" type="text" ng-model="_producerName" size="50" readonly/>
+				<button class="btn btn-info btn-xs" ng-click="onDeleteProducer()">
+	      			<span class="glyphicon glyphicon-trash"></span>
+	      		</button>
+			</div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<input class="form-control" type="text" size=20 name="producerName" id="producerName" type="text"  ng-model="producerName">
 	 	</div>
 		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchProducer()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
 		<div class="form-group form-group-sm">
-			<label for="_selectedProducer">{{'PRODUCER.LABEL' | translate }}:</label>
 			<select id="_selectedProducer" name="_selectedPerson" class="form-control" ng-model="_selectedProducer" required>
 	        	 <option ng-repeat="company in companies" value="{{company.id}}">{{company.name+' ['+company.code+']'}}</option>
 	        </select>
+	       	<button class="btn btn-info btn-xs" ng-click="onUpdateProducer()">
+	    		<span class="glyphicon glyphicon-pencil"></span>
+	      	</button>
 		</div>
 		
 		  	
       	<h6>
 			<span class="label label-warning" ng-show="productForm._name.$error.required" translate>NAME.REQUIRED</span>
-    		<span class="label label-warning" ng-show="productForm._selectedCategoryId.$error.required" translate>CATEGORY.REQUIRED</span>
-    		<span class="label label-warning" ng-show="productForm._selectedTypeId.$error.required" translate>TYPE.REQUIRED</span>
+    		<span class="label label-warning" ng-show="productForm._selectedCategory.$error.required" translate>CATEGORY.REQUIRED</span>
+    		<span class="label label-warning" ng-show="productForm._selectedType.$error.required" translate>TYPE.REQUIRED</span>
+    		<span class="label label-warning" ng-show="productForm._description.$error.required" translate>DESCRIPTION.REQUIRED</span>
     
     	</h6>
 		
@@ -171,22 +197,44 @@
 			
 		</div>
 		<!--  end attributes -->
-	
-	
 	  	
 	</div>
 	<!--  end detail -->
 	<div ng-show="!detail">
-		<h4><span class="label label-default">{{'COMPANY.TITLE' | translate }}</span></h4>
+		<h4><span class="label label-default">{{'PRODUCT.TITLE' | translate }}</span></h4>
 	
 		<div class="form-group form-group-sm">
-			<label for="code">{{'CODE.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="code" id="code" type="text"  ng-model="code">
+			<label for="name">{{'NAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="firstName">{{'NAME.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
+			<label for="selectedCategory">{{'CATEGORY.LABEL' | translate }}:</label>
+			<select id="selectedCategory" name="selectedCategory" class="form-control" ng-model="selectedCategory">
+				<option value=""></option>
+				<option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
+			</select>
+		</div>
+	
+		<div class="form-group form-group-sm">
+			<label for="selectedType">{{'TYPE.LABEL' | translate }}:</label>
+			<select id="selectedType" name="selectedType" class="form-control" ng-model="selectedType">
+				<option value=""></option>
+				<option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
+			</select>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="selectedAttribute">{{'ATTRIBUTE.LABEL' | translate }}:</label>
+			<select id="selectedAttribute" name="selectedAttribute" class="form-control" ng-model="selectedAttribute">
+				<option value=""></option>
+				<option ng-repeat="attribute in attributes" value="{{attribute.id}}">{{attribute.name}}</option>
+			</select>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="attributeValue">{{'ATTRIBUTEVALUE.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="attributeValue" id="attributeValue" type="text"  ng-model="attributeValue">
 		</div>
 		
 		<button type="button" class="btn btn-info btn-sm" ng-click="onSearch()">
@@ -199,36 +247,34 @@
 			</button>
 		
 		<br><br>
-		<table class="table table-bordered table-striped" ng-show="companies.length>0">
+		<table class="table table-bordered table-striped" ng-show="products.length>0">
 		<thead>
 			<tr class="info small"><th>Id</th>
-			<th>{{'CODE.LABEL' | translate }}</th>
 			<th>{{'NAME.LABEL' | translate }}</th>
-			<th>{{'ADDRESS.LABEL' | translate }}</th>
-			<th>{{'CITY.LABEL' | translate }}</th>
-			<th>{{'ZIP.LABEL' | translate }}</th>
-			<th>{{'FISCALCODE.LABEL' | translate }}</th>
-			<th>{{'VATCODE.LABEL' | translate }}</th>
+			<th>{{'CATEGORY.LABEL' | translate }}</th>
+			<th>{{'TYPE.LABEL' | translate }}</th>
+			<th>{{'CODE.LABEL' | translate }}</th>
+			<th>{{'PARENT.LABEL' | translate }}</th>
+			<th>{{'PRODUCER.LABEL' | translate }}</th>
 			<th></th>
 	     	</tr>
 	    </thead>
 	    <tbody>
-	    	<tr class="small" ng-repeat="company in companies | orderBy:'name'">
-	    		<td>{{ company.id }}</td>
-	    		<td>{{ company.code }}</td>
-	    		<td>{{ company.name }}</td>
-	    		<td>{{ company.address }}</td>
-	    		<td>{{ company.city }}</td>
-	    		<td>{{ company.zipCode }}</td>
-	    		<td>{{ company.fiscalCode }}</td>
-	    		<td>{{ company.vatCode }}</td>
+	    	<tr class="small" ng-repeat="product in products | orderBy:'name'">
+	    		<td>{{ product.id }}</td>
+	    		<td>{{ product.name }}</td>
+	    		<td>{{ product.category.name }}</td>
+	    		<td>{{ product.productType.name }}</td>
+	    		<td>{{ product.code }}</td>
+	    		<td>{{ product.parentName }}</td>
+	    		<td>{{ product.producerName }}</td>
 	    		
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editCompany(company.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editProduct(product.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="deleteCompany(company.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteProduct(product.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      			</button>
 	    			

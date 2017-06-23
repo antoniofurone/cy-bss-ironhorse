@@ -39,6 +39,28 @@ angular.module('irsearch',[])
 			return deferred.promise;
 		} 
 	})
+	.factory('irproduct',function($http,$q){
+		return function(name,categoryId,typeId,attrName,attrValue,securityToken){
+			
+			var query="?name="+(name!=undefined?encodeURIComponent(name):'');
+			query+="&categoryId="+(categoryId!=undefined?encodeURIComponent(categoryId):'0');
+			query+="&typeId="+(typeId!=undefined?encodeURIComponent(typeId):'0');
+			query+="&attrName="+(attrName!=undefined?encodeURIComponent(attrName):'');
+			query+="&attrValue="+(attrValue!=undefined?encodeURIComponent(attrValue):'');
+			
+			var deferred = $q.defer();
+			callRestWs($http,'product/find'+query,'GET',
+					{"Security-Token":securityToken},
+					{},
+					function(response){
+							deferred.resolve(response);						
+					}, 
+					function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);	
+			});
+			return deferred.promise;
+		} 
+	})
 	.factory('ircitysearch',function($http,$q){
 		return function(name,stateRegion,countryId,securityToken){
 			

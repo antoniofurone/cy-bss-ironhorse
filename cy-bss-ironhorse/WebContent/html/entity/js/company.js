@@ -96,7 +96,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	    'CONTACTTYPE.REQUIRED':'Tipo Contatto obbligatorio',
 	    'CONTACT.REQUIRED': 'Contatto obbligatorio',
 	    'ADDCONTACT.BUTTON':'Aggiungi Contatto',
-	    'ATTRIBUTES.LABEL':'Attribute',
+	    'ATTRIBUTES.LABEL':'Attributi',
 	    'ATTRIBUTENAME.LABEL':'Nome',
 	    'ATTRIBUTETYPE.LABEL':'Tipo',
 	    'ATTRIBUTEVALUE.LABEL':'Valore',
@@ -323,11 +323,6 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
    							
    							$scope.companyId=response.data.company.id;
    						
-   							$companyDept($scope.companyId);
-   							
-   							if ($scope.roles==undefined)
-   								$companyRole();
-   							
    							
    							callRestWs($http,'company/'+$scope.companyId+'/get','GET',
    									headers,
@@ -354,11 +349,19 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 	    	          		});
 						}
 						
-						$scope.contacts=undefined;
+						
+						$companyDept($scope.companyId);
+						if ($scope.roles==undefined)
+							$companyRole();
+						
+						$scope.contancts=undefined;
 						$scope.attributeValues=undefined;
 						
-						$scope.modify=true;
+						$companyPerson($scope.companyId);
+						$companyContacts($scope.companyId);
+						$companyAttributes();
 						
+						$scope.modify=true;
 					}
 					else
 					{

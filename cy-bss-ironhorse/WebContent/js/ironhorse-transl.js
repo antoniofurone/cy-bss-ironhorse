@@ -2,15 +2,16 @@ var menuMapTranslation={
 		"en":
 			{
 				"MENU.ADMIN":"Administration",
-				"MENU.ADMIN.USER":"Manage users",
+				"MENU.ADMIN.USER":"Users",
 				"MENU.ADMIN.CHPWD":"Change Password",
-				"MENU.ADMIN.CONTACTTYPE":"Contact Type",
+				"MENU.ADMIN.CONTACTTYPE":"Contact Types",
+				"MENU.ADMIN.PRICECOMPONENT":"Price Components",
 				"MENU.ADMIN.ATTRIBUTE":"Attributes",
 				"MENU.ADMIN.CURRENCY":"Currencies",
 				"MENU.ADMIN.METRIC":"Metrics",
 				"MENU.ADMIN.SCALE":"Metric Scales",
-				"MENU.ADMIN.PRODUCTCATEGORY":"Product Category",
-				"MENU.ADMIN.PRODUCTTYPE":"Product Type",
+				"MENU.ADMIN.PRODUCTCATEGORY":"Product Categories",
+				"MENU.ADMIN.PRODUCTTYPE":"Product Types",
 				
 				"MENU.ENTITY":"Entity",
 				'MENU.ENTITY.CITY':"City",
@@ -32,15 +33,17 @@ var menuMapTranslation={
 		"it":
 			{
 				"MENU.ADMIN":"Amministrazione",
-				"MENU.ADMIN.USER":"Gestione utenti",
+				"MENU.ADMIN.USER":"Utenti",
 				"MENU.ADMIN.CHPWD":"Modifica Password",
+				"MENU.ADMIN.COMPONENTTYPE":"",
 				"MENU.ADMIN.CONTACTTYPE":"Tipologie Contatti",
+				"MENU.ADMIN.PRICECOMPONENT":"Componenti di Prezzo",
 				"MENU.ADMIN.ATTRIBUTE":"Attributi",
 				"MENU.ADMIN.CURRENCY":"Valute",
 				"MENU.ADMIN.METRIC":"Metriche",
 				"MENU.ADMIN.SCALE":"Scale",
-				"MENU.ADMIN.PRODUCTCATEGORY":"Categoria Prodotto",
-				"MENU.ADMIN.PRODUCTTYPE":"Tipologia Prodotto",
+				"MENU.ADMIN.PRODUCTCATEGORY":"Categorie Prodotto",
+				"MENU.ADMIN.PRODUCTTYPE":"Tipologie Prodotto",
 				
 				
 				"MENU.ENTITY":"Entita'",
