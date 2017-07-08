@@ -4,39 +4,51 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      	.translations('en',{
      		'SEARCH.BUTTON':'Search',
      		'NEW.BUTTON':'New',
-     		'CURRENCY.TITLE':'Currencies',
-     		'NEW.TITLE':'New Currency',
-     		'MODIFY.TITLE':'Edit Currency',
+     		'MANAGED.TITLE':'Managed Companies',
+     		'NEW.TITLE':'New Managed Company',
+     		'MODIFY.TITLE':'Edit Managed Company',
+     		'COMPANY.LABEL':'Company',
+     		'COMPANY.REQUIRED':'Company is required',
      		'CODE.LABEL':'Code',
      		'NAME.LABEL':'Name',
-     		'NAME.REQUIRED':'Name is required',
-     		'CODE.REQUIRED':'Code is required',
+     		'ADDRESS.LABEL':'Address',
+     		'CITY.LABEL':'City',
+     		'ZIP.LABEL':'Zip Code',
+     		'FISCALCODE.LABEL':'Fiscal Code',
+     		'VATCODE.LABEL':'Vat Code',
+     		'EDIT.BUTTON':'Edit',
+     		'DELETE.BUTTON':'Delete',
+     		'INVOICEICON.LABEL':'Invoice Icon File Id',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
-		    'EDIT.BUTTON': 'Edit',
-		    'DELETE.BUTTON': 'Delete',
-		    'INS.OK': 'Currency added !',
-		    'UPD.OK': 'Currency updated !',
-		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Currency?'
+		    'INS.OK': 'Managed Company added !',
+		    'UPD.OK': 'Managed Company updated !',
+		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Managed Company?'
 		  })
 		  
 		.translations('it',{
 			'SEARCH.BUTTON':'Ricerca',
 			'NEW.BUTTON':'Nuovo',
-			'CURRENCY.TITLE':'Valute',
-			'NEW.TITLE':'Nuova Valuta',
-			'MODIFY.TITLE':'Modifica Valuta',
+			'MANAGED.TITLE':'Aziende Gestite',
+			'NEW.TITLE':'Nuova Azienda Gestita',
+			'MODIFY.TITLE':'Modifica Azienda Gestita',
+			'COMPANY.LABEL':'Azienda',
+			'COMPANY.REQUIRED':'Azienda obbligatoria',
 			'CODE.LABEL':'Codice',
-			'NAME.LABEL':'Nome',
-			'CODE.REQUIRED':'Codice obbligatorio',
-			'NAME.REQUIRED':'Nome obbligatorio',
-			'SUBMIT.BUTTON':'Conferma',
-			'EDIT.BUTTON': 'Modifica',
-		    'DELETE.BUTTON': 'Cancella',
-		    'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Valuta inserita !',
-    		'UPD.OK': 'Valuta modificata !',
-    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Valuta?"
+	 		'NAME.LABEL':'Nome',
+	 		'ADDRESS.LABEL':'Indirizzo',
+	 		'CITY.LABEL':"Citta'",
+	 		'ZIP.LABEL':'Cap',
+	 		'FISCALCODE.LABEL':'Codice Fiscale',
+	 		'VATCODE.LABEL':'P.Iva',
+	 		'EDIT.BUTTON':'Modifica',
+	 		'DELETE.BUTTON':'Cancella',
+	 		'INVOICEICON.LABEL':"File Id per l'icona della fattura",
+     		'SUBMIT.BUTTON':'Conferma',
+    		'BACK.BUTTON': 'Indietro',
+    		'INS.OK': 'Gestione inserita !',
+    		'UPD.OK': 'Gestione modificata !',
+    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Gestione?"
 		  });
      	
      	 $translateProvider.preferredLanguage(getLanguage());
@@ -44,18 +56,18 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 
 
 
-app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlanguages) {
+app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irlanguages) {
 	$scope.detail=false;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
 	$search=function(){
 	var headers={"Security-Token":$scope.securityToken};
-	callRestWs($http,'metric/getCurrencyAll','GET',
+	callRestWs($http,'company/getManagedAll','GET',
 			headers,
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						$scope.currencies=response.data.currencies;
+						$scope.managedCompanies=response.data.companies;
 					}
 					else
 					{
@@ -85,8 +97,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		$scope._code='';
-		$scope._name='';
+		$scope._companyId='';
+		$scope._companyName='';
+		$scope._invoiceIcon='';
+		
 		
 	}
 	// end new
@@ -95,15 +109,15 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope.currencyList._name.$error.required || $scope.currencyList._code.$error.required)
+		if ($scope.managedList._companyId.$error.required)
 	    	return;
 		
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
-		data['code']=$scope._code;
-		data['name']=$scope._name;
+		data['id']=$scope._companyId;
+		data['invoiceLogoId']=$scope._invoiceIcon;
 		
-		callRestWs($http,!$scope.modify?'metric/addCurrency':'metric/'+$scope.type_id+'/updateCurrency','POST',
+		callRestWs($http,!$scope.modify?'company/addManaged':'company/'+$scope._companyId+'/updateManaged','POST',
 				headers,
 				data,
 				function(response){
@@ -114,8 +128,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
    		    	          		.then(function (translatedValue) {
    		    	              		$scope.infoMessage=translatedValue;
    		    	          	});
-   							$scope.type_id=response.data.type.id;
-			   			}
+   						}
 						else {
 							$translate('UPD.OK')
 	    	          		.then(function (translatedValue) {
@@ -138,7 +151,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 	}// end onSubmit
 	
 	
-	$scope.editCurrency = function(id){
+	$scope.editManaged = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
@@ -146,14 +159,13 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.detail=true;
 		
 		var headers={"Security-Token":$scope.securityToken};
-		callRestWs($http,'metric/'+id+'/getCurrency','GET',
+		callRestWs($http,'company/'+id+'/getManaged','GET',
 				headers,
 				{},
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
-							$scope.type_id=response.data.currency.id;
-							$scope._code=response.data.currency.code;
-							$scope._name=response.data.currency.name;
+							$scope._companyId=response.data.company.id;
+							$scope._companyName=response.data.company.name;
 						}
 						else
 						{
@@ -165,7 +177,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 					});
 	}
 	
-	$scope.deleteCurrency = function(id){
+	$scope.deleteManaged = function(id){
 		
 		$translate('DELETECONFIRM.MESSAGE')
  		.then(function (translatedValue) {
@@ -173,7 +185,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'metric/'+id+'/removeCurrency','GET',
+ 			callRestWs($http,'company/'+id+'/removeManaged','GET',
  					headers,
  					{},
  					function(response){
@@ -191,7 +203,40 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
  			});
 		
 	}
-	// deleteCurrency
+	// deleteManaged
+	
+	$scope.onSearchCompany=function(){
+		ircompany('',$scope.companyName,$scope.securityToken).then(function(response) {
+			if (response.data.resultCode==RESULT_OK){
+					//alert (JSON.stringify(response));
+					$scope.companies=response.data.companies;
+				}
+			else
+				{
+					manageError($scope,response.data.resultCode,response.data.resultDesc);
+				}
+			}, function(data, status, headers, config) {
+    	    	manageError($scope,status,data);
+    	    });
+	}
+	
+	$scope.onDeleteCompany=function(){
+		$scope._companyId="";
+		$scope._companyName="";
+	}
+	
+	$scope.onUpdateCompany=function(){
+		if ($scope.companies!=undefined && $scope._selectedCompany!=undefined){
+			$scope._companyId=$scope._selectedCompany;
+			for (var i=0;i<$scope.companies.length;i++){
+				if ($scope.companies[i].id==$scope._companyId){
+					$scope._companyName=$scope.companies[i].name;
+					return;
+				}
+			}
+		}
+	}
+	
 }); 
    
 setMenuCntl(app);

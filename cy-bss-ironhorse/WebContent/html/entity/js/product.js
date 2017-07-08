@@ -46,7 +46,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'CODE.LABEL':'Codice',
  		'NAME.LABEL':'Nome',
  		'CATEGORY.LABEL':'Categoria',
- 		'TYPE.LABEL':"Tipo'",
+ 		'TYPE.LABEL':"Tipo",
  		'DESCRIPTION.LABEL':'Descrizione',
  		'PARENT.LABEL':'Contenitore',
  		'PRODUCER.LABEL':'Produttore',

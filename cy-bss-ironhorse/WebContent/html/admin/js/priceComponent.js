@@ -5,34 +5,40 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'SEARCH.BUTTON':'Search',
      		'NEW.BUTTON':'New',
      		'PRICECOMPONENT.TITLE':'Price Components',
-     		'NEW.TITLE':'New Currency',
-     		'MODIFY.TITLE':'Edit Currency',
+     		'MODIFY.TITLE':'Edit Component',
      		'CODE.LABEL':'Code',
      		'NAME.LABEL':'Name',
+     		'DESCRIPTION.LABEL':'Description',
+     		'PRICETYPE.LABEL':'Price Type',
+     		'PERIODMETRIC.LABEL':'Period Metric',
      		'NAME.REQUIRED':'Name is required',
      		'CODE.REQUIRED':'Code is required',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
-		    'INS.OK': 'Currency added !',
-		    'UPD.OK': 'Currency updated !',
-		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Currency?'
+		    'EDIT.BUTTON': 'Edit',
+		    'INS.OK': 'Component added !',
+		    'UPD.OK': 'Component updated !',
+		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Component?'
 		  })
 		  
 		.translations('it',{
 			'SEARCH.BUTTON':'Ricerca',
 			'NEW.BUTTON':'Nuovo',
 			'PRICECOMPONENT.TITLE':'Componenti di Prezzo',
-			'NEW.TITLE':'Nuova Valuta',
-			'MODIFY.TITLE':'Modifica Valuta',
+			'MODIFY.TITLE':'Modifica Componente',
 			'CODE.LABEL':'Codice',
-			'NAME.LABEL':'Nome',
-			'CODE.REQUIRED':'Codice obbligatorio',
+     		'NAME.LABEL':'Nome',
+			'DESCRIPTION.LABEL':'Descrizione',
+			'PRICETYPE.LABEL':'Tipo di Prezzo',
+			'PERIODMETRIC.LABEL':'Metrica di Periodo',
+     		'CODE.REQUIRED':'Codice obbligatorio',
 			'NAME.REQUIRED':'Nome obbligatorio',
 			'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Valuta inserita !',
-    		'UPD.OK': 'Valuta modificata !',
-    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Valuta?"
+    		'EDIT.BUTTON': 'Modifica',
+		    'INS.OK': 'Componente inserito !',
+    		'UPD.OK': 'Componente modificato !',
+    		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Componente?"
 		  });
      	
      	 $translateProvider.preferredLanguage(getLanguage());
@@ -91,15 +97,15 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		if ($scope.componentPriceList._name.$error.required)
+		if ($scope.priceComponentList._name.$error.required)
 	    	return;
 		
 		var headers={"Security-Token":$scope.securityToken};
 		var data = {};
 		data['name']=$scope._name;
-		data['name']=$scope._description;
+		data['description']=$scope._description;
 		
-		callRestWs($http,!$scope.modify?'price/addPriceComponet':'price/'+$scope.component_id+'/updateComponent','POST',
+		callRestWs($http,!$scope.modify?'price/addPriceComponet':'price/'+$scope.component_id+'/updatePriceComponent','POST',
 				headers,
 				data,
 				function(response){
@@ -148,8 +154,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,iruserroles,irlan
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
 							$scope.component_id=response.data.component.id;
-							//$scope._code=response.data.currency.code;
-							//$scope._name=response.data.currency.name;
+							$scope._code=response.data.component.code;
+							$scope._name=response.data.component.name;
+							$scope._description=response.data.component.description;
+							$scope._priceType=response.data.component.priceType.name;
+							$scope._periodMetric=response.data.component.periodMetricName;
+							
 						}
 						else
 						{

@@ -12,6 +12,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'NAME.REQUIRED':'Name is required',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
+		    'EDIT.BUTTON': 'Edit',
+		    'DELETE.BUTTON': 'Delete',
 		    'INS.OK': 'Type added !',
 		    'UPD.OK': 'Type updated !',
 		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Type?'
@@ -28,7 +30,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 			'NAME.REQUIRED':'Nome obbligatorio',
 			'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Tipo di prodotto inserito !',
+    		'EDIT.BUTTON': 'Modifca',
+  		    'DELETE.BUTTON': 'Cancella',
+  		    'INS.OK': 'Tipo di prodotto inserito !',
     		'UPD.OK': 'Tipo di prodotto modificato !',
     		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Tipo di Prodotto?"
 		  });

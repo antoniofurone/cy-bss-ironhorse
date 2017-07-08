@@ -8,6 +8,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.PRICECOMPONENT":"Price Components",
 				"MENU.ADMIN.ATTRIBUTE":"Attributes",
 				"MENU.ADMIN.CURRENCY":"Currencies",
+				"MENU.ADMIN.MANAGED":"Managed Company",
 				"MENU.ADMIN.METRIC":"Metrics",
 				"MENU.ADMIN.SCALE":"Metric Scales",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Product Categories",
@@ -40,6 +41,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.PRICECOMPONENT":"Componenti di Prezzo",
 				"MENU.ADMIN.ATTRIBUTE":"Attributi",
 				"MENU.ADMIN.CURRENCY":"Valute",
+				"MENU.ADMIN.MANAGED":"Aziende Gestite",
 				"MENU.ADMIN.METRIC":"Metriche",
 				"MENU.ADMIN.SCALE":"Scale",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Categorie Prodotto",
@@ -54,7 +56,7 @@ var menuMapTranslation={
 				"MENU.ENTITY.PRODUCT":"Prodotto",
 				"MENU.ENTITY.FILE":"File",
 				
-				"MENU.OPERATION":"Operation",
+				"MENU.OPERATION":"Operazioni",
 				"MENU.OPERATION.TTMS":"TTMS",
 					 
 				"MENU.MAPS":"Mappe",

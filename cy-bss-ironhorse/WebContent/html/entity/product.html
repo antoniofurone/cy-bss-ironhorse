@@ -129,7 +129,7 @@
 		</button>
 		
 		<div class="form-group form-group-sm">
-			<select id="_selectedProducer" name="_selectedPerson" class="form-control" ng-model="_selectedProducer" required>
+			<select id="_selectedProducer" name="_selectedProducer" class="form-control" ng-model="_selectedProducer">
 	        	 <option ng-repeat="company in companies" value="{{company.id}}">{{company.name+' ['+company.code+']'}}</option>
 	        </select>
 	       	<button class="btn btn-info btn-xs" ng-click="onUpdateProducer()">

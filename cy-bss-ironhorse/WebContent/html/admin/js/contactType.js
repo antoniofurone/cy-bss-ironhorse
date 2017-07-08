@@ -13,6 +13,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'TYPE.LABEL':'Type',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
+		    'EDIT.BUTTON': 'Edit',
+		    'DELETE.BUTTON': 'Delete',
 		    'INS.OK': 'Contact Type added !',
 		    'UPD.OK': 'Contact Type updated !',
 		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Contact Type?'
@@ -30,7 +32,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'TYPE.LABEL':'Tipo',
      		'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Tipologia Contatto inserita !',
+    		'EDIT.BUTTON': 'Modifca',
+  		    'DELETE.BUTTON': 'Cancella',
+  		    'INS.OK': 'Tipologia Contatto inserita !',
     		'UPD.OK': 'Tipologia Contatto modificata !',
     		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Tipologia Contatto?"
 		  });

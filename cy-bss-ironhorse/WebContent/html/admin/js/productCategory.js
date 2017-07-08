@@ -16,6 +16,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'METRIC.LABEL':'Metric',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
+		    'EDIT.BUTTON': 'Edit',
+		    'DELETE.BUTTON': 'Delete',
 		    'INS.OK': 'Category added !',
 		    'UPD.OK': 'Category updated !',
 		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Category?'
@@ -36,7 +38,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'METRIC.LABEL':'Metric',
      		'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Categoria di prodotto inserita !',
+    	    'EDIT.BUTTON': 'Modifica',
+   		    'DELETE.BUTTON': 'Cancella',
+   		 	'INS.OK': 'Categoria di prodotto inserita !',
     		'UPD.OK': 'Categoria di prodotto modificata !',
     		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Categoria di Prodotto?"
 		  });

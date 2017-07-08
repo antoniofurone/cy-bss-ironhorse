@@ -11,6 +11,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
      		'NAME.REQUIRED':'Name is required',
      		'SUBMIT.BUTTON':'Submit',
 		    'BACK.BUTTON': 'Back',
+		    'EDIT.BUTTON': 'Edit',
+		    'DELETE.BUTTON': 'Delete',
 		    'INS.OK': 'Metric added !',
 		    'UPD.OK': 'Metric updated !',
 		    'DELETECONFIRM.MESSAGE': 'Are you sure to delete Metric?'
@@ -26,7 +28,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 			'NAME.REQUIRED':'Nome obbligatorio',
 			'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
-    		'INS.OK': 'Metrica inserita !',
+    		'EDIT.BUTTON': 'Modifca',
+  		    'DELETE.BUTTON': 'Cancella',
+  		    'INS.OK': 'Metrica inserita !',
     		'UPD.OK': 'Metrica modificata !',
     		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la Metrica?"
 		  });
