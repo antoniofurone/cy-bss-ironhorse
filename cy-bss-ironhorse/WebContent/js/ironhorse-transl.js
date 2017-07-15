@@ -23,6 +23,8 @@ var menuMapTranslation={
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
+				"MENU.OPERATION.PURCHASE":"Purchases",
+				"MENU.OPERATION.SALES":"Sales",
 				"MENU.OPERATION.TTMS":"TTMS",
 				
 				"MENU.MAPS":"Maps",
@@ -57,6 +59,8 @@ var menuMapTranslation={
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operazioni",
+				"MENU.OPERATION.PURCHASE":"Aquisti",
+				"MENU.OPERATION.SALES":"Vendite",
 				"MENU.OPERATION.TTMS":"TTMS",
 					 
 				"MENU.MAPS":"Mappe",
