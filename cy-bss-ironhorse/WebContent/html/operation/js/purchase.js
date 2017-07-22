@@ -1,4 +1,34 @@
-var languageCode=getLanguage();
+var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
+
+$('#datepicker').datepicker({
+      autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+    }).on("changeDate", function(e){
+     console.log('datepicker:'+e.date);
+});
+
+$('#dateStartpicker').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('dateStartpicker:'+e.date);
+});
+
+$('#dateEndpicker').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('dateEndpicker:'+e.date);
+});
+
+$('#datepickerFrom').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('datepickerFrom:'+e.date);
+});
+
+$('#datepickerTo').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('datepickerTo:'+e.date);
+});
 
 var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','irsearch','irlist',
                                      'irattribute'])
@@ -7,27 +37,49 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  	.translations('en',{
  		'SEARCH.BUTTON':'Search',
  		'BACK.BUTTON':'Back',
- 		'PRODUCT.TITLE':'Product',
- 		'CODE.LABEL':'Code',
- 		'NAME.LABEL':'Name',
- 		'CATEGORY.LABEL':'Category',
+ 		'PURCHASE.TITLE':'Purchase',
+ 		'COMPANY.LABEL':'Company',
+ 		'PRODUCTID.LABEL':'Product Id',
+ 		'PRODUCTNAME.LABEL':'Product Name',
+ 		'SUPPLIERID.LABEL':'Supplier Id',
+ 		'SUPPLIERCODE.LABEL':'Supplier Code',
+ 		'SUPPLIERNAME.LABEL':'Supplier Name',
+ 		'PERSONID.LABEL':'Person Id',
+ 		'PERSONCODE.LABEL':'Person Code',
+ 		'PERSONNAME.LABEL':'Person Name',
+ 		'DATEFROM.LABEL':'From',
+ 		'DATETO.LABEL':'To',
+ 		'PRODUCT.LABEL':'Product',
+ 		'SUPPLIER.LABEL':'Supplier',
+ 		'PERSON.LABEL':'Person',
+ 		'COMPONENT.LABEL':'Component',
+ 		'UM.LABEL':'Um',
+ 		'QTY.LABEL':'Qty',
+ 		'CURRENCY.LABEL':'Currency',
+ 		'PRICE.LABEL':'Price',
+ 		'PRICETOT.LABEL':'Total Price',
+ 		'VAT.LABEL':'Vat',
+ 		'FREQUENCY.LABEL':'Frequency',
+ 		'TACITRENEWAL.LABEL':'Tacit Renewal',
  		'TYPE.LABEL':'Type',
- 		'DESCRIPTION.LABEL':'Description',
- 		'PARENT.LABEL':'Parent',
- 		'PRODUCER.LABEL':'Poducer',
+ 		'DATE.LABEL':'Date',
+ 		'DATESTART.LABEL':'Date Start',
+ 		'DATEEND.LABEL':'Date End',
  		'ATTRIBUTE.LABEL':'Attribute',
- 		'NAME.REQUIRED':'Name is required',
- 		'DESCRIPTION.REQUIRED':'Description is required',
- 		'CATEGORY.REQUIRED':'Category is required',
- 		'TYPE.REQUIRED':'Type is required',
+ 		'COMPANY.REQUIRED':'Company is required',
+ 		'PRODUCT.REQUIRED':'Product is required',
+ 		'SUPPLIER_PERSON.REQUIRED':'Supplier o Person is required',
+ 		'COMPONENT.REQUIRED':'Component is required',
+ 		'CURRENCY.REQUIRED':'Currency is required',
+ 		'VAT.REQUIRED':'Vat is required',
  	 	'EDIT.BUTTON':'Edit',
  		'DELETE.BUTTON':'Delete',
  		'NEW.BUTTON':'New',
  		'NEW.TITLE':'New',
- 		'INS.OK': 'Product inserted !',
-		'UPD.OK': 'Product changed !',
+ 		'INS.OK': 'Purchase inserted !',
+		'UPD.OK': 'Purchase changed !',
 		'MODIFY.TITLE':'Change',
-		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Product ?',
+		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Purchase ?',
 		'SUBMIT.BUTTON':'Submit',
 		'ATTRIBUTES.LABEL':'Attributes',
  		'ATTRIBUTENAME.LABEL':'Name',
@@ -36,33 +88,59 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	    'ATTRIBUTENAME.REQUIRED':'Attribute Name is required',
 	    'ATTRIBUTEVALUE.REQUIRED':'Attribute Value is required',
 	    'ADDATTRIBUTE.BUTTON':'Add Attribute',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?"
- 	  })
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?",
+	    'YES.OPTION':'Yes',
+	    'NO.OPTION':'No',
+	    'BILLABLE.OPTION':'Billable',
+	    'HYPOTHESIS.OPTION':'Hypothesis'
+	  })
 	  
 	.translations('it',{
 		'SEARCH.BUTTON':'Ricerca',
 		'BACK.BUTTON':'Indietro',
- 		'PRODUCT.TITLE':'Prodotto',
- 		'CODE.LABEL':'Codice',
- 		'NAME.LABEL':'Nome',
- 		'CATEGORY.LABEL':'Categoria',
- 		'TYPE.LABEL':"Tipo",
- 		'DESCRIPTION.LABEL':'Descrizione',
- 		'PARENT.LABEL':'Contenitore',
- 		'PRODUCER.LABEL':'Produttore',
- 	 	'ATTRIBUTE.LABEL':'Attribute',
- 		'NAME.REQUIRED':'Nome obbligatorio',
- 		'DESCRIPTION.REQUIRED':'Descrizione obbligatoria',
- 		'CATEGORY.REQUIRED':'Categoria obbligatoria',
- 		'TYPE.REQUIRED':'Type obbligatorio',
+		'PURCHASE.TITLE':'Vendita',
+ 		'COMPANY.LABEL':'Azienda',
+ 		'PRODUCTID.LABEL':'Id Prodotto',
+ 		'PRODUCTNAME.LABEL':'Nome Prodotto',
+ 		'SUPPLIERID.LABEL':'Id Fornitore',
+ 		'SUPPLIERCODE.LABEL':'Codice Fornitore:',
+ 		'SUPPLIERNAME.LABEL':'Nome Fornitore:',
+ 		'PERSONID.LABEL':'Id Persona',
+		'PERSONCODE.LABEL':'Codice Persona',
+ 		'PERSONNAME.LABEL':'Nome Persona',
+		'DATEFROM.LABEL':'Da',
+ 		'DATETO.LABEL':'A',
+ 		'PRODUCT.LABEL':'Prodotto',
+ 		'SUPPLIER.LABEL':'Fornitore',
+ 		'PERSON.LABEL':'Persona',
+ 		'COMPONENT.LABEL':'Componente',
+ 		'UM.LABEL':'Um',
+ 		'QTY.LABEL':"Quantita'",
+ 		'CURRENCY.LABEL':'Valuta',
+ 		'PRICE.LABEL':'Prezzo',
+ 		'PRICETOT.LABEL':'Prezzo Totale',
+ 		'VAT.LABEL':'Iva',
+ 		'FREQUENCY.LABEL':'Frequenza',
+ 		'TACITRENEWAL.LABEL':'Tacito Rinnovo',
+ 		'TYPE.LABEL':'Tipo',
+ 		'DATE.LABEL':'Data',
+ 		'DATESTART.LABEL':'Data Inizio',
+ 		'DATEEND.LABEL':'Data Fine',
+ 		'ATTRIBUTE.LABEL':'Attribute',
+ 		'COMPANY.REQUIRED':'Azienda obbligatoria',
+ 		'PRODUCT.REQUIRED':'Prodotto obbligatorio',
+ 		'SUPPLIER_PERSON.REQUIRED':'Fornitore o Persona obbligatorio',
+ 		'COMPONENT.REQUIRED':'Componente obbligatorio',
+ 		'CURRENCY.REQUIRED':'Valuta obbligatoria',
+ 		'VAT.REQUIRED':'Iva obbligatoria',
  	 	'EDIT.BUTTON':'Modifica',
  		'DELETE.BUTTON':'Cancella',
  		'NEW.BUTTON':'Nuova',
  		'NEW.TITLE':'Nuova',
- 		'INS.OK': 'Prodotto inserito!',
-		'UPD.OK': 'Prodotto modificato !',
+ 		'INS.OK': 'Acquisto inserito!',
+		'UPD.OK': 'Acquisto modificato !',
 		'MODIFY.TITLE':'Modifica',
-		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare il Prodotto ?",
+		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'acquisto ?",
 		'SUBMIT.BUTTON':'Conferma',
  		'ATTRIBUTES.LABEL':'Attributi',
 	    'ATTRIBUTENAME.LABEL':'Nome',
@@ -71,7 +149,12 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	    'ATTRIBUTENAME.REQUIRED':'Nome Attributo obbligatorio',
 	    'ATTRIBUTEVALUE.REQUIRED':'Valore Attributo obbligatorio',
 	    'ADDATTRIBUTE.BUTTON':'Aggiungi Attributo',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?"
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?",
+	    'YES.OPTION':'Si',
+	    'NO.OPTION':'No',
+	    'BILLABLE.OPTION':'Billabile',
+	    'HYPOTHESIS.OPTION':'Ipotesi'
+	  
   	  });
  	
  	
@@ -84,10 +167,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
 	
-	callRestWs($http,'product/getCategoryAll','GET',{},{},
+	callRestWs($http,'company/getManagedAll','GET',{},{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						$scope.categories=response.data.categories;
+						$scope.managedCompanies=response.data.companies;
 					}
 					else
 					{
@@ -98,10 +181,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 						manageError($scope,status,data);
 				});
 	
-	callRestWs($http,'product/getTypeAll','GET',{},{},
+	callRestWs($http,'price/getPriceComponentAll','GET',{},{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						$scope.types=response.data.types;
+						$scope.components=response.data.components;
 					}
 					else
 					{
@@ -113,7 +196,22 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 				});
 	
 	
-	irgetobjectbyname($scope.securityToken,"Product").then(function(response) {
+	callRestWs($http,'metric/getCurrencyAll','GET',{},{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						$scope.currencies=response.data.currencies;
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+	
+	
+	irgetobjectbyname($scope.securityToken,"Purchase").then(function(response) {
 		if (response.data.resultCode==RESULT_OK){
 			//alert (JSON.stringify(response));
 			$scope.objectId=response.data.object.id;
@@ -362,11 +460,11 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 	}
 	
 		
-	$scope.onSearchParent=function(){
-		irproduct($scope.parentName,'','','','',$scope.securityToken).then(function(response) {
+	$scope.onSearchProduct=function(){
+		irproduct($scope.productName,'','','','',$scope.securityToken).then(function(response) {
 			if (response.data.resultCode==RESULT_OK){
-					//alert (JSON.stringify(response));
-					$scope.parents=response.data.products;
+					//console.log (JSON.stringify(response));
+					$scope.products=response.data.products;
 				}
 			else
 				{
@@ -377,28 +475,49 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
     	    });
 	}
 	
-	$scope.onUpdateParent=function(){
-		if ($scope.parents!=undefined && $scope._selectedParent!=undefined){
-			$scope._parentId=$scope._selectedParent;
-			for (var i=0;i<$scope.parents.length;i++){
-				if ($scope.parents[i].id==$scope._parentId){
-					$scope._parentName=$scope.parents[i].name;
+	
+	$scope.onUpdateProduct=function(){
+		if ($scope.products!=undefined && $scope._selectedProduct!=undefined){
+			$scope._productId=$scope._selectedProduct;
+			for (var i=0;i<$scope.products.length;i++){
+				if ($scope.products[i].id==$scope._productId){
+					$scope._productName=$scope.products[i].name;
+					$scope._vat=$scope.products[i].category.vat;
+					
+					var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+					callRestWs($http,'metric/'+$scope.products[i].category.metricId+'/getMetricScaleAll','GET',
+							headers,
+							{},
+							function(response){
+									if (response.data.resultCode==RESULT_OK){
+										$scope.ums=response.data.metricScales;
+									}
+									else
+									{
+										manageError($scope,response.data.resultCode,response.data.resultDesc);
+									}
+								}, 
+								function(data, status, headers, config){
+										manageError($scope,status,data);
+								});
+					
 					return;
-				}
+					} // end if
+					
+				} // end for
 			}
-		}
+		}// onUpdateProduct
+	
+	$scope.onDeleteProduct=function(){
+		$scope._productId="";
+		$scope._productName="";
 	}
 	
-	$scope.onDeleteParent=function(){
-		$scope._parentId="";
-		$scope._parentName="";
-	}
-	
-	$scope.onSearchProducer=function(){
-		ircompany('',$scope.producerName,$scope.securityToken).then(function(response) {
+	$scope.onSearchSupplier=function(){
+		ircompany('',$scope.supplierName,$scope.securityToken).then(function(response) {
 			if (response.data.resultCode==RESULT_OK){
 					//alert (JSON.stringify(response));
-					$scope.companies=response.data.companies;
+					$scope.suppliers=response.data.companies;
 				}
 			else
 				{
@@ -409,21 +528,21 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
     	    });
 	}
 	
-	$scope.onUpdateProducer=function(){
-		if ($scope.companies!=undefined && $scope._selectedProducer!=undefined){
-			$scope._producerId=$scope._selectedProducer;
-			for (var i=0;i<$scope.companies.length;i++){
-				if ($scope.companies[i].id==$scope._producerId){
-					$scope._producerName=$scope.companies[i].name;
+	$scope.onUpdateSupplier=function(){
+		if ($scope.suppliers!=undefined && $scope._selectedSupplier!=undefined){
+			$scope._supplierId=$scope._selectedSupplier;
+			for (var i=0;i<$scope.suppliers.length;i++){
+				if ($scope.suppliers[i].id==$scope._supplierId){
+					$scope._supplierName=$scope.suppliers[i].name;
 					return;
 				}
 			}
 		}
 	}
 	
-	$scope.onDeleteProducer=function(){
-		$scope._producerId="";
-		$scope._producerName="";
+	$scope.onDeleteSupplier=function(){
+		$scope._supplierId="";
+		$scope._supplierName="";
 	}
 	
 	

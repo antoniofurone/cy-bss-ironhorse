@@ -33,7 +33,7 @@
 	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
 	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
-	<form novalidate name="productForm" id="productForm" class="form-inline" role="form" method="post">
+	<form novalidate name="purchaseForm" id="purchaseForm" class="form-inline" role="form" method="post">
 
 	<div id='list' ng-show="detail">
 		<div ng-show="!modify"><h4><span class="label label-default">{{'NEW.TITLE' | translate }}</span></h4></div>
@@ -59,7 +59,7 @@
 		<h5><span class="label label-default">{{'PRODUCT.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
 			<div>
-				<input class="form-control" name="_productId" id="_productId" type="text" ng-model="_productId" size="50" ng-show="false"/>
+				<input class="form-control" name="_productId" id="_productId" type="text" ng-model="_productId" size="50" ng-show="false" required/>
 				<input class="form-control" name="_productName" id="_productName" type="text" ng-model="_productName" size="50" readonly/>
 				<button class="btn btn-info btn-xs" ng-click="onDeleteProduct()">
 	      			<span class="glyphicon glyphicon-trash"></span>
@@ -87,7 +87,7 @@
 		<h5><span class="label label-default">{{'SUPPLIER.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
 			<div>
-				<input class="form-control" name="_supplierId" id="_supplierId" type="text" ng-model="_supplierId" size="50" ng-show="false"/>
+				<input class="form-control" name="_supplierId" id="_supplierId" type="text" ng-model="_supplierId" size="50" ng-show="false" required/>
 				<input class="form-control" name="_supplierName" id="_supplierName" type="text" ng-model="_supplierName" size="50" readonly/>
 				<button class="btn btn-info btn-xs" ng-click="onDeleteSupplier()">
 	      			<span class="glyphicon glyphicon-trash"></span>
@@ -115,7 +115,7 @@
 		<h5><span class="label label-default">{{'PERSON.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
 			<div>
-				<input class="form-control" name="_personId" id="_personId" type="text" ng-model="_personId" size="50" ng-show="false"/>
+				<input class="form-control" name="_personId" id="_personId" type="text" ng-model="_personId" size="50" ng-show="false" required/>
 				<input class="form-control" name="_personName" id="_personName" type="text" ng-model="_personName" size="50" readonly/>
 				<button class="btn btn-info btn-xs" ng-click="onDeletePerson()">
 	      			<span class="glyphicon glyphicon-trash"></span>
@@ -139,11 +139,20 @@
 	    </div>
 		<!-- end person -->
 		<br>
+		
+		<div class="form-group form-group-sm">
+			<label for="_selectedComponent">{{'COMPONENT.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedComponent" name="_selectedComponent" class="form-control" ng-model="_selectedComponent" required>
+		        	 <option ng-repeat="component in components" value="{{component.id}}">{{component.name}}</option>
+		        </select>
+		   	</div>
+		</div>
+		
 		<div class="form-group form-group-sm">
 			<label for="_selectedUm">{{'UM.LABEL' | translate }}:</label>
 			<div>
 				<select id="_selectedUm" name="_selectedUm" class="form-control" ng-model="_selectedUm">
-		        	 <option value=""> </option>
 		        	 <option ng-repeat="um in ums" value="{{um.id}}">{{um.simbol}}</option>
 		        </select>
 		   	</div>
@@ -157,7 +166,7 @@
 		<div class="form-group form-group-sm">
 			<label for="_selectedCurrency">{{'CURRENCY.LABEL' | translate }}:</label>
 			<div>
-				<select id="_selectedCurrency" name="_selectedCurrency" class="form-control" ng-model="_selectedCurrency">
+				<select id="_selectedCurrency" name="_selectedCurrency" class="form-control" ng-model="_selectedCurrency" required>
 		        	 <option ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.code}}</option>
 		        </select>
 		   	</div>
@@ -175,16 +184,78 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_vat">{{'VAT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_vat" id="_vat" type="number" ng-model="_vat" size="15"  step="1"/></div>
+			<div><input class="form-control" name="_vat" id="_vat" type="number" ng-model="_vat" size="15"  step="1" required/></div>
 		</div>
 		
+		<div class="form-group form-group-sm">
+			<label for="_selectedFrequency">{{'FREQUENCY.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedFrequency" name="_selectedFrequency" class="form-control" ng-model="_selectedFrequency">
+		        	 <option value=""> </option>
+		        	 <option ng-repeat="frequency in frequencies" value="{{frequency.id}}">{{frequency.name}} [{{frequency.simbol}}]</option>
+		        </select>
+		   	</div>
+		</div>
+	
+		<div class="form-group form-group-sm">
+			<label for="_selectedTacitRenewal">{{'TACITRENEWAL.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedTacitRenewal" name="_selectedTacitRenewal" class="form-control" ng-model="_selectedTacitRenewal">
+		        	 <option value="Y"> {{'YES.OPTION' | translate }} </option>
+		        	 <option value="N"> {{'NO.OPTION' | translate }} </option>
+		        </select>
+		   	</div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_selectedType">{{'TYPE.LABEL' | translate }}:</label>
+			<div>
+				<select id="_selectedType" name="_selectedType" class="form-control" ng-model="_selectedType">
+		       	   	 <option value="B"> {{'BILLABLE.OPTION' | translate }} </option>
+		        	 <option value="N"> {{'NO.OPTION' | translate }} </option>
+		     	     <option value="H"> {{'HYPOTESYS.OPTION' | translate }} </option>
+		        </select>
+		   	</div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_date">{{'DATE.LABEL' | translate }}:</label>
+			<div>
+				<div class="input-group date" id="datepicker">
+	            <input class="form-control" type="text" name="_date" id="_date" type="text"  ng-model="_date">
+	            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	    	   	</div>
+          	</div>	
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="dateStart">{{'DATESTART.LABEL' | translate }}:</label>
+			<div>
+				<div class="input-group date" id="dateStartpicker">
+	            <input class="form-control" type="text" name="_dateStart" id="_dateStart" type="text"  ng-model="_dateStart">
+	            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	          	</div>
+	        </div>	
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="dateEnd">{{'DATEEND.LABEL' | translate }}:</label>
+			<div>
+				<div class="input-group date" id="dateEndpicker">
+	            <input class="form-control" type="text" name="_dateEnd" id="_dateEnd" type="text"  ng-model="_dateEnd">
+	            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	          	</div>
+	        </div>  		
+		</div>
 		
 		<h6>
-			<span class="label label-warning" ng-show="productForm._name.$error.required" translate>NAME.REQUIRED</span>
-    		<span class="label label-warning" ng-show="productForm._selectedCategory.$error.required" translate>CATEGORY.REQUIRED</span>
-    		<span class="label label-warning" ng-show="productForm._selectedType.$error.required" translate>TYPE.REQUIRED</span>
-    		<span class="label label-warning" ng-show="productForm._description.$error.required" translate>DESCRIPTION.REQUIRED</span>
-    
+			<span class="label label-warning" ng-show="purchaseForm._selectedCompany.$error.required" translate>COMPANY.REQUIRED</span>
+    		<span class="label label-warning" ng-show="purchaseForm._productId.$error.required" translate>PRODUCT.REQUIRED</span>
+    		<span class="label label-warning" ng-show="purchaseForm._supplierId.$error.required && purchaseForm._personId.$error.required" translate>SUPPLIER_PERSON.REQUIRED</span>
+    		<span class="label label-warning" ng-show="purchaseForm._selectedComponent.$error.required" translate>COMPONENT.REQUIRED</span>
+    		<span class="label label-warning" ng-show="purchaseForm._selectedCurrency.$error.required" translate>CURRENCY.REQUIRED</span>
+    		<span class="label label-warning" ng-show="purchaseForm._vat.$error.required" translate>VAT.REQUIRED</span>
+    		
     	</h6>
 		
       	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
@@ -242,29 +313,71 @@
 	</div>
 	<!--  end detail -->
 	<div ng-show="!detail">
-		<h4><span class="label label-default">{{'PRODUCT.TITLE' | translate }}</span></h4>
+		<h4><span class="label label-default">{{'PURCHASE.TITLE' | translate }}</span></h4>
 	
 		<div class="form-group form-group-sm">
-			<label for="name">{{'NAME.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="name" id="name" type="text"  ng-model="name">
+			<label for="selectedCompany">{{'COMPANY.LABEL' | translate }}:</label>
+			<select id="selectedCompany" name="selectedCompany" class="form-control" ng-model="selectedCompany">
+				<option value=""></option>
+	   	 		<option ng-repeat="managed in managedCompanies" value="{{managed.id}}">{{managed.name}}</option>
+		     </select>
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="selectedCategory">{{'CATEGORY.LABEL' | translate }}:</label>
-			<select id="selectedCategory" name="selectedCategory" class="form-control" ng-model="selectedCategory">
-				<option value=""></option>
-				<option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</option>
-			</select>
-		</div>
-	
-		<div class="form-group form-group-sm">
-			<label for="selectedType">{{'TYPE.LABEL' | translate }}:</label>
-			<select id="selectedType" name="selectedType" class="form-control" ng-model="selectedType">
-				<option value=""></option>
-				<option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
-			</select>
+			<label for="productId">{{'PRODUCTID.LABEL' | translate }}:</label>
+			<input class="form-control" type="number" name="productId" id="productId"  ng-model="product">
 		</div>
 		
+		<div class="form-group form-group-sm">
+			<label for="name">{{'PRODUCTNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="productName" id="productName"  ng-model="productName">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="supplierId">{{'SUPPLIERID.LABEL' | translate }}:</label>
+			<input class="form-control" type="number" name="supplierId" id="supplierId"  ng-model="supplierId">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="supplierCode">{{'SUPPLIERCODE.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="supplierCode" id="supplierCode"  ng-model="supplierCode">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="supplierName">{{'SUPPLIERNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="supplierName" id="supplierName"  ng-model="supplierName">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="personId">{{'PERSONID.LABEL' | translate }}:</label>
+			<input class="form-control" type="number" name="personId" id="personId"  ng-model="personId">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="personCode">{{'PERSONCODE.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="personCode" id="personCode"  ng-model="personCode">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="personName">{{'PERSONNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="personName" id="supplierName"  ng-model="personName">
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="dateFrom">{{'DATEFROM.LABEL' | translate }}:</label>
+			<div class="input-group date" id="datepickerFrom">
+            <input class="form-control" type="text" name="dateFrom" id="dateFrom" type="text"  ng-model="dateFrom">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          	</div>	
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="dateTo">{{'DATETO.LABEL' | translate }}:</label>
+			
+			<div class="input-group date" id="datepickerTo">
+            <input class="form-control" type="text" name="dateTo" id="dateTo" type="text"  ng-model="dateTo">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+          	</div>	
+		</div>
 		<div class="form-group form-group-sm">
 			<label for="selectedAttribute">{{'ATTRIBUTE.LABEL' | translate }}:</label>
 			<select id="selectedAttribute" name="selectedAttribute" class="form-control" ng-model="selectedAttribute">
@@ -272,7 +385,6 @@
 				<option ng-repeat="attribute in attributes" value="{{attribute.id}}">{{attribute.name}}</option>
 			</select>
 		</div>
-		
 		<div class="form-group form-group-sm">
 			<label for="attributeValue">{{'ATTRIBUTEVALUE.LABEL' | translate }}:</label>
 			<input class="form-control" type="text" name="attributeValue" id="attributeValue" type="text"  ng-model="attributeValue">
@@ -291,24 +403,46 @@
 		<table class="table table-bordered table-striped" ng-show="products.length>0">
 		<thead>
 			<tr class="info small"><th>Id</th>
-			<th>{{'NAME.LABEL' | translate }}</th>
-			<th>{{'CATEGORY.LABEL' | translate }}</th>
-			<th>{{'TYPE.LABEL' | translate }}</th>
-			<th>{{'CODE.LABEL' | translate }}</th>
-			<th>{{'PARENT.LABEL' | translate }}</th>
-			<th>{{'PRODUCER.LABEL' | translate }}</th>
+			<th>{{'PRODUCT.LABEL' | translate }}</th>
+			<th>{{'SUPPLIERCODE.LABEL' | translate }}</th>
+			<th>{{'SUPPLIER.LABEL' | translate }}</th>
+			<th>{{'PERSONCODE.LABEL' | translate }}</th>
+			<th>{{'PERSON.LABEL' | translate }}</th>
+			<th>{{'COMPONENT.LABEL' | translate }}</th>
+			<th>{{'UM.LABEL' | translate }}</th>
+			<th>{{'QTY.LABEL' | translate }}</th>
+			<th>{{'CURRENCY.LABEL' | translate }}</th>
+			<th>{{'PRICE.LABEL' | translate }}</th>
+			<th>{{'AMOUNT.LABEL' | translate }}</th>
+			<th>{{'VAT.LABEL' | translate }}</th>
+			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
+			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
+			<th>{{'DATE.LABEL' | translate }}</th>
+			<th>{{'FREQUENCY.LABEL' | translate }}</th>
+			<th>{{'COMPANY.LABEL' | translate }}</th>
 			<th></th>
 	     	</tr>
 	    </thead>
 	    <tbody>
-	    	<tr class="small" ng-repeat="product in products | orderBy:'name'">
-	    		<td>{{ product.id }}</td>
-	    		<td>{{ product.name }}</td>
-	    		<td>{{ product.category.name }}</td>
-	    		<td>{{ product.productType.name }}</td>
-	    		<td>{{ product.code }}</td>
-	    		<td>{{ product.parentName }}</td>
-	    		<td>{{ product.producerName }}</td>
+	    	<tr class="small" ng-repeat="purchase in purchases | orderBy:'date'">
+	    		<td>{{ purchase.id }}</td>
+	    		<td>{{ prichase.productName }}</td>
+	    		<td>{{ purchase.supplierCode }}</td>
+	    		<td>{{ purchase.supplierName }}</td>
+	    		<td>{{ purchase.personCode }}</td>
+	    		<td>{{ purchase.personFirstName }} {{ purchase.personSecondName }}</td>
+	    		<td>{{ purchase.componentName }}</td>
+	    		<td>{{ purchase.qtyUmSimbol }}</td>
+	    		<td>{{ purchase.qty }}</td>
+	    		<td>{{ purchase.currencyCode }}</td>
+	    		<td>{{ purchase.price }}</td>
+	    		<td>{{ purchase.amount }}</td>
+	    		<td>{{ purchase.vat }}</td>
+	    		<td>{{ purchase.vatAmount }}</td>
+	    		<td>{{ purchase.amount+purchase.vatAmount }}</td>
+	    		<td>{{ purchase.date }}</td>
+	    		<td>{{ purchase.frequencyName }}</td>
+	    		<td>{{ purchase.companyName }}</td>
 	    		
 	    		<td> 
 	      			<button class="btn btn-info btn-xs" ng-click="editProduct(product.id)">
@@ -337,6 +471,5 @@
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
 <script src="js/purchase.js"></script>
 
-	
 </body>
 </html>	
