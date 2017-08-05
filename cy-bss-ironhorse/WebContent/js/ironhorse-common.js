@@ -121,14 +121,72 @@ function manageError($scope,status,data){
 		$scope.errorMessage=status+" - "+JSON.stringify(data);	
 }
 
+function StringToStringDDMMYYYY(stringDate){
+	var date=new Date(stringDate);
+	var year=date.getFullYear().toString();
+	var month=(date.getMonth()+1).toString();
+	var day=date.getDate().toString();
+	return (day.length==2?day:"0"+day)+"/"+(month.length==2?month:"0"+month)+"/"+year;
+}
+
 function dateToStringDDMMYYYY(date){
 	var year=date.getFullYear().toString();
 	var month=(date.getMonth()+1).toString();
 	var day=date.getDate().toString();
-	return (day.length==2?day:"0"+day)+"/"+month+"/"+year;
+	return (day.length==2?day:"0"+day)+"/"+(month.length==2?month:"0"+month)+"/"+year;
+}
+
+function dateToStringI18N(date){
+	var year=date.getFullYear().toString();
+	var month=(date.getMonth()+1).toString();
+	var day=date.getDate().toString();
+	return getLanguage()=='it'?(day.length==2?day:"0"+day)+"/"+(month.length==2?month:"0"+month)+"/"+year:
+		(month.length==2?month:"0"+month)+"/"+(day.length==2?day:"0"+day)+"/"+year;
+	
 }
 
 function replaceURLWithHTMLLinks(text) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
     return text.replace(exp,"<a href='$1' target='_blank'>$1</a>"); 
 }
+
+String.prototype.dateFormat = function(){
+	var date=new Date(this);
+	var year=date.getFullYear().toString();
+	var month=(date.getMonth()+1).toString();
+	var day=date.getDate().toString();
+	return (day.length==2?day:"0"+day)+"/"+(month.length==2?month:"0"+month)+"/"+year;
+}	
+
+Number.prototype.round=function(n){
+	return Math.round(this*(10**n))/(10**n);
+}
+
+
+Number.prototype.formatI18N = function(n) {
+	var browserLang = navigator.language || navigator.userLanguage;
+	if (browserLang=='it-IT' || browserLang=='it')
+		return this.format(n, 3, '.', ',');
+	else
+		return this.format(n, 3, ',', '.');
+}
+
+/**
+ * Number.prototype.format(n, x, s, c)
+ * 
+ * @param integer n: length of decimal
+ * @param integer x: length of whole part
+ * @param mixed   s: sections delimiter
+ * @param mixed   c: decimal delimiter
+ */
+Number.prototype.format = function(n, x, s, c) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+
+//12345678.9.format(2, 3, '.', ',');  // "12.345.678,90"
+//123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
+//12345678.9.format(0, 3, '-');       // "12-345-679"
+//var a = parseFloat("10")

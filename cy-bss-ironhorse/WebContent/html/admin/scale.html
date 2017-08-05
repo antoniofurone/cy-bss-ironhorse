@@ -121,7 +121,7 @@
 	    		<td>{{ scale.id }}</td>
 	    		<td>{{ scale.name }}</td>
 	    		<td>{{ scale.simbol }}</td>
-	    		<td>{{ scale.scale }}</td>
+	    		<td>{{ scale.scale.formatI18N(6) }}</td>
 	    		
 	    		<td> 
 	      			<button class="btn btn-info btn-xs" ng-click="editScale(scale.id)">

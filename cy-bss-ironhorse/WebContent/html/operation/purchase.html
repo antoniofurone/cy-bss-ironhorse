@@ -103,7 +103,7 @@
 		
 		<div class="form-group form-group-sm">
 			<select id="_selectedSupplier" name="_selectedSupplier" class="form-control" ng-model="_selectedSupplier">
-	        	 <option ng-repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name}}</option>
+	        	 <option ng-repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name +' ['+supplier.code+']'}}</option>
 	        </select>
 	        <button class="btn btn-info btn-xs" ng-click="onUpdateSupplier()">
 	    		<span class="glyphicon glyphicon-pencil"></span>
@@ -123,7 +123,8 @@
 			</div>
 		</div>
 		<div class="form-group form-group-sm">
-			<input class="form-control" type="text" size=20 name="personName" id="personName" type="text"  ng-model="personName">
+			<input class="form-control" type="text" size=20 name="personFirstName" id="personFirstName" type="text"  ng-model="personFirstName">
+			<input class="form-control" type="text" size=20 name="personSecondName" id="personSecondName" type="text"  ng-model="personSecondName">
 	 	</div>
 		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchPerson()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
@@ -131,7 +132,7 @@
 		
 		<div class="form-group form-group-sm">
 			<select id="_selectedPerson" name="_selectedPerson" class="form-control" ng-model="_selectedPerson">
-	        	 <option ng-repeat="person in persons" value="{{supplier.id}}">{{person.firstName+' '+person.secondName+' ['+person.code+']'}}</option>
+	        	 <option ng-repeat="person in persons" value="{{person.id}}">{{person.firstName+' '+person.secondName+' ['+person.code+']'}}</option>
 	        </select>
 	        <button class="btn btn-info btn-xs" ng-click="onUpdatePerson()">
 	    		<span class="glyphicon glyphicon-pencil"></span>
@@ -177,10 +178,11 @@
 			<div><input class="form-control" name="_price" id="_price" type="number" ng-model="_price" size="15"  step="0.01"/></div>
 		</div>
 		
-		<div class="form-group form-group-sm">
-			<label for="_priceTot">{{'PRICETOT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_priceTot" id="_priceTot" type="number" ng-model="_priceTot" size="15"  step="0.01"/></div>
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_price">{{'AMOUNT.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_amount" id="_amount" type="number" ng-model="_amount" size="15" readonly/></div>
 		</div>
+		
 		
 		<div class="form-group form-group-sm">
 			<label for="_vat">{{'VAT.LABEL' | translate }}:</label>
@@ -188,6 +190,21 @@
 		</div>
 		
 		<div class="form-group form-group-sm">
+			<label for="_priceTot">{{'PRICETOT.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_priceTot" id="_priceTot" type="number" ng-model="_priceTot" size="15"  step="0.01"/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_vatAmount">{{'VATAMOUNT.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_vatAmount" id="_vatAmount" type="number" ng-model="_vatAmount" size="15" readonly/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="modify">
+			<label for="_amountTot">{{'AMOUNTTOT.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_amountTot" id="_amountTot" type="number" ng-model="_amountTot" size="15" readonly/></div>
+		</div>
+		
+		<div class="form-group form-group-sm" ng-show="false">
 			<label for="_selectedFrequency">{{'FREQUENCY.LABEL' | translate }}:</label>
 			<div>
 				<select id="_selectedFrequency" name="_selectedFrequency" class="form-control" ng-model="_selectedFrequency">
@@ -197,7 +214,7 @@
 		   	</div>
 		</div>
 	
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show="false">
 			<label for="_selectedTacitRenewal">{{'TACITRENEWAL.LABEL' | translate }}:</label>
 			<div>
 				<select id="_selectedTacitRenewal" name="_selectedTacitRenewal" class="form-control" ng-model="_selectedTacitRenewal">
@@ -213,7 +230,7 @@
 				<select id="_selectedType" name="_selectedType" class="form-control" ng-model="_selectedType">
 		       	   	 <option value="B"> {{'BILLABLE.OPTION' | translate }} </option>
 		        	 <option value="N"> {{'NO.OPTION' | translate }} </option>
-		     	     <option value="H"> {{'HYPOTESYS.OPTION' | translate }} </option>
+		     	     <option value="H"> {{'HYP.OPTION' | translate }} </option>
 		        </select>
 		   	</div>
 		</div>
@@ -228,7 +245,7 @@
           	</div>	
 		</div>
 		
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show="false">
 			<label for="dateStart">{{'DATESTART.LABEL' | translate }}:</label>
 			<div>
 				<div class="input-group date" id="dateStartpicker">
@@ -238,7 +255,7 @@
 	        </div>	
 		</div>
 		
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show="false">
 			<label for="dateEnd">{{'DATEEND.LABEL' | translate }}:</label>
 			<div>
 				<div class="input-group date" id="dateEndpicker">
@@ -325,7 +342,7 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="productId">{{'PRODUCTID.LABEL' | translate }}:</label>
-			<input class="form-control" type="number" name="productId" id="productId"  ng-model="product">
+			<input class="form-control" type="number" name="productId" id="productId"  ng-model="productId">
 		</div>
 		
 		<div class="form-group form-group-sm">
@@ -400,7 +417,7 @@
 			</button>
 		
 		<br><br>
-		<table class="table table-bordered table-striped" ng-show="products.length>0">
+		<table class="table table-bordered table-striped" ng-show="purchases.length>0">
 		<thead>
 			<tr class="info small"><th>Id</th>
 			<th>{{'PRODUCT.LABEL' | translate }}</th>
@@ -418,38 +435,41 @@
 			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
 			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
 			<th>{{'DATE.LABEL' | translate }}</th>
+			<!-- 
 			<th>{{'FREQUENCY.LABEL' | translate }}</th>
 			<th>{{'COMPANY.LABEL' | translate }}</th>
+			-->
 			<th></th>
 	     	</tr>
 	    </thead>
 	    <tbody>
 	    	<tr class="small" ng-repeat="purchase in purchases | orderBy:'date'">
 	    		<td>{{ purchase.id }}</td>
-	    		<td>{{ prichase.productName }}</td>
+	    		<td>{{ purchase.productName }}</td>
 	    		<td>{{ purchase.supplierCode }}</td>
 	    		<td>{{ purchase.supplierName }}</td>
 	    		<td>{{ purchase.personCode }}</td>
 	    		<td>{{ purchase.personFirstName }} {{ purchase.personSecondName }}</td>
 	    		<td>{{ purchase.componentName }}</td>
 	    		<td>{{ purchase.qtyUmSimbol }}</td>
-	    		<td>{{ purchase.qty }}</td>
+	    		<td>{{ purchase.qty.round(4).formatI18N(4) }}</td>
 	    		<td>{{ purchase.currencyCode }}</td>
-	    		<td>{{ purchase.price }}</td>
-	    		<td>{{ purchase.amount }}</td>
-	    		<td>{{ purchase.vat }}</td>
-	    		<td>{{ purchase.vatAmount }}</td>
-	    		<td>{{ purchase.amount+purchase.vatAmount }}</td>
-	    		<td>{{ purchase.date }}</td>
+	    		<td>{{ purchase.price.round(2).formatI18N(2) }}</td>
+	    		<td>{{ purchase.amount.round(2).formatI18N(2) }}</td>
+	    		<td>{{ purchase.vat.round(2).formatI18N(2) }}</td>
+	    		<td>{{ purchase.vatAmount.round(2).formatI18N(2) }}</td>
+	    		<td>{{ (purchase.amount+purchase.vatAmount).round(2).formatI18N(2) }}</td>
+	    		<td>{{ purchase.date.dateFormat() }}</td>
+	    		<!-- 
 	    		<td>{{ purchase.frequencyName }}</td>
 	    		<td>{{ purchase.companyName }}</td>
-	    		
+	    		-->
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editProduct(product.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editPurchase(purchase.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="deleteProduct(product.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deletePurchase(purchase.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      			</button>
 	    			
