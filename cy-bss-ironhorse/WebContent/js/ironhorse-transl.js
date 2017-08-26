@@ -23,6 +23,8 @@ var menuMapTranslation={
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operation",
+				"MENU.OPERATION.INVOICE":"Invoices",
+				"MENU.OPERATION.SELFINVOICE":"Self Invoices",
 				"MENU.OPERATION.PURCHASE":"Purchases",
 				"MENU.OPERATION.SALES":"Sales",
 				"MENU.OPERATION.TTMS":"TTMS",
@@ -59,6 +61,8 @@ var menuMapTranslation={
 				"MENU.ENTITY.FILE":"File",
 				
 				"MENU.OPERATION":"Operazioni",
+				"MENU.OPERATION.INVOICE":"Fatture",
+				"MENU.OPERATION.SELFINVOICE":"Auto Fatture",
 				"MENU.OPERATION.PURCHASE":"Aquisti",
 				"MENU.OPERATION.SALES":"Vendite",
 				"MENU.OPERATION.TTMS":"TTMS",

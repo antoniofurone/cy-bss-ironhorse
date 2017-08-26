@@ -100,6 +100,41 @@ angular.module('irsearch',[])
 			return deferred.promise;
 		} 
 	})
+	.factory('irinvoice',function($http,$q){
+		return function(number,year,companyId,
+				tpCompanyId,tpCompanyCode,tpCompanyName,
+				personId,personCode,personName,
+				fromDate,toDate,invoiceType,
+				securityToken){
+			
+			var query="?companyId="+(companyId!=undefined?encodeURIComponent(companyId):'0');
+			query+="&tpCompanyId="+(tpCompanyId!=undefined?encodeURIComponent(tpCompanyId):'0');
+			query+="&tpCompanyCode="+(tpCompanyCode!=undefined?encodeURIComponent(tpCompanyCode):'');
+			query+="&tpCompanyName="+(tpCompanyName!=undefined?encodeURIComponent(tpCompanyName):'');
+			
+			query+="&personId="+(personId!=undefined?encodeURIComponent(personId):'0');
+			query+="&personCode="+(personCode!=undefined?encodeURIComponent(personCode):'');
+			query+="&personName="+(personName!=undefined?encodeURIComponent(personName):'');
+			
+			query+="&number="+(number!=undefined?encodeURIComponent(number):'0');
+			query+="&year="+(year!=undefined?encodeURIComponent(year):'0');
+			
+			query+="&fromDate="+(fromDate!=undefined?encodeURIComponent(fromDate):'');
+			query+="&toDate="+(toDate!=undefined?encodeURIComponent(toDate):'');
+			
+			var deferred = $q.defer();
+			callRestWs($http,'invoice/'+invoiceType+'/find'+query,'GET',
+					{"Security-Token":securityToken},
+					{},
+					function(response){
+							deferred.resolve(response);						
+					}, 
+					function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);	
+			});
+			return deferred.promise;
+		} 
+	})
 	.factory('ircitysearch',function($http,$q){
 		return function(name,stateRegion,countryId,securityToken){
 			

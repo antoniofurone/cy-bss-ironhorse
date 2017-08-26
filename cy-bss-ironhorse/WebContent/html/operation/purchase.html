@@ -435,9 +435,9 @@
 			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
 			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
 			<th>{{'DATE.LABEL' | translate }}</th>
+			<th>{{'COMPANY.LABEL' | translate }}</th>
 			<!-- 
 			<th>{{'FREQUENCY.LABEL' | translate }}</th>
-			<th>{{'COMPANY.LABEL' | translate }}</th>
 			-->
 			<th></th>
 	     	</tr>
@@ -452,17 +452,17 @@
 	    		<td>{{ purchase.personFirstName }} {{ purchase.personSecondName }}</td>
 	    		<td>{{ purchase.componentName }}</td>
 	    		<td>{{ purchase.qtyUmSimbol }}</td>
-	    		<td>{{ purchase.qty.round(4).formatI18N(4) }}</td>
+	    		<td align="right">{{ purchase.qty.round(4).formatI18N(4) }}</td>
 	    		<td>{{ purchase.currencyCode }}</td>
-	    		<td>{{ purchase.price.round(2).formatI18N(2) }}</td>
-	    		<td>{{ purchase.amount.round(2).formatI18N(2) }}</td>
-	    		<td>{{ purchase.vat.round(2).formatI18N(2) }}</td>
-	    		<td>{{ purchase.vatAmount.round(2).formatI18N(2) }}</td>
-	    		<td>{{ (purchase.amount+purchase.vatAmount).round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ purchase.price.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ purchase.amount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ purchase.vat.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ purchase.vatAmount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ (purchase.amount+purchase.vatAmount).round(2).formatI18N(2) }}</td>
 	    		<td>{{ purchase.date.dateFormat() }}</td>
+	    		<td>{{ purchase.companyName }}</td>
 	    		<!-- 
 	    		<td>{{ purchase.frequencyName }}</td>
-	    		<td>{{ purchase.companyName }}</td>
 	    		-->
 	    		<td> 
 	      			<button class="btn btn-info btn-xs" ng-click="editPurchase(purchase.id)">
