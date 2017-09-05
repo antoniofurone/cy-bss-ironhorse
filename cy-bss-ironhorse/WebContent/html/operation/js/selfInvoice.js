@@ -28,6 +28,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'INVOICE.TITLE':'Self Invoices',
  		'NUMBER.LABEL':'Number',
  		'YEAR.LABEL':'Year',
+ 		'BILLABLE.LABEL':'Billable',
  		'COMPANY.LABEL':'Company',
  		'PRODUCTID.LABEL':'Product Id',
  		'PRODUCTNAME.LABEL':'Product Name',
@@ -66,7 +67,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'COMPONENT.REQUIRED':'Component is required',
  		'CURRENCY.REQUIRED':'Currency is required',
  		'VAT.REQUIRED':'Vat is required',
- 	 	'EDIT.BUTTON':'Edit',
+ 		'ADD.BUTTON':'Add',
+ 		'EDIT.BUTTON':'Edit',
  		'DELETE.BUTTON':'Delete',
  		'NEW.BUTTON':'New',
  		'CLOSE.BUTTON':'Lock',
@@ -76,6 +78,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'UPD.OK': 'Invoice changed !',
 		'MODIFY.TITLE':'Change',
 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Invoice ?',
+		'CLOSECONFIRM.MESSAGE': 'Are you sure to lock Invoice ?',
 		'SUBMIT.BUTTON':'Submit',
 		'CANCELLED.LABEL':'Cancelled'
  	  })
@@ -86,6 +89,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'INVOICE.TITLE':'Auto Fatture',
 		'NUMBER.LABEL':'Numero',
 		'YEAR.LABEL':'Anno',
+		'BILLABLE.LABEL':'Fatturabili',
  		'COMPANY.LABEL':'Azienda',
  		'PRODUCTID.LABEL':'Id Prodotto',
  		'PRODUCTNAME.LABEL':'Nome Prodotto',
@@ -124,6 +128,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'COMPONENT.REQUIRED':'Componente obbligatorio',
  		'CURRENCY.REQUIRED':'Valuta obbligatoria',
  		'VAT.REQUIRED':'Iva obbligatoria',
+ 		'ADD.BUTTON':'Aggiungi',
  	 	'EDIT.BUTTON':'Modifica',
  		'DELETE.BUTTON':'Cancella',
  		'NEW.BUTTON':'Nuovo',
@@ -134,6 +139,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'UPD.OK': 'Fattura modificata !',
 		'MODIFY.TITLE':'Modifica',
 		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la fattura ?",
+		'CLOSECONFIRM.MESSAGE': 'Sei sicuro di chiudere la fattura ?',
 		'SUBMIT.BUTTON':'Conferma',
 		'CANCELLED.LABEL':'Cancellata'
   	  });
@@ -249,33 +255,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	    	          		});
 						}
 						
-						callRestWs($http,'invoice/'+$scope.invoiceType+'/'+$scope.invoiceId+'/get','GET',
-									headers,
-									{},
-									function(response){
-											if (response.data.resultCode==RESULT_OK){
-												//console.log(JSON.stringify(response));
-												$scope._amount=response.data.invoice.amount.round(2);
-												$scope._vatAmount=response.data.invoice.vatAmount.round(2);
-												$scope._amountTot=response.data.invoice.totAmount.round(2);
-												
-												$scope._items=response.data.invoice.billables;
-												$scope._number=response.data.invoice.number;
-												$scope._year=response.data.invoice.year;
-												$scope._date=dateToStringDDMMYYYY(new Date(response.data.invoice.date));
-												$scope._note=response.data.invoice.note;
-												
-												
-											}
-											else
-											{
-												manageError($scope,response.data.resultCode,response.data.resultDesc);
-											}
-										}, 
-										function(data, status, headers, config){
-												manageError($scope,status,data);
-										});
-						
+						$getInvoice($scope.invoiceId);	
 						
 						$scope.modify=true;
 						
@@ -290,6 +270,75 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 				});
 		
 	}
+	
+	$getInvoice = function (invoiceId){
+		
+		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+		callRestWs($http,'invoice/'+$scope.invoiceType+'/'+invoiceId+'/get','GET',
+			headers,
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//console.log(JSON.stringify(response));
+						$scope.invoiceId=response.data.invoice.id;
+						
+						$scope._selectedCompany=response.data.invoice.companyId;
+						$scope._companyName=response.data.invoice.companyName;
+						
+						$scope._supplierId=response.data.invoice.tpCompanyId;
+						$scope._supplierName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
+						
+						$scope._personId=response.data.invoice.personId;
+						$scope._personName=(response.data.invoice.personFirstName==undefined?'':response.data.invoice.personFirstName+' ')
+							+(response.data.invoice.personSecondName==undefined?'':response.data.invoice.personSecondName);
+	
+						$scope._note=response.data.invoice.note;
+						$scope._amount=response.data.invoice.amount.round(2).formatI18N(2);
+						$scope._vatAmount=response.data.invoice.vatAmount.round(2).formatI18N(2);
+						$scope._amountTot=response.data.invoice.totAmount.round(2).formatI18N(2);
+						
+						$scope._selectedCurrency=response.data.invoice.currencyId;
+						$scope._currencyName=response.data.invoice.currencyCode;
+						
+						
+						$scope.items=response.data.invoice.billables;
+						$scope._number=response.data.invoice.number==0?'':response.data.invoice.number;
+						$scope._year=response.data.invoice.year;
+						$scope._date=dateToStringDDMMYYYY(new Date(response.data.invoice.date));
+						$scope._note=response.data.invoice.note;
+						
+						if (response.data.invoice.number==0){
+							// Read Billables
+							
+							callRestWs($http,'invoice/'+$scope.invoiceType+'/'+invoiceId+'/getBillables','GET',
+									headers,
+									{},
+									function(response){
+											if (response.data.resultCode==RESULT_OK){
+												console.log(JSON.stringify(response));
+												$scope.billables=response.data.billables;
+											}
+											else
+											{
+												manageError($scope,response.data.resultCode,response.data.resultDesc);
+											}
+										}, 
+										function(data, status, headers, config){
+												manageError($scope,status,data);
+										});
+						}
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+	
+	}
+	
 	
 	$scope.onBack = function() {
 		$scope.errorMessage="";
@@ -310,28 +359,20 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		
 		
 		$scope._selectedCompany='';
-		$scope._productId='';
-		$scope._productName='';
-		$scope._selectedProduct='';
 		$scope._supplierId='';
 		$scope._supplierName='';
 		$scope._selectedSupplier='';
 		$scope._personId='';
 		$scope._personName='';
 		$scope._selectedPerson='';
-		$scope._qty='';
-		$scope._selectedUm='';
-		$scope._selectedComponent='';
-		$scope._price='';
-		$scope._priceTot='';
 		$scope._selectedCurrency='';
-		$scope._vat='';
 		$scope._date='';
-		$scope._dateStart='';
-		$scope._dateEnd='';
-		$scope._selectedFrequency='';
-		$scope._selectedTacitRenewal='';
-		$scope._selectedType='';
+		$scope._note='';
+		
+		$scope._amount='';
+		$scope._vatAmount='';
+		$scope._amountTot='';
+		
 		
 	}
 	
@@ -342,34 +383,30 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		
 		$scope.modify=true;
 		$scope.detail=true;
+	
+		$getInvoice(id);
+	}
+	
+	$scope.closeInvoice = function(id){
+		
+	}
+	
+	$scope.printInvoice = function(id){
+		$window.open("printSelfInvoice.html?invoiceId="+id);
+
+	}
+		
+
+	$scope.addBillable = function(billableId){
 		
 		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
-		callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/get','GET',
+		callRestWs($http,'invoice/'+$scope.invoiceType+'/'+$scope.invoiceId+'/addBillable/'+billableId,'GET',
 			headers,
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
 						//console.log(JSON.stringify(response));
-						$scope.invoiceId=response.data.invoice.id;
-						
-						$scope._selectedCompany=response.data.invoice.companyId;
-						
-						$scope._supplierId=response.data.invoice.tpCompanyId;
-						$scope._supplierName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
-						
-						$scope._personId=response.data.invoice.personId;
-						$scope._personName=(response.data.invoice.personFirstName==undefined?'':response.data.invoice.personFirstName+' ')
-							+(response.data.invoice.personSecondName==undefined?'':response.data.invoice.personSecondName);
-	
-						$scope._note=response.data.invoice.note;
-						$scope._amount=response.data.invoice.amount.round(2);
-						$scope._vatAmount=response.data.invoice.vatAmount.round(2);
-						$scope._amountTot=response.data.invoice.totAmount.round(2);
-						$scope._selectedCurrency=response.data.invoice.currencyId;
-						$scope._date=dateToStringDDMMYYYY(new Date(response.data.invoice.date));
-						
-						
-						
+						$getInvoice($scope.invoiceId);	
 					}
 					else
 					{
@@ -379,19 +416,60 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 				function(data, status, headers, config){
 						manageError($scope,status,data);
 				});
+	
 	}
+
+	$scope.removeBillable = function(billableId){
+		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+		callRestWs($http,'invoice/'+$scope.invoiceType+'/'+$scope.invoiceId+'/removeBillable/'+billableId,'GET',
+			headers,
+			{},
+			function(response){
+					if (response.data.resultCode==RESULT_OK){
+						//console.log(JSON.stringify(response));
+						$getInvoice($scope.invoiceId);	
+					}
+					else
+					{
+						manageError($scope,response.data.resultCode,response.data.resultDesc);
+					}
+				}, 
+				function(data, status, headers, config){
+						manageError($scope,status,data);
+				});
+
+	}
+	
 	
 	$scope.closeInvoice = function(id){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
 		
-	}
-	
-	$scope.printInvoice = function(id){
-		//$window.open("printSelfInvoice.html?invoiceId="+id, '_blank', 'height=800,width=800');
-		$window.open("printSelfInvoice.html?invoiceId="+id);
-
-	}
+		$translate('CLOSECONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/close','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								$search();							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 		});
+	}	
 		
-
+		
 	$scope.deleteInvoice = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
@@ -402,7 +480,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'purchase/'+id+'/remove','GET',
+ 			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/remove','GET',
  					headers,
  					{},
  					function(response){

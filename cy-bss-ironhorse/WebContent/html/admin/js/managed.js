@@ -166,6 +166,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irlangu
 						if (response.data.resultCode==RESULT_OK){
 							$scope._companyId=response.data.company.id;
 							$scope._companyName=response.data.company.name;
+							$scope._invoiceIcon=response.data.company.invoiceLogoId==0?'':response.data.company.invoiceLogoId;
 						}
 						else
 						{

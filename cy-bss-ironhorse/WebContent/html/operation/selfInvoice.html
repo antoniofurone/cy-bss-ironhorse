@@ -47,17 +47,18 @@
 		
 		<div class="form-group form-group-sm" ng-show="modify">
 			<label for="_number">{{'NUMBER.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_number" id="_number" type="number" ng-model="_number" size="10" readonly/></div>
+			<div><input class="form-control" name="_number" id="_number" type="string" ng-model="_number" size="10" readonly/></div>
 		</div>
 		
 		<div class="form-group form-group-sm" ng-show="modify">
 			<label for="_number">{{'YEAR.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_year" id="_year" type="number" ng-model="_year" size="10" readonly/></div>
+			<div><input class="form-control" name="_year" id="_year" type="string" ng-model="_year" size="10" readonly/></div>
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="_selectedCompany">{{'COMPANY.LABEL' | translate }}:</label>
-			<div>
+			<label>{{'COMPANY.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_companyName" id="_companyName" type="string" ng-model="_companyName" size="50" ng-show='modify' readonly/></div>
+			<div ng-show='!modify'>
 				<select id="_selectedCompany" name="_selectedCompany" class="form-control" ng-model="_selectedCompany" required>
 		        	 <option value=""> </option>
 		        	 <option ng-repeat="managed in managedCompanies" value="{{managed.id}}">{{managed.name}}</option>
@@ -71,19 +72,19 @@
 			<div>
 				<input class="form-control" name="_supplierId" id="_supplierId" type="text" ng-model="_supplierId" size="50" ng-show="false" required/>
 				<input class="form-control" name="_supplierName" id="_supplierName" type="text" ng-model="_supplierName" size="50" readonly/>
-				<button class="btn btn-info btn-xs" ng-click="onDeleteSupplier()">
+				<button class="btn btn-info btn-xs" ng-click="onDeleteSupplier()" ng-show='!modify'>
 	      			<span class="glyphicon glyphicon-trash"></span>
 	      		</button>
 			</div>
 		</div>
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show='!modify'>
 			<input class="form-control" type="text" size=20 name="supplierName" id="supplierName" type="text"  ng-model="supplierName">
 	 	</div>
-		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchSupplier()">
+		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchSupplier()" ng-show='!modify'>
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show='!modify'>
 			<select id="_selectedSupplier" name="_selectedSupplier" class="form-control" ng-model="_selectedSupplier">
 	        	 <option ng-repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name +' ['+supplier.code+']'}}</option>
 	        </select>
@@ -95,24 +96,24 @@
 		
 		<!-- person -->
 		<h5><span class="label label-default">{{'PERSON.LABEL' | translate }}</span></h5>
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" >
 			<div>
 				<input class="form-control" name="_personId" id="_personId" type="text" ng-model="_personId" size="50" ng-show="false" required/>
 				<input class="form-control" name="_personName" id="_personName" type="text" ng-model="_personName" size="50" readonly/>
-				<button class="btn btn-info btn-xs" ng-click="onDeletePerson()">
+				<button class="btn btn-info btn-xs" ng-click="onDeletePerson()" ng-show='!modify'>
 	      			<span class="glyphicon glyphicon-trash"></span>
 	      		</button>
 			</div>
 		</div>
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show='!modify'>
 			<input class="form-control" type="text" size=20 name="personFirstName" id="personFirstName" type="text"  ng-model="personFirstName">
 			<input class="form-control" type="text" size=20 name="personSecondName" id="personSecondName" type="text"  ng-model="personSecondName">
 	 	</div>
-		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchPerson()">
+		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchPerson()" ng-show='!modify'>
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm" ng-show='!modify'>
 			<select id="_selectedPerson" name="_selectedPerson" class="form-control" ng-model="_selectedPerson">
 	        	 <option ng-repeat="person in persons" value="{{person.id}}">{{person.firstName+' '+person.secondName+' ['+person.code+']'}}</option>
 	        </select>
@@ -125,7 +126,7 @@
 		</br>
 		<div class="form-group form-group-sm">
       		<label for="_note">{{'NOTE.LABEL' | translate }}:</label>
-			<div><textarea class="form-control" rows="8" cols="90" name="_note" ng-model="_note" maxlength=500></textarea></div>
+			<div><textarea class="form-control" rows="4" cols="90" name="_note" ng-model="_note" maxlength=500></textarea></div>
 		</div>
 		</br>
 		
@@ -140,8 +141,9 @@
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="_selectedCurrency">{{'CURRENCY.LABEL' | translate }}:</label>
-			<div>
+			<label>{{'CURRENCY.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_currencyName" id="_currencyName" type="string" ng-model="_currencyName" size="10" ng-show='modify' readonly/></div>
+			<div ng-show='!modify'>
 				<select id="_selectedCurrency" name="_selectedCurrency" class="form-control" ng-model="_selectedCurrency" required>
 		        	 <option ng-repeat="currency in currencies" value="{{currency.id}}">{{currency.code}}</option>
 		        </select>
@@ -150,18 +152,18 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_amount">{{'AMOUNT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_amount" id="_amount" type="number" ng-model="_amount" size="15" readonly/></div>
+			<div><input class="form-control" name="_amount" id="_amount" type="string" ng-model="_amount" size="15" readonly/></div>
 		</div>
 		
 		
 		<div class="form-group form-group-sm">
 			<label for="_vatAmount">{{'VATAMOUNT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_vatAmount" id="_vatAmount" type="number" ng-model="_vatAmount" size="15" readonly/></div>
+			<div><input class="form-control" name="_vatAmount" id="_vatAmount" type="string" ng-model="_vatAmount" size="15" readonly/></div>
 		</div>
 		
 		<div class="form-group form-group-sm">
 			<label for="_amountTot">{{'AMOUNTTOT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_amountTot" id="_amountTot" type="number" ng-model="_amountTot" size="15" readonly/></div>
+			<div><input class="form-control" name="_amountTot" id="_amountTot" type="string" ng-model="_amountTot" size="15" readonly/></div>
 		</div>
 		
 		
@@ -172,18 +174,114 @@
     		
     	</h6>
 		
-      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" translate>SUBMIT.BUTTON</button>
+      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" ng-show='_number==0' translate>SUBMIT.BUTTON</button>
+		
+		<button type="button" class="btn btn-sm btn-info" ng-click="printInvoice(invoiceId)" ng-show='_number!=0'>
+			<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
+		</button>
+	
+	      			
 	
 		<!-- attributes -->
 		<div ng-show="modify">
 		
 		<!-- item list -->
+		<br>
+		<table class="table table-bordered table-striped" ng-show="items.length>0">
+		<thead>
+			<tr class="info small"><th>Id</th>
+			<th>{{'PRODUCT.LABEL' | translate }}</th>
+			<th>{{'COMPONENT.LABEL' | translate }}</th>
+			<th>{{'UM.LABEL' | translate }}</th>
+			<th>{{'QTY.LABEL' | translate }}</th>
+			<th>{{'PRICE.LABEL' | translate }}</th>
+			<th>{{'AMOUNT.LABEL' | translate }}</th>
+			<th>{{'VAT.LABEL' | translate }}</th>
+			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
+			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
+			<th>{{'DATE.LABEL' | translate }}</th>
+			<th></th>
+	     	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr class="small" ng-repeat="item in items | orderBy:'productName'">
+	    		<td>{{ item.id }}</td>
+	    		<td>{{ item.productName }}</td>
+	    		<td>{{ item.componentName }}</td>
+	    		<td>{{ item.qtyUmSimbol }}</td>
+	    		
+	    		<td align="right">{{ item.qty.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ item.price.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ item.amount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ item.vat.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ item.vatAmount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ item.totAmount.round(2).formatI18N(2) }}</td>
+	    		
+	    		<td>{{ item.date.dateFormat() }}</td>
+	    		
+	    		
+	    		<td> 
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="removeBillable(item.id)" ng-show='_number==0'>
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    			
+	    		</td>
+	    	</tr>
+	    </tbody>		  		
+	      	
+	</table>
 		
-		<!-- billable list -->
-		
-		
-		</div>
-		<!--  end attributes -->
+			
+	<!-- billable list -->
+	<h5><span class="label label-default" ng-show='_number==0 && billables.length>0'>{{'BILLABLE.LABEL' | translate }}</span></h5>
+	
+	<table class="table table-bordered table-striped" ng-show="billables.length>0">
+		<thead>
+			<tr class="info small"><th>Id</th>
+			<th>{{'PRODUCT.LABEL' | translate }}</th>
+			<th>{{'COMPONENT.LABEL' | translate }}</th>
+			<th>{{'UM.LABEL' | translate }}</th>
+			<th>{{'QTY.LABEL' | translate }}</th>
+			<th>{{'PRICE.LABEL' | translate }}</th>
+			<th>{{'AMOUNT.LABEL' | translate }}</th>
+			<th>{{'VAT.LABEL' | translate }}</th>
+			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
+			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
+			<th>{{'DATE.LABEL' | translate }}</th>
+			<th></th>
+	     	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr class="small" ng-repeat="billable in billables | orderBy:'date'">
+	    		<td>{{ billable.id }}</td>
+	    		<td>{{ billable.productName }}</td>
+	    		<td>{{ billable.componentName }}</td>
+	    		<td>{{ billable.qtyUmSimbol }}</td>
+	    		
+	    		<td align="right">{{ billable.qty.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ billable.price.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ billable.amount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ billable.vat.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ billable.vatAmount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ billable.totAmount.round(2).formatI18N(2) }}</td>
+	    		<td>{{ billable.date.dateFormat() }}</td>
+	    		
+	    		<td> 
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="addBillable(billable.id)" ng-show='_number==0'>
+	      				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'ADD.BUTTON' | translate }}
+	      			</button>
+	    			
+	    		</td>
+	    	</tr>
+	    </tbody>		  		
+	      	
+	</table>
+	
+	</div>
+	
+	<!-- billable list -->
 	  	
 	</div>
 	<!--  end detail -->
@@ -302,11 +400,11 @@
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="closeInvoice(invoice.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="closeInvoice(invoice.id)" ng-show='invoice.number==0'>
 	      			<span class="glyphicon glyphicon-lock"></span>&nbsp;&nbsp;{{'CLOSE.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="printInvoice(invoice.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="printInvoice(invoice.id)" ng-show='invoice.number!=0'>
 	      			<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
 	      			</button>
 	      			
