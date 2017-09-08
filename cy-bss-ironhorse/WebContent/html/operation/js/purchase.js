@@ -341,26 +341,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 	    	          		});
 						}
 						
-						callRestWs($http,'purchase/'+$scope.purchaseId+'/get','GET',
-									headers,
-									{},
-									function(response){
-											if (response.data.resultCode==RESULT_OK){
-												//console.log(JSON.stringify(response));
-												$scope._price=response.data.purchase.price.round(2);
-												$scope._priceTot=response.data.purchase.priceTot.round(2);
-												$scope._amount=response.data.purchase.amount.round(2);
-												$scope._vatAmount=response.data.purchase.vatAmount.round(2);
-												$scope._amountTot=(response.data.purchase.amount+response.data.purchase.vatAmount).round(2);
-											}
-											else
-											{
-												manageError($scope,response.data.resultCode,response.data.resultDesc);
-											}
-										}, 
-										function(data, status, headers, config){
-												manageError($scope,status,data);
-										});
+						
+						$getPurchase($scope.purchaseId);
 						
 						
 						$scope.attributeValues=undefined;
@@ -426,12 +408,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 	}
 	
 	
-	$scope.editPurchase = function(id){
-		$scope.errorMessage="";
-		$scope.infoMessage="";
-		
-		$scope.modify=true;
-		$scope.detail=true;
+	$getPurchase = function (id){
 		
 		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
 		callRestWs($http,'purchase/'+id+'/get','GET',
@@ -521,6 +498,18 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 				function(data, status, headers, config){
 						manageError($scope,status,data);
 				});
+		
+		
+	}
+	
+	$scope.editPurchase = function(id){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		$scope.modify=true;
+		$scope.detail=true;
+		
+		$getPurchase(id);
 	}
 	
 

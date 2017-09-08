@@ -17,7 +17,11 @@ app.config(function($translateProvider) {
  		'DATE.LABEL':'Date',
  		'FISCALCODE.LABEL':'Fiscal Code',
  		'VATCODE.LABEL':'VAT Code',
- 		'NUMBER.LABEL':'Number'
+ 		'NUMBER.LABEL':'Self Invoice Nr.',
+ 		'NOTE.LABEL':'Note',
+ 		'TOTALAMOUNT.LABEL':'Total Amount',
+ 		'TOTALVAT.LABEL':'Total Vat',
+ 		'TOTAL.LABEL':'Invoice Amount'
  	  })
 	  
 	.translations('it',{
@@ -32,7 +36,11 @@ app.config(function($translateProvider) {
  		'DATE.LABEL':'Data',
  		'FISCALCODE.LABEL':'Codice Fiscale',
 		'VATCODE.LABEL':'Partita IVA',
-		'NUMBER.LABEL':'Numero'
+		'NUMBER.LABEL':'Autofattura Nr.',
+		'NOTE.LABEL':'Nota',
+		'TOTALAMOUNT.LABEL':'Importo Totale',
+		'TOTALVAT.LABEL':'IVA Totale',
+		'TOTAL.LABEL':'Importo Fattura'
 	  });
  	
  	
@@ -80,7 +88,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 				$scope._number=response.data.invoice.number==0?'':response.data.invoice.number;
 				$scope._year=response.data.invoice.year;
 				$scope._stringNumber=response.data.invoice.stringNumber;
-				$scope._date=dateToStringDDMMYYYY(new Date(response.data.invoice.date));
+				$scope._date=response.data.invoice.date;
 				$scope._note=response.data.invoice.note;
 				
 				

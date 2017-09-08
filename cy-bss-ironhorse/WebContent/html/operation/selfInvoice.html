@@ -174,9 +174,9 @@
     		
     	</h6>
 		
-      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" ng-show='_number==0' translate>SUBMIT.BUTTON</button>
+      	<button type="button" class="btn btn-sm btn-info" ng-click="onSubmit()" ng-show='_number==0 || _number==undefined' translate>SUBMIT.BUTTON</button>
 		
-		<button type="button" class="btn btn-sm btn-info" ng-click="printInvoice(invoiceId)" ng-show='_number!=0'>
+		<button type="button" class="btn btn-sm btn-info" ng-click="printInvoice(invoiceId)" ng-show='_number!=0 && modify'>
 			<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
 		</button>
 	

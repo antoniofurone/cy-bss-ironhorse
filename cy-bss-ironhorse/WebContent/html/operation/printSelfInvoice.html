@@ -100,7 +100,10 @@
 		
 		<tr>
 		<td colspan=2>
-			<h4>{{'NUMBER.LABEL' | translate }}: <strong>{{ _stringNumber }}</strong></h4>
+			<h4>
+			{{'NUMBER.LABEL' | translate }}: <strong>{{ _stringNumber }}</strong>
+			{{'DATE.LABEL' | translate }}:<strong>{{ _date.dateFormat() }}</strong>
+			</h4>
 		</td>
 		</tr>
 		
@@ -126,7 +129,7 @@
 			    </thead>
 			    <tbody>
 			    	<tr class="small" ng-repeat="item in items | orderBy:'productName'">
-			    		<th>{{'DATE.LABEL' | translate }}</th>
+			    		<td>{{ item.date.dateFormat() }}</td>
 			    		
 			    		<td>{{ item.productName }}</td>
 			    		<td>{{ item.qtyUmSimbol }}</td>
@@ -145,6 +148,34 @@
 			      	
 				</table>
 		
+		</td>
+		</tr>
+		
+		<tr>
+		<td colspan=2>
+			{{'NOTE.LABEL' | translate }}: <strong>{{ _note }}</strong>
+		</td>
+		</tr>
+		
+		<tr>
+		<td colspan=2 align=right>
+			<table class="table-condensed table-bordered table-striped">
+				<thead>
+					<tr class="info small">
+					
+					<th>{{'TOTALAMOUNT.LABEL' | translate }}</th>
+					<th>{{'TOTALVAT.LABEL' | translate }}</th>
+					<th>{{'TOTAL.LABEL' | translate }}</th>
+					
+			     	</tr>
+			    </thead>
+				<tr class="small">
+			    	<td align="right">{{ _amount }}</td>
+			    	<td align="right">{{ _vatAmount }}</td>
+			    	<td align="right">{{ _amountTot }}</td>
+			    </tr>
+			
+			</table>
 		</td>
 		</tr>
 		

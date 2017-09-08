@@ -387,9 +387,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		$getInvoice(id);
 	}
 	
-	$scope.closeInvoice = function(id){
-		
-	}
+	
 	
 	$scope.printInvoice = function(id){
 		$window.open("printSelfInvoice.html?invoiceId="+id);
@@ -451,7 +449,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 				return;
 			
  			var headers={"Security-Token":$scope.securityToken};
- 			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/close','GET',
+ 			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/lock','GET',
  					headers,
  					{},
  					function(response){
