@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>CyBusiness - Self Invoice</title>
+	<title>CyBusiness - Invoice</title>
 	
 	<link rel="shortcut icon" href="../../images/cy.ico" type="image/x-icon" />
 	
@@ -66,33 +66,33 @@
 		   	</div>
 		</div>
 		
-		<!-- supplier -->
-		<h5><span class="label label-default">{{'SUPPLIER.LABEL' | translate }}</span></h5>
+		<!-- customer -->
+		<h5><span class="label label-default">{{'CUSTOMER.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
 			<div>
-				<input class="form-control" name="_supplierId" id="_supplierId" type="text" ng-model="_supplierId" size="50" ng-show="false" required/>
-				<input class="form-control" name="_supplierName" id="_supplierName" type="text" ng-model="_supplierName" size="50" readonly/>
-				<button class="btn btn-info btn-xs" ng-click="onDeleteSupplier()" ng-show='!modify'>
+				<input class="form-control" name="_customerId" id="_customerId" type="text" ng-model="_customerId" size="50" ng-show="false" required/>
+				<input class="form-control" name="_customerName" id="_customerName" type="text" ng-model="_customerName" size="50" readonly/>
+				<button class="btn btn-info btn-xs" ng-click="onDeleteCustomer()" ng-show='!modify'>
 	      			<span class="glyphicon glyphicon-trash"></span>
 	      		</button>
 			</div>
 		</div>
 		<div class="form-group form-group-sm" ng-show='!modify'>
-			<input class="form-control" type="text" size=20 name="supplierName" id="supplierName" type="text"  ng-model="supplierName">
+			<input class="form-control" type="text" size=20 name="customerName" id="customerName" type="text"  ng-model="customerName">
 	 	</div>
-		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchSupplier()" ng-show='!modify'>
+		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchCustomer()" ng-show='!modify'>
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
 		<div class="form-group form-group-sm" ng-show='!modify'>
-			<select id="_selectedSupplier" name="_selectedSupplier" class="form-control" ng-model="_selectedSupplier">
-	        	 <option ng-repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name +' ['+supplier.code+']'}}</option>
+			<select id="_selectedCustomer" name="_selectedCustomer" class="form-control" ng-model="_selectedCustomer">
+	        	 <option ng-repeat="customer in customers" value="{{customer.id}}">{{customer.name +' ['+customer.code+']'}}</option>
 	        </select>
-	        <button class="btn btn-info btn-xs" ng-click="onUpdateSupplier()">
+	        <button class="btn btn-info btn-xs" ng-click="onUpdateCustomer()">
 	    		<span class="glyphicon glyphicon-pencil"></span>
 	      	</button>
 	    </div>
-		<!-- end supplier -->
+		<!-- end customer -->
 		
 		<!-- person -->
 		<h5><span class="label label-default">{{'PERSON.LABEL' | translate }}</span></h5>
@@ -169,7 +169,7 @@
 		
 		<h6>
 			<span class="label label-warning" ng-show="invoiceForm._selectedCompany.$error.required" translate>COMPANY.REQUIRED</span>
-    		<span class="label label-warning" ng-show="invoiceForm._supplierId.$error.required && invoiceForm._personId.$error.required" translate>SUPPLIER_PERSON.REQUIRED</span>
+    		<span class="label label-warning" ng-show="invoiceForm._customerId.$error.required && invoiceForm._personId.$error.required" translate>CUSTOMER_PERSON.REQUIRED</span>
     		<span class="label label-warning" ng-show="invoiceForm._selectedCurrency.$error.required" translate>CURRENCY.REQUIRED</span>
     		
     	</h6>
@@ -307,18 +307,18 @@
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierId">{{'SUPPLIERID.LABEL' | translate }}:</label>
-			<input class="form-control" type="number" name="supplierId" id="supplierId"  ng-model="supplierId">
+			<label for="customerId">{{'CUSTOMERID.LABEL' | translate }}:</label>
+			<input class="form-control" type="number" name="customerId" id="customerId"  ng-model="customerId">
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierCode">{{'SUPPLIERCODE.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="supplierCode" id="supplierCode"  ng-model="supplierCode">
+			<label for="customerCode">{{'CUSTOMERCODE.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="customerCode" id="customerCode"  ng-model="customerCode">
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierName">{{'SUPPLIERNAME.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="supplierName" id="supplierName"  ng-model="supplierName">
+			<label for="customerName">{{'CUSTOMERNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="customerName" id="customerName"  ng-model="customerName">
 		</div>
 		
 		<div class="form-group form-group-sm">
@@ -333,7 +333,7 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="personName">{{'PERSONNAME.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="personName" id="supplierName"  ng-model="personName">
+			<input class="form-control" type="text" name="personName" id="customerName"  ng-model="personName">
 		</div>
 		
 		<div class="form-group form-group-sm">
@@ -365,8 +365,8 @@
 		<thead>
 			<tr class="info small"><th>Id</th>
 			<th>{{'NUMBER.LABEL' | translate }}</th>
-			<th>{{'SUPPLIERCODE.LABEL' | translate }}</th>
-			<th>{{'SUPPLIER.LABEL' | translate }}</th>
+			<th>{{'CUSTOMERCODE.LABEL' | translate }}</th>
+			<th>{{'CUSTOMER.LABEL' | translate }}</th>
 			<th>{{'PERSONCODE.LABEL' | translate }}</th>
 			<th>{{'PERSON.LABEL' | translate }}</th>
 			<th>{{'CURRENCY.LABEL' | translate }}</th>
@@ -428,7 +428,7 @@
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script src="js/selfInvoice.js"></script>
+<script src="js/invoice.js"></script>
 
 </body>
 </html>	

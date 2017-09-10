@@ -100,6 +100,45 @@ angular.module('irsearch',[])
 			return deferred.promise;
 		} 
 	})
+	.factory('irsale',function($http,$q){
+		return function(companyId,productId,productName,
+				customerId,customerCode,customerName,
+				personId,personCode,personName,
+				attrName,attrValue,
+				fromDate,toDate,
+				securityToken){
+			
+			var query="?companyId="+(companyId!=undefined?encodeURIComponent(companyId):'0');
+			query+="&productId="+(productId!=undefined?encodeURIComponent(productId):'0');
+			query+="&productName="+(productName!=undefined?encodeURIComponent(productName):'');
+			
+			query+="&customerId="+(customerId!=undefined?encodeURIComponent(customerId):'0');
+			query+="&customerCode="+(customerCode!=undefined?encodeURIComponent(customerCode):'');
+			query+="&customerName="+(customerName!=undefined?encodeURIComponent(customerName):'');
+			
+			query+="&personId="+(personId!=undefined?encodeURIComponent(personId):'0');
+			query+="&personCode="+(personCode!=undefined?encodeURIComponent(personCode):'');
+			query+="&personName="+(personName!=undefined?encodeURIComponent(personName):'');
+			
+			query+="&attrName="+(attrName!=undefined?encodeURIComponent(attrName):'');
+			query+="&attrValue="+(attrValue!=undefined?encodeURIComponent(attrValue):'');
+			
+			query+="&fromDate="+(fromDate!=undefined?encodeURIComponent(fromDate):'');
+			query+="&toDate="+(toDate!=undefined?encodeURIComponent(toDate):'');
+			
+			var deferred = $q.defer();
+			callRestWs($http,'sale/find'+query,'GET',
+					{"Security-Token":securityToken},
+					{},
+					function(response){
+							deferred.resolve(response);						
+					}, 
+					function(data, status, headers, config){
+							deferred.reject(data, status, headers, config);	
+			});
+			return deferred.promise;
+		} 
+	})
 	.factory('irinvoice',function($http,$q){
 		return function(number,year,companyId,
 				tpCompanyId,tpCompanyCode,tpCompanyName,

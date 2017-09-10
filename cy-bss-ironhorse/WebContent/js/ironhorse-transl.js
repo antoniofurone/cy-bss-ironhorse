@@ -27,7 +27,7 @@ var menuMapTranslation={
 				"MENU.OPERATION.SELFINVOICE":"Self Invoices",
 				"MENU.OPERATION.PURCHASE":"Purchases",
 				"MENU.OPERATION.SALES":"Sales",
-				"MENU.OPERATION.TTMS":"TTMS",
+				"MENU.OPERATION.TTMS":"Tickets",
 				
 				"MENU.MAPS":"Maps",
 				"MENU.MAPS.URBANBOT.WARN":"Warnings",
@@ -65,7 +65,7 @@ var menuMapTranslation={
 				"MENU.OPERATION.SELFINVOICE":"Auto Fatture",
 				"MENU.OPERATION.PURCHASE":"Aquisti",
 				"MENU.OPERATION.SALES":"Vendite",
-				"MENU.OPERATION.TTMS":"TTMS",
+				"MENU.OPERATION.TTMS":"Tickets",
 					 
 				"MENU.MAPS":"Mappe",
 				"MENU.MAPS.URBANBOT.WARN":"Segnalazioni",

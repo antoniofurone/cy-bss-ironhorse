@@ -25,23 +25,23 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  	.translations('en',{
  		'SEARCH.BUTTON':'Search',
  		'BACK.BUTTON':'Back',
- 		'INVOICE.TITLE':'Self Invoices',
+ 		'INVOICE.TITLE':'Invoices',
  		'NUMBER.LABEL':'Number',
  		'YEAR.LABEL':'Year',
  		'BILLABLE.LABEL':'Billable',
  		'COMPANY.LABEL':'Company',
  		'PRODUCTID.LABEL':'Product Id',
  		'PRODUCTNAME.LABEL':'Product Name',
- 		'SUPPLIERID.LABEL':'Supplier Id',
- 		'SUPPLIERCODE.LABEL':'Supplier Code',
- 		'SUPPLIERNAME.LABEL':'Supplier Name',
+ 		'CUSTOMERID.LABEL':'Customer Id',
+ 		'CUSTOMERCODE.LABEL':'Customer Code',
+ 		'CUSTOMERNAME.LABEL':'Customer Name',
  		'PERSONID.LABEL':'Person Id',
  		'PERSONCODE.LABEL':'Person Code',
  		'PERSONNAME.LABEL':'Person Name',
  		'DATEFROM.LABEL':'From',
  		'DATETO.LABEL':'To',
  		'PRODUCT.LABEL':'Product',
- 		'SUPPLIER.LABEL':'Supplier',
+ 		'CUSTOMER.LABEL':'Customer',
  		'PERSON.LABEL':'Person',
  		'COMPONENT.LABEL':'Component',
  		'UM.LABEL':'Um',
@@ -63,7 +63,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'ATTRIBUTE.LABEL':'Attribute',
  		'COMPANY.REQUIRED':'Company is required',
  		'PRODUCT.REQUIRED':'Product is required',
- 		'SUPPLIER_PERSON.REQUIRED':'Supplier o Person is required',
+ 		'CUSTOMER_PERSON.REQUIRED':'Customer o Person is required',
  		'COMPONENT.REQUIRED':'Component is required',
  		'CURRENCY.REQUIRED':'Currency is required',
  		'VAT.REQUIRED':'Vat is required',
@@ -86,23 +86,23 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	.translations('it',{
 		'SEARCH.BUTTON':'Ricerca',
 		'BACK.BUTTON':'Indietro',
-		'INVOICE.TITLE':'Auto Fatture',
+		'INVOICE.TITLE':'Fatture',
 		'NUMBER.LABEL':'Numero',
 		'YEAR.LABEL':'Anno',
 		'BILLABLE.LABEL':'Fatturabili',
  		'COMPANY.LABEL':'Azienda',
  		'PRODUCTID.LABEL':'Id Prodotto',
  		'PRODUCTNAME.LABEL':'Nome Prodotto',
- 		'SUPPLIERID.LABEL':'Id Fornitore',
- 		'SUPPLIERCODE.LABEL':'Codice Fornitore',
- 		'SUPPLIERNAME.LABEL':'Nome Fornitore',
+ 		'CUSTOMERID.LABEL':'Id Cliente',
+ 		'CUSTOMERCODE.LABEL':'Codice Cliente',
+ 		'CUSTOMERNAME.LABEL':'Nome Cliente',
  		'PERSONID.LABEL':'Id Persona',
 		'PERSONCODE.LABEL':'Codice Persona',
  		'PERSONNAME.LABEL':'Nome Persona',
 		'DATEFROM.LABEL':'Da',
  		'DATETO.LABEL':'A',
  		'PRODUCT.LABEL':'Prodotto',
- 		'SUPPLIER.LABEL':'Fornitore',
+ 		'CUSTOMER.LABEL':'Cliente',
  		'PERSON.LABEL':'Persona',
  		'COMPONENT.LABEL':'Componente',
  		'UM.LABEL':'Um',
@@ -124,7 +124,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'ATTRIBUTE.LABEL':'Attribute',
  		'COMPANY.REQUIRED':'Azienda obbligatoria',
  		'PRODUCT.REQUIRED':'Prodotto obbligatorio',
- 		'SUPPLIER_PERSON.REQUIRED':'Fornitore o Persona obbligatorio',
+ 		'CUSTOMER_PERSON.REQUIRED':'Cliente o Persona obbligatorio',
  		'COMPONENT.REQUIRED':'Componente obbligatorio',
  		'CURRENCY.REQUIRED':'Valuta obbligatoria',
  		'VAT.REQUIRED':'Iva obbligatoria',
@@ -152,7 +152,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		irinvoice) {
 	
 	
-	$scope.invoiceType='p';
+	$scope.invoiceType='a';
 	$scope.detail=false;
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
 	
@@ -190,7 +190,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	$search=function(){
 		
 		irinvoice($scope.number,$scope.year,$scope.selectedCompany,
-				$scope.supplierId,$scope.supplierCode,$scope.supplierName,
+				$scope.customerId,$scope.customerCode,$scope.customerName,
 				$scope.personId,$scope.personCode,$scope.personName,
 				$scope.dateFrom,$scope.dateTo,
 				$scope.invoiceType,$scope.securityToken).then(function(response) {
@@ -220,7 +220,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		$scope.infoMessage="";
 		
 		if ($scope.invoiceForm._selectedCompany.$error.required || 
-			($scope.invoiceForm._supplierId.$error.required && $scope.invoiceForm._personId.$error.required) ||
+			($scope.invoiceForm._customerId.$error.required && $scope.invoiceForm._personId.$error.required) ||
 			$scope.invoiceForm._selectedCurrency.$error.required )
 			return;
 		
@@ -228,7 +228,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		var data = {};
 		
 		data['companyId']=$scope._selectedCompany;
-		data['tpCompanyId']=$scope._supplierId;
+		data['tpCompanyId']=$scope._customerId;
 		data['personId']=$scope._personId;
 		data['currencyId']=$scope._selectedCurrency;
 		data['date']=$scope._date;
@@ -285,8 +285,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 						$scope._selectedCompany=response.data.invoice.companyId;
 						$scope._companyName=response.data.invoice.companyName;
 						
-						$scope._supplierId=response.data.invoice.tpCompanyId;
-						$scope._supplierName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
+						$scope._customerId=response.data.invoice.tpCompanyId;
+						$scope._customerName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
 						
 						$scope._personId=response.data.invoice.personId;
 						$scope._personName=(response.data.invoice.personFirstName==undefined?'':response.data.invoice.personFirstName+' ')
@@ -359,9 +359,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		
 		
 		$scope._selectedCompany='';
-		$scope._supplierId='';
-		$scope._supplierName='';
-		$scope._selectedSupplier='';
+		$scope._customerId='';
+		$scope._customerName='';
+		$scope._selectedCustomer='';
 		$scope._personId='';
 		$scope._personName='';
 		$scope._selectedPerson='';
@@ -390,7 +390,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	
 	
 	$scope.printInvoice = function(id){
-		$window.open("printSelfInvoice.html?invoiceId="+id);
+		$window.open("printInvoice.html?invoiceId="+id);
 
 	}
 		
@@ -498,11 +498,11 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	}
 	
 	
-	$scope.onSearchSupplier=function(){
-		ircompany('',$scope.supplierName,$scope.securityToken).then(function(response) {
+	$scope.onSearchCustomer=function(){
+		ircompany('',$scope.customerName,$scope.securityToken).then(function(response) {
 			if (response.data.resultCode==RESULT_OK){
 					//alert (JSON.stringify(response));
-					$scope.suppliers=response.data.companies;
+					$scope.customers=response.data.companies;
 				}
 			else
 				{
@@ -513,20 +513,20 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
     	    });
 	}
 	
-	$scope.onUpdateSupplier=function(){
+	$scope.onUpdateCustomer=function(){
 		$scope._personId="";
 		$scope._personName="";
 		
-		$scope._supplierId=$scope._selectedSupplier;
+		$scope._customerId=$scope._selectedCustomer;
 		
 		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
-		callRestWs($http,'company/'+$scope._supplierId+'/get','GET',
+		callRestWs($http,'company/'+$scope._customerId+'/get','GET',
 				headers,
 				{},
 				function(response){
 						if (response.data.resultCode==RESULT_OK){
 							//console.log(JSON.stringify(response));
-							$scope._supplierName=response.data.company.name;
+							$scope._customerName=response.data.company.name;
 						}
 						else
 							{
@@ -537,13 +537,12 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 					function(data, status, headers, config){
 							manageError($scope,status,data);
 					});
-		
-		
+	
 	}
 	
-	$scope.onDeleteSupplier=function(){
-		$scope._supplierId="";
-		$scope._supplierName="";
+	$scope.onDeleteCustomer=function(){
+		$scope._customerId="";
+		$scope._customerName="";
 	}
 	
 	$scope.onSearchPerson=function(){
@@ -562,29 +561,29 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	}
 	
 	$scope.onUpdatePerson=function(){
-		$scope._supplierId="";
-		$scope._supplierName="";
+		$scope._customerId="";
+		$scope._customerName="";
 		
-	$scope._personId=$scope._selectedPerson;
+		$scope._personId=$scope._selectedPerson;
 		
-	var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
-	callRestWs($http,'person/'+$scope._personId+'/get','GET',
-			headers,
-			{},
-			function(response){
-					if (response.data.resultCode==RESULT_OK){
-						//console.log(JSON.stringify(response));
-						$scope._personName=response.data.person.firstName+' '+response.data.person.secondName;
-					}
-					else
-					{
-						manageError($scope,response.data.resultCode,response.data.resultDesc);
-					}
-				}, 
-				function(data, status, headers, config){
-						manageError($scope,status,data);
-				});
-		
+		var headers={"Security-Token":$scope.securityToken,"Language":languageCode};
+		callRestWs($http,'person/'+$scope._personId+'/get','GET',
+				headers,
+				{},
+				function(response){
+						if (response.data.resultCode==RESULT_OK){
+							//console.log(JSON.stringify(response));
+							$scope._personName=response.data.person.firstName+' '+response.data.person.secondName;
+						}
+						else
+						{
+							manageError($scope,response.data.resultCode,response.data.resultDesc);
+						}
+					}, 
+					function(data, status, headers, config){
+							manageError($scope,status,data);
+					});
+
 	}
 	
 	$scope.onDeletePerson=function(){

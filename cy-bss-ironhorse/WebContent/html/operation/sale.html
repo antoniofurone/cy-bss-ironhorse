@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>CyBusiness - Purchase</title>
+	<title>CyBusiness - Sales</title>
 	
 	<link rel="shortcut icon" href="../../images/cy.ico" type="image/x-icon" />
 	
@@ -33,7 +33,7 @@
 	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
 	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
 	
-	<form novalidate name="purchaseForm" id="purchaseForm" class="form-inline" role="form" method="post">
+	<form novalidate name="saleForm" id="saleForm" class="form-inline" role="form" method="post">
 
 	<div id='list' ng-show="detail">
 		<div ng-show="!modify"><h4><span class="label label-default">{{'NEW.TITLE' | translate }}</span></h4></div>
@@ -83,33 +83,33 @@
 	    </div>
 		<!-- end product -->
 		
-		<!-- supplier -->
-		<h5><span class="label label-default">{{'SUPPLIER.LABEL' | translate }}</span></h5>
+		<!-- customer -->
+		<h5><span class="label label-default">{{'CUSTOMER.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
 			<div>
-				<input class="form-control" name="_supplierId" id="_supplierId" type="text" ng-model="_supplierId" size="50" ng-show="false" required/>
-				<input class="form-control" name="_supplierName" id="_supplierName" type="text" ng-model="_supplierName" size="50" readonly/>
-				<button class="btn btn-info btn-xs" ng-click="onDeleteSupplier()">
+				<input class="form-control" name="_customerId" id="_customerId" type="text" ng-model="_customerId" size="50" ng-show="false" required/>
+				<input class="form-control" name="_customerName" id="_customerName" type="text" ng-model="_customerName" size="50" readonly/>
+				<button class="btn btn-info btn-xs" ng-click="onDeleteCustomer()">
 	      			<span class="glyphicon glyphicon-trash"></span>
 	      		</button>
 			</div>
 		</div>
 		<div class="form-group form-group-sm">
-			<input class="form-control" type="text" size=20 name="supplierName" id="supplierName" type="text"  ng-model="supplierName">
+			<input class="form-control" type="text" size=20 name="customerName" id="customerName" type="text"  ng-model="customerName">
 	 	</div>
-		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchSupplier()">
+		<button type="button" class="btn btn-xs btn-info" ng-click="onSearchCustomer()">
 			<span class="glyphicon glyphicon-search"></span>{{'SEARCH.BUTTON' | translate }}
 		</button>
 		
 		<div class="form-group form-group-sm">
-			<select id="_selectedSupplier" name="_selectedSupplier" class="form-control" ng-model="_selectedSupplier">
-	        	 <option ng-repeat="supplier in suppliers" value="{{supplier.id}}">{{supplier.name +' ['+supplier.code+']'}}</option>
+			<select id="_selectedCustomer" name="_selectedCustomer" class="form-control" ng-model="_selectedCustomer">
+	        	 <option ng-repeat="customer in customers" value="{{customer.id}}">{{customer.name +' ['+customer.code+']'}}</option>
 	        </select>
-	        <button class="btn btn-info btn-xs" ng-click="onUpdateSupplier()">
+	        <button class="btn btn-info btn-xs" ng-click="onUpdateCustomer()">
 	    		<span class="glyphicon glyphicon-pencil"></span>
 	      	</button>
 	    </div>
-		<!-- end supplier -->
+		<!-- end customer -->
 		
 		<!-- person -->
 		<h5><span class="label label-default">{{'PERSON.LABEL' | translate }}</span></h5>
@@ -266,12 +266,12 @@
 		</div>
 		
 		<h6>
-			<span class="label label-warning" ng-show="purchaseForm._selectedCompany.$error.required" translate>COMPANY.REQUIRED</span>
-    		<span class="label label-warning" ng-show="purchaseForm._productId.$error.required" translate>PRODUCT.REQUIRED</span>
-    		<span class="label label-warning" ng-show="purchaseForm._supplierId.$error.required && purchaseForm._personId.$error.required" translate>SUPPLIER_PERSON.REQUIRED</span>
-    		<span class="label label-warning" ng-show="purchaseForm._selectedComponent.$error.required" translate>COMPONENT.REQUIRED</span>
-    		<span class="label label-warning" ng-show="purchaseForm._selectedCurrency.$error.required" translate>CURRENCY.REQUIRED</span>
-    		<span class="label label-warning" ng-show="purchaseForm._vat.$error.required" translate>VAT.REQUIRED</span>
+			<span class="label label-warning" ng-show="saleForm._selectedCompany.$error.required" translate>COMPANY.REQUIRED</span>
+    		<span class="label label-warning" ng-show="saleForm._productId.$error.required" translate>PRODUCT.REQUIRED</span>
+    		<span class="label label-warning" ng-show="saleForm._customerId.$error.required && saleForm._personId.$error.required" translate>CUSTOMER_PERSON.REQUIRED</span>
+    		<span class="label label-warning" ng-show="saleForm._selectedComponent.$error.required" translate>COMPONENT.REQUIRED</span>
+    		<span class="label label-warning" ng-show="saleForm._selectedCurrency.$error.required" translate>CURRENCY.REQUIRED</span>
+    		<span class="label label-warning" ng-show="saleForm._vat.$error.required" translate>VAT.REQUIRED</span>
     		
     	</h6>
 		
@@ -330,7 +330,7 @@
 	</div>
 	<!--  end detail -->
 	<div ng-show="!detail">
-		<h4><span class="label label-default">{{'PURCHASE.TITLE' | translate }}</span></h4>
+		<h4><span class="label label-default">{{'SALE.TITLE' | translate }}</span></h4>
 	
 		<div class="form-group form-group-sm">
 			<label for="selectedCompany">{{'COMPANY.LABEL' | translate }}:</label>
@@ -351,18 +351,18 @@
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierId">{{'SUPPLIERID.LABEL' | translate }}:</label>
-			<input class="form-control" type="number" name="supplierId" id="supplierId"  ng-model="supplierId">
+			<label for="customerId">{{'CUSTOMERID.LABEL' | translate }}:</label>
+			<input class="form-control" type="number" name="customerId" id="customerId"  ng-model="customerId">
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierCode">{{'SUPPLIERCODE.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="supplierCode" id="supplierCode"  ng-model="supplierCode">
+			<label for="customerCode">{{'CUSTOMERCODE.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="customerCode" id="customerCode"  ng-model="customerCode">
 		</div>
 		
 		<div class="form-group form-group-sm">
-			<label for="supplierName">{{'SUPPLIERNAME.LABEL' | translate }}:</label>
-			<input class="form-control" type="text" name="supplierName" id="supplierName"  ng-model="supplierName">
+			<label for="customerName">{{'CUSTOMERNAME.LABEL' | translate }}:</label>
+			<input class="form-control" type="text" name="customerName" id="customerName"  ng-model="customerName">
 		</div>
 		
 		<div class="form-group form-group-sm">
@@ -417,12 +417,12 @@
 			</button>
 		
 		<br><br>
-		<table class="table table-bordered table-striped" ng-show="purchases.length>0">
+		<table class="table table-bordered table-striped" ng-show="sales.length>0">
 		<thead>
 			<tr class="info small"><th>Id</th>
 			<th>{{'PRODUCT.LABEL' | translate }}</th>
-			<th>{{'SUPPLIERCODE.LABEL' | translate }}</th>
-			<th>{{'SUPPLIER.LABEL' | translate }}</th>
+			<th>{{'CUSTOMERCODE.LABEL' | translate }}</th>
+			<th>{{'CUSTOMER.LABEL' | translate }}</th>
 			<th>{{'PERSONCODE.LABEL' | translate }}</th>
 			<th>{{'PERSON.LABEL' | translate }}</th>
 			<th>{{'COMPONENT.LABEL' | translate }}</th>
@@ -443,33 +443,33 @@
 	     	</tr>
 	    </thead>
 	    <tbody>
-	    	<tr class="small" ng-repeat="purchase in purchases | orderBy:'date'">
-	    		<td>{{ purchase.id }}</td>
-	    		<td>{{ purchase.productName }}</td>
-	    		<td>{{ purchase.supplierCode }}</td>
-	    		<td>{{ purchase.supplierName }}</td>
-	    		<td>{{ purchase.personCode }}</td>
-	    		<td>{{ purchase.personFirstName }} {{ purchase.personSecondName }}</td>
-	    		<td>{{ purchase.componentName }}</td>
-	    		<td>{{ purchase.qtyUmSimbol }}</td>
-	    		<td align="right">{{ purchase.qty.round(4).formatI18N(4) }}</td>
-	    		<td>{{ purchase.currencyCode }}</td>
-	    		<td align="right">{{ purchase.price.round(2).formatI18N(2) }}</td>
-	    		<td align="right">{{ purchase.amount.round(2).formatI18N(2) }}</td>
-	    		<td align="right">{{ purchase.vat.round(2).formatI18N(2) }}</td>
-	    		<td align="right">{{ purchase.vatAmount.round(2).formatI18N(2) }}</td>
-	    		<td align="right">{{ (purchase.amount+purchase.vatAmount).round(2).formatI18N(2) }}</td>
-	    		<td>{{ purchase.date.dateFormat() }}</td>
-	    		<td>{{ purchase.companyName }}</td>
+	    	<tr class="small" ng-repeat="sale in sales | orderBy:'date'">
+	    		<td>{{ sale.id }}</td>
+	    		<td>{{ sale.productName }}</td>
+	    		<td>{{ sale.customerCode }}</td>
+	    		<td>{{ sale.customerName }}</td>
+	    		<td>{{ sale.personCode }}</td>
+	    		<td>{{ sale.personFirstName }} {{ sale.personSecondName }}</td>
+	    		<td>{{ sale.componentName }}</td>
+	    		<td>{{ sale.qtyUmSimbol }}</td>
+	    		<td align="right">{{ sale.qty.round(4).formatI18N(4) }}</td>
+	    		<td>{{ sale.currencyCode }}</td>
+	    		<td align="right">{{ sale.price.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ sale.amount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ sale.vat.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ sale.vatAmount.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ (sale.amount+sale.vatAmount).round(2).formatI18N(2) }}</td>
+	    		<td>{{ sale.date.dateFormat() }}</td>
+	    		<td>{{ sale.companyName }}</td>
 	    		<!-- 
-	    		<td>{{ purchase.frequencyName }}</td>
+	    		<td>{{ sale.frequencyName }}</td>
 	    		-->
 	    		<td> 
-	      			<button class="btn btn-info btn-xs" ng-click="editPurchase(purchase.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="editSale(sale.id)">
 	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="deletePurchase(purchase.id)">
+	      			<button class="btn btn-info btn-xs" ng-click="deleteSale(sale.id)">
 	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      			</button>
 	    			
@@ -489,7 +489,7 @@
 </div>
 
 <script src="../../js/angularjs-bootstrap-datepicker/bootstrap-datepicker-it.js"></script>
-<script src="js/purchase.js"></script>
+<script src="js/sale.js"></script>
 
 </body>
 </html>	

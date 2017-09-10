@@ -74,7 +74,7 @@ var languageCode=getLocalStorageItem("org.cysoft.bss.ih.user.languageCode");
 		  
 		.translations('it',{
 			'SEARCH.BUTTON':'Ricerca',
-			'NEW.BUTTON':'New',
+			'NEW.BUTTON':'Nuova',
 			'BACK.BUTTON':'Indietro',
 			'ADDFILE.BUTTON':'Aggiungi File',
 			'NEW.TITLE':'Nuova',

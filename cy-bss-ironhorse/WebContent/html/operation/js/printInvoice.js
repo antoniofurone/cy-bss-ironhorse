@@ -17,7 +17,7 @@ app.config(function($translateProvider) {
  		'DATE.LABEL':'Date',
  		'FISCALCODE.LABEL':'Fiscal Code',
  		'VATCODE.LABEL':'VAT Code',
- 		'NUMBER.LABEL':'Self Invoice Nr.',
+ 		'NUMBER.LABEL':'Invoice Nr.',
  		'NOTE.LABEL':'Note',
  		'CURRENCY.LABEL':'Currency',
  		'TOTALAMOUNT.LABEL':'Total Amount',
@@ -37,7 +37,7 @@ app.config(function($translateProvider) {
  		'DATE.LABEL':'Data',
  		'FISCALCODE.LABEL':'Codice Fiscale',
 		'VATCODE.LABEL':'Partita IVA',
-		'NUMBER.LABEL':'Autofattura Nr.',
+		'NUMBER.LABEL':'Fattura Nr.',
 		'NOTE.LABEL':'Nota',
 		'CURRENCY.LABEL':'Valuta',
 		'TOTALAMOUNT.LABEL':'Importo Totale',
@@ -52,7 +52,7 @@ app.config(function($translateProvider) {
 app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompany,irproduct,irperson,
 		irinvoice) {
 	
-	$scope.invoiceType='p';
+	$scope.invoiceType='a';
 	$scope.detail=false;
 	$scope.coreUrl=getLocalStorageItem("org.cysoft.bss.ih.coreurl");
 	$scope.securityToken=getLocalStorageItem("org.cysoft.bss.ih.securityToken");
@@ -71,8 +71,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 				$scope._companyId=response.data.invoice.companyId;
 				$scope._companyName=response.data.invoice.companyName;
 				
-				$scope._supplierId=response.data.invoice.tpCompanyId;
-				$scope._supplierName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
+				$scope._customerId=response.data.invoice.tpCompanyId;
+				$scope._customerName=response.data.invoice.tpCompanyName==undefined?'':response.data.invoice.tpCompanyName;
 				
 				$scope._personId=response.data.invoice.personId;
 				$scope._personName=(response.data.invoice.personFirstName==undefined?'':response.data.invoice.personFirstName+' ')
@@ -115,27 +115,27 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 											response.data.company.country+')':'';
 									
 									
-									if ($scope._supplierId!=0){
+									if ($scope._customerId!=0){
 										
-											callRestWs($http,'company/'+$scope._supplierId+'/get','GET',
+											callRestWs($http,'company/'+$scope._customerId+'/get','GET',
 													headers,
 													{},
 													function(response){
 															if (response.data.resultCode==RESULT_OK){
 																console.log(JSON.stringify(response));
-																$scope._supplierName=response.data.company.name;
-																$scope._supplierAddress=response.data.company.address;
+																$scope._customerName=response.data.company.name;
+																$scope._customerAddress=response.data.company.address;
 																$scope._suppplierFiscalCode=response.data.company.fiscalCode;
-																$scope._supplierVatCode=response.data.company.vatCode;
-																$scope._supplierCity=response.data.company.city;
-																$scope._supplierZip=response.data.company.zipCode;
+																$scope._customerVatCode=response.data.company.vatCode;
+																$scope._customerCity=response.data.company.city;
+																$scope._customerZip=response.data.company.zipCode;
 																
-																$scope._supplierZipCityCountry=(response.data.company.zipCode!=undefined && response.data.company.zipCode!='')?
+																$scope._customerZipCityCountry=(response.data.company.zipCode!=undefined && response.data.company.zipCode!='')?
 																		response.data.company.zipCode:'';
 																
-																$scope._supplierZipCityCountry+=(response.data.company.city!=undefined && response.data.company.city!='')?' '+
+																$scope._customerZipCityCountry+=(response.data.company.city!=undefined && response.data.company.city!='')?' '+
 																		response.data.company.city:'';
-																$scope._supplierZipCityCountry+=(response.data.company.country!=undefined && response.data.company.country!='')?' ('+
+																$scope._customerZipCityCountry+=(response.data.company.country!=undefined && response.data.company.country!='')?' ('+
 																		response.data.company.country+')':'';
 																
 															}
@@ -157,18 +157,18 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 												function(response){
 														if (response.data.resultCode==RESULT_OK){
 															//console.log(JSON.stringify(response));
-															$scope._supplierName=response.data.person.firstName+' '+response.data.person.secondName;
-															$scope._supplierAddress=response.data.person.address;
-															$scope._supplierVatCode='';
-															$scope._supplierFiscalCode=response.data.person.fiscalCode;
-															$scope._supplierCity=response.data.person.city;
-															$scope._supplierZip=response.data.person.zipCode;
+															$scope._customerName=response.data.person.firstName+' '+response.data.person.secondName;
+															$scope._customerAddress=response.data.person.address;
+															$scope._customerVatCode='';
+															$scope._customerFiscalCode=response.data.person.fiscalCode;
+															$scope._customerCity=response.data.person.city;
+															$scope._customerZip=response.data.person.zipCode;
 															
-															$scope._supplierZipCityCountry=(response.data.person.zipCode!=undefined && response.data.person.zipCode!='')?
+															$scope._customerZipCityCountry=(response.data.person.zipCode!=undefined && response.data.person.zipCode!='')?
 																	response.data.person.zipCode:'';
-															$scope._supplierZipCityCountry+=(response.data.person.city!=undefined && response.data.person.city!='')?' '+
+															$scope._customerZipCityCountry+=(response.data.person.city!=undefined && response.data.person.city!='')?' '+
 																	response.data.person.city:'';
-															$scope._supplierZipCityCountry+=(response.data.person.country!=undefined && response.data.person.country!='')?' ('+
+															$scope._customerZipCityCountry+=(response.data.person.country!=undefined && response.data.person.country!='')?' ('+
 																	response.data.person.country+')':'';
 															
 															
