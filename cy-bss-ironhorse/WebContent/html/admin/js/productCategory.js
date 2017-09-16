@@ -35,7 +35,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 			'METRIC.REQUIRED':'Metrica obbligatoria',
 			'VAT.REQUIRED':'Iva obbligaotoria e numerica',
      		'VAT.LABEL':'Iva',
-     		'METRIC.LABEL':'Metric',
+     		'METRIC.LABEL':'Metrica',
      		'SUBMIT.BUTTON':'Conferma',
     		'BACK.BUTTON': 'Indietro',
     	    'EDIT.BUTTON': 'Modifica',

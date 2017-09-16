@@ -166,7 +166,7 @@ String.prototype.dateFormat = function(){
 }	
 
 Number.prototype.round=function(n){
-	return Math.round(this*(10**n))/(10**n);
+	return Math.round(this*Math.pow(10,n))/Math.pow(10,n);
 }
 
 

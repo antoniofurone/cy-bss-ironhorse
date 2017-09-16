@@ -22,7 +22,8 @@ app.config(function($translateProvider) {
  		'CURRENCY.LABEL':'Currency',
  		'TOTALAMOUNT.LABEL':'Total Amount',
  		'TOTALVAT.LABEL':'Total Vat',
- 		'TOTAL.LABEL':'Invoice Amount'
+ 		'TOTAL.LABEL':'Invoice Amount',
+ 		'TO.LABEL':'To'
  	  })
 	  
 	.translations('it',{
@@ -42,7 +43,8 @@ app.config(function($translateProvider) {
 		'CURRENCY.LABEL':'Valuta',
 		'TOTALAMOUNT.LABEL':'Importo Totale',
 		'TOTALVAT.LABEL':'IVA Totale',
-		'TOTAL.LABEL':'Importo Fattura'
+		'TOTAL.LABEL':'Importo Fattura',
+		'TO.LABEL':'A'
 	  });
  	
  	
@@ -125,7 +127,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 																console.log(JSON.stringify(response));
 																$scope._customerName=response.data.company.name;
 																$scope._customerAddress=response.data.company.address;
-																$scope._suppplierFiscalCode=response.data.company.fiscalCode;
+																$scope._customerFiscalCode=response.data.company.fiscalCode;
 																$scope._customerVatCode=response.data.company.vatCode;
 																$scope._customerCity=response.data.company.city;
 																$scope._customerZip=response.data.company.zipCode;
@@ -157,7 +159,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$location,ircompa
 												function(response){
 														if (response.data.resultCode==RESULT_OK){
 															//console.log(JSON.stringify(response));
-															$scope._customerName=response.data.person.firstName+' '+response.data.person.secondName;
+															$scope._customerName=response.data.person.secondName+' '+response.data.person.firstName;
 															$scope._customerAddress=response.data.person.address;
 															$scope._customerVatCode='';
 															$scope._customerFiscalCode=response.data.person.fiscalCode;

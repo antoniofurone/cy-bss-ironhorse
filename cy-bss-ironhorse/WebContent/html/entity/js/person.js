@@ -224,7 +224,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,
 		$scope._fiscalCode='';
 		$scope._birthDay='';
 		$scope._selectedBornCityId='';
-		
+		$scope._zip='';
 		
 	}
 	

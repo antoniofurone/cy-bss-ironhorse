@@ -27,7 +27,7 @@
 	
 </head>
 <body>
-<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl" ng-cloak>
 	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
 	
 	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
@@ -435,6 +435,7 @@
 			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
 			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
 			<th>{{'DATE.LABEL' | translate }}</th>
+			<th>{{'BILLABLE.LABEL' | translate }}</th>
 			<th>{{'COMPANY.LABEL' | translate }}</th>
 			<!-- 
 			<th>{{'FREQUENCY.LABEL' | translate }}</th>
@@ -460,6 +461,7 @@
 	    		<td align="right">{{ sale.vatAmount.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ (sale.amount+sale.vatAmount).round(2).formatI18N(2) }}</td>
 	    		<td>{{ sale.date.dateFormat() }}</td>
+	    		<td>{{ sale.noBilled!=0?'Y('+sale.noBilled+')':'N' }}</td>
 	    		<td>{{ sale.companyName }}</td>
 	    		<!-- 
 	    		<td>{{ sale.frequencyName }}</td>

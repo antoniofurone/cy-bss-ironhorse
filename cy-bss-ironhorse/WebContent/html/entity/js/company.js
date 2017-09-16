@@ -399,7 +399,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 		$scope._address='';
 		$scope._selectedCityId='';
 		$scope._fiscalCode='';
-		$scope._vatCode;
+		$scope._vatCode='';
+		$scope._zip='';
 		
 	}
 	
@@ -417,7 +418,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 			{},
 			function(response){
 					if (response.data.resultCode==RESULT_OK){
-						//console.log(JSON.stringify(response));
+						console.log(JSON.stringify(response));
 						$scope.companyId=response.data.company.id;
 						$scope._code=response.data.company.code;
 						$scope._name=response.data.company.name;
@@ -425,6 +426,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 						$scope._selectedCityId=response.data.company.cityId==0?'':response.data.company.cityId;
 						$scope._fiscalCode=response.data.company.fiscalCode;
 						$scope._vatCode=response.data.company.vatCode;
+						$scope._zip=response.data.company.zipCode;
 						
 						$companyDept($scope.companyId);
 						if ($scope.roles==undefined)

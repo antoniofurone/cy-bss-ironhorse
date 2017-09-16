@@ -37,7 +37,7 @@
 	
 </head>
 <body>
-<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl">
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl" ng-cloak>
 	
 	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
 	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
@@ -93,7 +93,7 @@
 		
 		<tr>
 		<td></td>
-		<td><h4><strong>{{ _customerName }}</strong></h4></td>
+		<td>{{'TO.LABEL' | translate }}:<h4><strong>{{ _customerName }}</strong></h4></td>
 		</tr>
 		
 		<tr>
