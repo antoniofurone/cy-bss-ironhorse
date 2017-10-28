@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CyBusiness - Server</title>
+	
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="shortcut icon" href="../../images/cy.ico">
+	
+	<script src="../../js/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script> 
+	<script src="../../js/angularjs/1.3.15/angular.min.js"></script>
+	<script src="../../js/angular-translate/2.8.1/angular-translate.min.js"></script>
+	
+	<script src="../../js/ironhorse-common.js"></script>
+	<script src="../../js/ironhorse-transl.js"></script>
+	<script src="../../js/ironhorse-list.js"></script>
+	<script src="../../js/ironhorse-search.js"></script>
+	
+	   
+</head>
+<body>
+
+<div class="container-fluid" ng-app="pageApp" ng-controller="pageCtrl" ng-cloak>
+	<div class="page-header" ng-include="'../../includes/header.html'" ></div>
+	
+	<div class="alert alert-danger" ng-show="errorMessage"> {{ errorMessage }}</div>
+	<div class="alert alert-info" ng-show="infoMessage"> {{ infoMessage }}</div>
+	
+		
+	<form novalidate name="serverList" id="serverList" class="form-inline" role="form" method="post">
+		
+		<h4><span class="label label-default">{{'SERVER.TITLE' | translate }}</span></h4>
+		
+      	<table class="table table-bordered table-striped" ng-show="servers.length>0">
+      		<thead><tr class="info small">
+      			<th>Id</th>
+      			<th>{{'NODEID.LABEL' | translate }}</th>
+      			<th>{{'STATUS.LABEL' | translate }}</th>
+      			<th>{{'IP.LABEL' | translate }}</th>
+      			<th>{{'MACHINE.LABEL' | translate }}</th>
+      			<th>{{'STARTDATE.LABEL' | translate }}</th>
+      			<th>{{'STOPDATE.LABEL' | translate }}</th>
+      			
+      		</tr></thead>
+      		<tbody>
+	      		<tr class="small" ng-repeat="server in servers | orderBy:'nodeId'">
+	    		
+	    		<td>{{ server.id }}</td>
+	    		<td>{{ server.nodeId }}</td>
+	    		<td>{{ server.status }}</td>
+	    		<td>{{ server.ip }}</td>
+	    		<td>{{ server.machine }}</td>
+	    		<td>{{ server.startDate }}</td>
+	    		<td>{{ server.stopDate }}</td>
+	    		
+	  			</tr>
+  			</tbody>
+   		</table>
+   		
+   		<h4><span class="label label-default">{{'COMMAND.TITLE' | translate }}</span></h4>
+		
+   		<div class="form-group form-group-sm">
+				
+				<div class="form-group form-group-sm">
+					<label for="_selectedServer">{{'SERVER.LABEL' | translate }}:</label>
+					<select id="_selectedServer" name="_selectedServer" class="form-control" ng-model="_selectedServer" required>
+			        	 <option value=''/>	
+			        	 <option ng-repeat="server in servers" value="{{server.id}}">{{server.nodeId}}</option>
+			        </select>
+				</div>
+				
+				<div class="form-group form-group-sm">
+					<label for="_name">{{'COMMAND.LABEL' | translate }}:</label>
+					<input class="form-control" name="_command" id="_command" type="text" ng-model="_command" size="20" maxlength=30 required/>
+				</div>
+				
+				<button type="button" class="btn btn-sm btn-info" ng-click="onSendCommand()" translate>SENDCOMMAND.BUTTON</button>
+		
+		<h6>
+			<span class="label label-warning" ng-show="serverList._selectedServer.$error.required" translate>SERVER.REQUIRED</span>
+			<span class="label label-warning" ng-show="serverList._command.$error.required" translate>COMMAND.REQUIRED</span>
+		</h6>
+		
+		</div>	
+		
+		<br>
+			
+		<div class="form-group form-group-sm">
+				
+				<div class="form-group form-group-sm">
+					<label for="_selectedServerCommand">{{'SERVER.LABEL' | translate }}:</label>
+					<select id="_selectedServerCommand" name="_selectedServerCommand" class="form-control" ng-model="_selectedServerCommand">
+			        	 <option value=''/>	
+			        	 <option ng-repeat="server in servers" value="{{server.id}}">{{server.nodeId}}</option>
+			        </select>
+				</div>
+				
+				<div class="form-group form-group-sm">
+					<label for="_selectedStatusCommand">{{'STATUS.LABEL' | translate }}:</label>
+					<select id="_selectedStatusCommand" name="_selectedStatusCommand" class="form-control" ng-model="_selectedStatusCommand">
+			        	 <option value=''/>	
+			        	 <option value='Pending'>Pending</option>
+			        	 <option value='Executed'>Executed</option>
+			       	  	 <option value='Running'>Running</option>
+			        </select>
+				</div>
+				
+				<button type="button" class="btn btn-sm btn-info" ng-click="onSearhCommand()" translate>SEARCH.BUTTON</button>
+		
+		</div>
+			
+		<br><br>
+					
+		<table class="table table-bordered table-striped" ng-show="commands.length>0">
+      		<thead><tr class="info small">
+      			<th>Id</th>
+      			<th>{{'COMMAND.LABEL' | translate }}</th>
+      			<th>{{'SERVERID.LABEL' | translate }}</th>
+      			<th>{{'STATUS.LABEL' | translate }}</th>
+      			<th>{{'REQEXECDATE.LABEL' | translate }}</th>
+      			<th>{{'EXECDATE.LABEL' | translate }}</th>
+      			<th>{{'RESULT.LABEL' | translate }}</th>
+      			<td></td>
+      		</tr></thead>
+      		<tbody>
+	      		<tr class="small" ng-repeat="command in commands | orderBy:'requestedExecDate'">
+	    		
+	    		<td>{{ command.id }}</td>
+	    		<td>{{ command.command }}</td>
+	    		<td>{{ command.serverId }}</td>
+	    		<td>{{ command.status }}</td>
+	    		<td>{{ command.requestedExecDate }}</td>
+	    		<td>{{ command.executionDate }}</td>
+	    		<td>{{ command.result }}</td>
+	    		
+	    		<td>
+	      			<button class="btn btn-info btn-xs" ng-click="deleteCommand(command.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    		</td>
+	    		
+	  			</tr>
+  			</tbody>
+   		</table>
+   		
+   		<h4><span class="label label-default">{{'QUEUE.TITLE' | translate }}</span></h4>
+		<div class="form-group form-group-sm">
+				
+				<div class="form-group form-group-sm">
+					<label for="_selectedServerQueue">{{'SERVER.LABEL' | translate }}:</label>
+					<select id="_selectedServerQueue" name="_selectedServerQueue" class="form-control" ng-model="_selectedServerQueue">
+			        	 <option value=''/>	
+			        	 <option ng-repeat="server in servers" value="{{server.id}}">{{server.nodeId}}</option>
+			        </select>
+				</div>
+				
+				<div class="form-group form-group-sm">
+					<label for="_selectedStatusQueue">{{'STATUS.LABEL' | translate }}:</label>
+					<select id="_selectedStatusQueue" name="_selectedStatusQueue" class="form-control" ng-model="_selectedStatusQueue">
+			       	   	 <option value=''/>	
+			        	 <option value='Pending'>Pending</option>
+			        	 <option value='Executed'>Executed</option>
+			       	  	 <option value='Running'>Running</option>
+			        </select>
+				</div>
+				
+				<button type="button" class="btn btn-sm btn-info" ng-click="onSearhQueue()" translate>SEARCH.BUTTON</button>
+		
+		</div>	
+		
+		<br><br>
+		
+		<table class="table table-bordered table-striped" ng-show="items.length>0">
+      		<thead><tr class="info small">
+      			<th>Id</th>
+      			<th>{{'OBJECTNAME.LABEL' | translate }}</th>
+      			<th>{{'OBJECTID.LABEL' | translate }}</th>
+      			<th>{{'STATUS.LABEL' | translate }}</th>
+      			<th>{{'SERVERID.LABEL' | translate }}</th>
+      			<th>{{'NODEID.LABEL' | translate }}</th>
+      			<th>{{'REQEXECDATE.LABEL' | translate }}</th>
+      			<th>{{'STARTEXECDATE.LABEL' | translate }}</th>
+      			<th>{{'ENDEXECDATE.LABEL' | translate }}</th>
+      			
+      			<th></th>
+      
+      						
+      		</tr></thead>
+      		<tbody>
+	      		<tr class="small" ng-repeat="item in items | orderBy:'requestedExecDate'">
+	    		
+	    		<td>{{ item.id }}</td>
+	    		<td>{{ item.objectName }}</td>
+	    		<td>{{ item.objectId }}</td>
+	    		<td>{{ item.status }}</td>
+	    		<td>{{ item.serverId==0?'':item.serverId }}</td>
+	    		<td>{{ item.serverNodeId }}</td>
+	    		<td>{{ item.requestedExecDate }}</td>
+	    		<td>{{ item.startExecDate }}</td>
+	    		<td>{{ item.endExecDate }}</td>
+	    		
+	    		<td>
+	      			<button class="btn btn-info btn-xs" ng-click="deleteQueue(item.id)">
+	      			<span class="glyphicon glyphicon-trash"></span>{{'DELETE.BUTTON' | translate }}
+	      			</button>
+	    		</td>
+	    		
+	    		
+	  			</tr>
+  			</tbody>
+   		</table>
+   		
+	</form>
+
+</div>
+
+<script src="js/server.js"></script>
+
+</body>
+</html>	

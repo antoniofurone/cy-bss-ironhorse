@@ -472,8 +472,8 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 
 						
 						$scope._selectedComponent=response.data.sale.componentId;
-						$scope._price=response.data.sale.price.round(2);
-						$scope._priceTot=response.data.sale.priceTot.round(2);
+						$scope._price=response.data.sale.price.round(6);
+						$scope._priceTot=response.data.sale.priceTot.round(6);
 						$scope._amount=response.data.sale.amount.round(2);
 						$scope._vatAmount=response.data.sale.vatAmount.round(2);
 						$scope._amountTot=(response.data.sale.amount+response.data.sale.vatAmount).round(2);

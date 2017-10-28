@@ -175,7 +175,7 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_price">{{'PRICE.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_price" id="_price" type="number" ng-model="_price" size="15"  step="0.01"/></div>
+			<div><input class="form-control" name="_price" id="_price" type="number" ng-model="_price" size="15"  step="0.000001"/></div>
 		</div>
 		
 		<div class="form-group form-group-sm" ng-show="modify">
@@ -191,7 +191,7 @@
 		
 		<div class="form-group form-group-sm">
 			<label for="_priceTot">{{'PRICETOT.LABEL' | translate }}:</label>
-			<div><input class="form-control" name="_priceTot" id="_priceTot" type="number" ng-model="_priceTot" size="15"  step="0.01"/></div>
+			<div><input class="form-control" name="_priceTot" id="_priceTot" type="number" ng-model="_priceTot" size="15"  step="0.000001"/></div>
 		</div>
 		
 		<div class="form-group form-group-sm" ng-show="modify">
@@ -455,7 +455,7 @@
 	    		<td>{{ purchase.qtyUmSimbol }}</td>
 	    		<td align="right">{{ purchase.qty.round(4).formatI18N(4) }}</td>
 	    		<td>{{ purchase.currencyCode }}</td>
-	    		<td align="right">{{ purchase.price.round(2).formatI18N(2) }}</td>
+	    		<td align="right">{{ purchase.price.round(6).formatI18N(6) }}</td>
 	    		<td align="right">{{ purchase.amount.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ purchase.vat.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ purchase.vatAmount.round(2).formatI18N(2) }}</td>

@@ -13,6 +13,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.SCALE":"Metric Scales",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Product Categories",
 				"MENU.ADMIN.PRODUCTTYPE":"Product Types",
+				"MENU.ADMIN.SERVER":"Server",
 				
 				"MENU.ENTITY":"Entity",
 				'MENU.ENTITY.CITY':"City",
@@ -50,6 +51,7 @@ var menuMapTranslation={
 				"MENU.ADMIN.SCALE":"Scale",
 				"MENU.ADMIN.PRODUCTCATEGORY":"Categorie Prodotto",
 				"MENU.ADMIN.PRODUCTTYPE":"Tipologie Prodotto",
+				"MENU.ADMIN.SERVER":"Server",
 				
 				
 				"MENU.ENTITY":"Entita'",
