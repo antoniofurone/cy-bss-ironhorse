@@ -197,3 +197,53 @@ Number.prototype.format = function(n, x, s, c) {
 //123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
 //12345678.9.format(0, 3, '-');       // "12-345-679"
 //var a = parseFloat("10")
+
+function checkItaFiscalCode(cfins)
+{
+	if (cfins==undefined)
+		return false;
+	var cf = cfins.toUpperCase();
+	var cfReg = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
+	if (!cfReg.test(cf))
+	{
+		return false;
+	}
+  	
+	var set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
+	var s = 0;
+	for( i = 1; i <= 13; i += 2 )
+	  s += setpari.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+	for( i = 0; i <= 14; i += 2 )
+	  s += setdisp.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+	if ( s%26 != cf.charCodeAt(15)-'A'.charCodeAt(0) )
+	  return false;
+	return true;
+}
+
+function checkItaVatCode(pi)
+{
+	if( pi == '' ) return false;
+	if( pi.length != 11 )
+		return false;
+	
+	var validi = "0123456789";
+	for( i = 0; i < 11; i++ ){
+		if( validi.indexOf( pi.charAt(i) ) == -1 )
+			return false
+	}
+	s = 0;
+	for( i = 0; i <= 9; i += 2 )
+		s += pi.charCodeAt(i) - '0'.charCodeAt(0);
+	for( i = 1; i <= 9; i += 2 ){
+		c = 2*( pi.charCodeAt(i) - '0'.charCodeAt(0) );
+	if( c > 9 ) c = c - 9;
+		s += c;
+	}
+	if( ( 10 - s%10 )%10 != pi.charCodeAt(10) - '0'.charCodeAt(0) )
+		return false
+	return true;
+}
+

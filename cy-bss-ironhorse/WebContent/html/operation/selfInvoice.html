@@ -66,6 +66,20 @@
 		   	</div>
 		</div>
 		
+		<!-- change number --> 
+		<div class="form-group form-group-sm" ng-show='_number!=0 && modify'>
+			<label>{{'CHANGENUMBER.LABEL' | translate }}:</label>
+			<div>
+				<input class="form-control" name="_changeNumber" id="_changeNumber" type="number" ng-model="_changeNumber" required/>
+				<button type="button" class="btn btn-sm btn-info" ng-click="onChangeNumber()" ng-show="_number!=0 && modify" translate>CHANGENUMBER.BUTTON</button>
+			</div>
+		</div>
+		
+		<h6>
+			<span class="label label-warning" ng-show="_number!=0 && modify && (invoiceForm._changeNumber.$error.required || invoiceForm._changeNumber.$error.number)" translate>CHANGENUMBER.REQUIRED</span>
+		</h6>
+		
+		
 		<!-- supplier -->
 		<h5><span class="label label-default">{{'SUPPLIER.LABEL' | translate }}</span></h5>
 		<div class="form-group form-group-sm">
@@ -179,8 +193,6 @@
 		<button type="button" class="btn btn-sm btn-info" ng-click="printInvoice(invoiceId)" ng-show='_number!=0 && modify'>
 			<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
 		</button>
-	
-	      			
 	
 		<!-- attributes -->
 		<div ng-show="modify">
@@ -397,19 +409,23 @@
 	    		
 	    		<td> 
 	      			<button class="btn btn-info btn-xs" ng-click="editInvoice(invoice.id)">
-	      			<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
+	      				<span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{'EDIT.BUTTON' | translate }}
 	      			</button>
 	      			
-	      			<button class="btn btn-info btn-xs" ng-click="closeInvoice(invoice.id)" ng-show='invoice.number==0'>
-	      			<span class="glyphicon glyphicon-lock"></span>&nbsp;&nbsp;{{'CLOSE.BUTTON' | translate }}
+	      			<button class="btn btn-info btn-xs" ng-click="lockInvoice(invoice.id)" ng-show='invoice.number==0'>
+	      				<span class="glyphicon glyphicon-lock"></span>&nbsp;&nbsp;{{'LOCK.BUTTON' | translate }}
+	      			</button>
+	      			
+	      			<button class="btn btn-info btn-xs" ng-click="unlockInvoice(invoice.id)" ng-show='invoice.number!=0'>
+	      				<span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;{{'UNLOCK.BUTTON' | translate }}
 	      			</button>
 	      			
 	      			<button class="btn btn-info btn-xs" ng-click="printInvoice(invoice.id)" ng-show='invoice.number!=0'>
-	      			<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
+	      				<span class="glyphicon glyphicon-print"></span>&nbsp;&nbsp;{{'PRINT.BUTTON' | translate }}
 	      			</button>
 	      			
 	      			<button class="btn btn-info btn-xs" ng-click="deleteInvoice(invoice.id)">
-	      			<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
+	      				<span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;{{'DELETE.BUTTON' | translate }}
 	      			</button>
 	    			
 	    		</td>

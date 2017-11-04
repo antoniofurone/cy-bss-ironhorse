@@ -44,6 +44,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'SUPPLIER.LABEL':'Supplier',
  		'PERSON.LABEL':'Person',
  		'COMPONENT.LABEL':'Component',
+ 		'CHANGENUMBER.LABEL':'New Number',
+ 		'CHANGENUMBER.BUTTON':'Change',
  		'UM.LABEL':'Um',
  		'QTY.LABEL':'Qty',
 		'NOTE.LABEL':'Note',
@@ -66,19 +68,22 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'SUPPLIER_PERSON.REQUIRED':'Supplier o Person is required',
  		'COMPONENT.REQUIRED':'Component is required',
  		'CURRENCY.REQUIRED':'Currency is required',
+ 		'CHANGENUMBER.REQUIRED':'New Number is numeric',
  		'VAT.REQUIRED':'Vat is required',
  		'ADD.BUTTON':'Add',
  		'EDIT.BUTTON':'Edit',
  		'DELETE.BUTTON':'Delete',
  		'NEW.BUTTON':'New',
- 		'CLOSE.BUTTON':'Lock',
+ 		'LOCK.BUTTON':'Lock',
+ 		'UNLOCK.BUTTON':'Unlock',
  		'PRINT.BUTTON':'Print',
  		'NEW.TITLE':'New Self Invoice',
  		'INS.OK': 'Invoice inserted !',
 		'UPD.OK': 'Invoice changed !',
 		'MODIFY.TITLE':'Change Self Invoice',
 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Invoice ?',
-		'CLOSECONFIRM.MESSAGE': 'Are you sure to lock Invoice ?',
+		'LOCKCONFIRM.MESSAGE': 'Are you sure to lock Invoice ?',
+		'UNLOCKCONFIRM.MESSAGE': 'Are you sure to unlock Invoice ?',
 		'SUBMIT.BUTTON':'Submit',
 		'CANCELLED.LABEL':'Cancelled'
  	  })
@@ -105,6 +110,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'SUPPLIER.LABEL':'Fornitore',
  		'PERSON.LABEL':'Persona',
  		'COMPONENT.LABEL':'Componente',
+ 		'CHANGENUMBER.LABEL':'Nuovo Numero',
+ 		'CHANGENUMBER.BUTTON':'Modifica',
  		'UM.LABEL':'Um',
  		'QTY.LABEL':"Quantita'",
 		'NOTE.LABEL':'Nota',
@@ -127,19 +134,22 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'SUPPLIER_PERSON.REQUIRED':'Fornitore o Persona obbligatorio',
  		'COMPONENT.REQUIRED':'Componente obbligatorio',
  		'CURRENCY.REQUIRED':'Valuta obbligatoria',
+ 		'CHANGENUMBER.REQUIRED':"Nuovo numero e' numerico",
  		'VAT.REQUIRED':'Iva obbligatoria',
  		'ADD.BUTTON':'Aggiungi',
  	 	'EDIT.BUTTON':'Modifica',
  		'DELETE.BUTTON':'Cancella',
  		'NEW.BUTTON':'Nuova',
- 		'CLOSE.BUTTON':'Chiudi',
+ 		'LOCK.BUTTON':'Chiudi',
+ 		'UNLOCK.BUTTON':'Apri',
  		'PRINT.BUTTON':'Stampa',
  		'NEW.TITLE':'Nuova Autofattura',
  		'INS.OK': 'Fattura inserita !',
 		'UPD.OK': 'Fattura modificata !',
 		'MODIFY.TITLE':'Modifica Autofattura',
 		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare la fattura ?",
-		'CLOSECONFIRM.MESSAGE': 'Sei sicuro di chiudere la fattura ?',
+		'LOCKCONFIRM.MESSAGE': 'Sei sicuro di chiudere la fattura ?',
+		'UNLOCKCONFIRM.MESSAGE': 'Sei sicuro di voler aprire la fattura ?',
 		'SUBMIT.BUTTON':'Conferma',
 		'CANCELLED.LABEL':'Cancellata'
   	  });
@@ -380,6 +390,7 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	$scope.editInvoice = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
+		$scope._changeNumber="";
 		
 		$scope.modify=true;
 		$scope.detail=true;
@@ -439,11 +450,11 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 	}
 	
 	
-	$scope.closeInvoice = function(id){
+	$scope.lockInvoice = function(id){
 		$scope.errorMessage="";
 		$scope.infoMessage="";
 		
-		$translate('CLOSECONFIRM.MESSAGE')
+		$translate('LOCKCONFIRM.MESSAGE')
  		.then(function (translatedValue) {
  			if (!confirm(translatedValue))
 				return;
@@ -467,6 +478,33 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
  		});
 	}	
 		
+	$scope.unlockInvoice = function(id){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		$translate('UNLOCKCONFIRM.MESSAGE')
+ 		.then(function (translatedValue) {
+ 			if (!confirm(translatedValue))
+				return;
+			
+ 			var headers={"Security-Token":$scope.securityToken};
+ 			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+id+'/unlock','GET',
+ 					headers,
+ 					{},
+ 					function(response){
+ 							if (response.data.resultCode==RESULT_OK){
+ 								$search();							
+ 							}
+ 							else
+ 							{
+ 								manageError($scope,response.data.resultCode,response.data.resultDesc);
+ 							}
+ 						}, 
+ 						function(data, status, headers, config){
+ 								manageError($scope,status,data);
+ 						});
+ 		});
+	}	
 		
 	$scope.deleteInvoice = function(id){
 		$scope.errorMessage="";
@@ -592,6 +630,35 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,$window,ircompany
 		$scope._personName="";
 	}
 	
+	$scope.onChangeNumber=function(){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		if ($scope.invoiceForm._changeNumber.$error.required || $scope.invoiceForm._changeNumber.$error.number) 
+			return;
+		
+		var headers={"Security-Token":$scope.securityToken};
+			callRestWs($http,'invoice/'+$scope.invoiceType+'/'+$scope.invoiceId+'/updateNumber/'+$scope._changeNumber,'GET',
+					headers,
+					{},
+					function(response){
+							if (response.data.resultCode==RESULT_OK){
+								$translate('UPD.OK')
+		    	          		.then(function (translatedValue) {
+		    	              		$scope.infoMessage=translatedValue;
+		    	          		});
+							
+								$getInvoice($scope.invoiceId);
+							}
+							else
+							{
+								manageError($scope,response.data.resultCode,response.data.resultDesc);
+							}
+						}, 
+						function(data, status, headers, config){
+								manageError($scope,status,data);
+						});
+	}
 	
 });
 

@@ -27,6 +27,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Company ?',
 		'DELETEPERSONCONFIRM.MESSAGE': 'Are you sure to delete Person ?',		
  		'SUBMIT.BUTTON':'Submit',
+ 		'CHECKITAFISCALCODE.BUTTON':'Check Fiscal Code [ITA]',
+ 		'CHECKITAVATCODE.BUTTON':'Check Vat Code [ITA]',
  		'PERSONS.LABEL':'Persons',
  		'FIRSTNAME.LABEL':'First Name',
  		'SECONDNAME.LABEL':'Second Name',
@@ -52,8 +54,12 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	    'ATTRIBUTENAME.REQUIRED':'Attribute Name is required',
 	    'ATTRIBUTEVALUE.REQUIRED':'Attribute Value is required',
 	    'ADDATTRIBUTE.BUTTON':'Add Attribute',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?"
- 	  })
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?",
+	    'FISCALCODE.OK':"Fiscal Code is valid !",
+	    'FISCALCODE.NOK':"Fiscal Code is invalid !",
+	    'VATCODE.OK':"Vat Code is valid !",
+	    'VATCODE.NOK':"Vat Code is invalid !"
+	  })
 	  
 	.translations('it',{
 		'SEARCH.BUTTON':'Ricerca',
@@ -78,6 +84,8 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 		'DELETECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Azienda ?",
 		'DELETEPERSONCONFIRM.MESSAGE':"Sei sicuro di cancellare la Persona ?",		
  		'SUBMIT.BUTTON':'Conferma',
+ 		'CHECKITAFISCALCODE.BUTTON':'Verifica Codice Fiscale [ITA]',
+ 		'CHECKITAVATCODE.BUTTON':'Verifica P.Iva [ITA]',
  		'PERSONS.LABEL':'Persone',
  		'FIRSTNAME.LABEL':'Nome',
  		'SECONDNAME.LABEL':'Cognome',
@@ -103,7 +111,11 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
 	    'ATTRIBUTENAME.REQUIRED':'Nome Attributo obbligatorio',
 	    'ATTRIBUTEVALUE.REQUIRED':'Valore Attributo obbligatorio',
 	    'ADDATTRIBUTE.BUTTON':'Aggiungi Attributo',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?"
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?",
+	    'FISCALCODE.OK':"Codice Fiscale valido !",
+	    'FISCALCODE.NOK':"Codice Fiscal non valido !",
+	    'VATCODE.OK':"Partita Iva valida !",
+	    'VATCODE.NOK':"Partita Iva non valida !"
   	  });
  	
  	
@@ -719,6 +731,47 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,ircitie
 
 	}
 	
+	$scope.onCheckItaFiscalCode = function(){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		if (!checkItaFiscalCode($scope._fiscalCode)){
+			
+			$translate('FISCALCODE.NOK')
+      		.then(function (translatedValue) {
+          		$scope.errorMessage=translatedValue;
+      		});
+		
+		}
+		else
+		{
+			$translate('FISCALCODE.OK')
+	      		.then(function (translatedValue) {
+	          		$scope.infoMessage=translatedValue;
+	      		});
+		}
+	}
+	
+	$scope.onCheckItaVatCode = function(){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		if (!checkItaVatCode($scope._vatCode)){
+			
+			$translate('VATCODE.NOK')
+      		.then(function (translatedValue) {
+          		$scope.errorMessage=translatedValue;
+      		});
+		
+		}
+		else
+		{
+			$translate('VATCODE.OK')
+	      		.then(function (translatedValue) {
+	          		$scope.infoMessage=translatedValue;
+	      		});
+		}
+	}
 	
 });
 

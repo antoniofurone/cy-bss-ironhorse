@@ -40,6 +40,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator',
  		'INS.OK': 'Person inserted !',
 		'UPD.OK': 'Person changed !',
 		'SUBMIT.BUTTON':'Submit',
+		'CHECKITAFISCALCODE.BUTTON':'Check Fiscal Code [ITA]',
 		'DELETECONFIRM.MESSAGE': 'Are you sure to delete Person ?',
 		'DELETECONTACTCONFIRM.MESSAGE': 'Are you sure to delete Contact ?',
 		'RESET.BUTTON': 'Reset',
@@ -56,7 +57,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator',
 	    'ATTRIBUTENAME.REQUIRED':'Attribute Name is required',
 	    'ATTRIBUTEVALUE.REQUIRED':'Attribute Value is required',
 	    'ADDATTRIBUTE.BUTTON':'Add Attribute',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?"
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Are you sure to delete Attribute ?",
+	    'FISCALCODE.OK':"Fiscal Code is valid !",
+	    'FISCALCODE.NOK':"Fiscal Code is invalid !"
 	  })
 	  
 	.translations('it',{
@@ -86,6 +89,7 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator',
  		'INS.OK': 'Persona inserita !',
 		'UPD.OK': 'Persona modificata !',
 		'SUBMIT.BUTTON':'Submit',
+		'CHECKITAFISCALCODE.BUTTON':'Verifica Codice Fiscale [ITA]',
 		'DELETECONFIRM.MESSAGE': 'Sei sicuro di cancellare la Persona ?',
 		'DELETECONTACTCONFIRM.MESSAGE': 'Sei sicuro di cancellare il Contatto ?',
 	    'RESET.BUTTON': 'Reset',
@@ -102,7 +106,9 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator',
 	    'ATTRIBUTENAME.REQUIRED':'Nome Attributo obbligatorio',
 	    'ATTRIBUTEVALUE.REQUIRED':'Valore Attributo obbligatorio',
 	    'ADDATTRIBUTE.BUTTON':'Aggiungi Attributo',
-	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?"
+	    'DELETEATTRIBUTECONFIRM.MESSAGE': "Sei sicuro di cancellare l'Attributo ?",
+	    'FISCALCODE.OK':"Codice Fiscale valido !",
+	    'FISCALCODE.NOK':"Codice Fiscale non valido !"
 	  });
  	
  	
@@ -563,6 +569,27 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,
  						});
  		});
 		
+	}
+	
+	$scope.onCheckItaFiscalCode = function(){
+		$scope.errorMessage="";
+		$scope.infoMessage="";
+		
+		if (!checkItaFiscalCode($scope._fiscalCode)){
+			
+			$translate('FISCALCODE.NOK')
+      		.then(function (translatedValue) {
+          		$scope.errorMessage=translatedValue;
+      		});
+		
+		}
+		else
+		{
+			$translate('FISCALCODE.OK')
+	      		.then(function (translatedValue) {
+	          		$scope.infoMessage=translatedValue;
+	      		});
+		}
 	}
 	
 	});
