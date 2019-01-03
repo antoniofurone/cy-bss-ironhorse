@@ -213,7 +213,10 @@
 			<th>{{'VAT.LABEL' | translate }}</th>
 			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
 			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
+			<th>{{'DATESTART.LABEL' | translate }}</th>
+			<th>{{'DATEEND.LABEL' | translate }}</th>
 			<th>{{'DATE.LABEL' | translate }}</th>
+			<th>{{'TYPE.LABEL' | translate }}</th>
 			<th></th>
 	     	</tr>
 	    </thead>
@@ -231,7 +234,10 @@
 	    		<td align="right">{{ item.vatAmount.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ item.totAmount.round(2).formatI18N(2) }}</td>
 	    		
+	    		<td>{{ item.dateStart.dateFormat() }}</td>
+	    		<td>{{ item.dateEnd.dateFormat() }}</td>
 	    		<td>{{ item.date.dateFormat() }}</td>
+	    		<td>{{ item.billableType }}</td>
 	    		
 	    		
 	    		<td> 
@@ -262,12 +268,16 @@
 			<th>{{'VAT.LABEL' | translate }}</th>
 			<th>{{'VATAMOUNT.LABEL' | translate }}</th>
 			<th>{{'AMOUNTTOT.LABEL' | translate }}</th>
+			<th>{{'DATESTART.LABEL' | translate }}</th>
+			<th>{{'DATEEND.LABEL' | translate }}</th>
 			<th>{{'DATE.LABEL' | translate }}</th>
+			<th>{{'TYPE.LABEL' | translate }}</th>
+			
 			<th></th>
 	     	</tr>
 	    </thead>
 	    <tbody>
-	    	<tr class="small" ng-repeat="billable in billables | orderBy:'date'">
+	    	<tr class="small" ng-repeat="billable in billables | orderBy:'date_start'">
 	    		<td>{{ billable.id }}</td>
 	    		<td>{{ billable.productName }}</td>
 	    		<td>{{ billable.componentName }}</td>
@@ -279,7 +289,10 @@
 	    		<td align="right">{{ billable.vat.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ billable.vatAmount.round(2).formatI18N(2) }}</td>
 	    		<td align="right">{{ billable.totAmount.round(2).formatI18N(2) }}</td>
+	    		<td>{{ billable.dateStart.dateFormat() }}</td>
+	    		<td>{{ billable.dateEnd.dateFormat() }}</td>
 	    		<td>{{ billable.date.dateFormat() }}</td>
+	    		<td>{{ billable.billableType }}</td>
 	    		
 	    		<td> 
 	      			

@@ -214,7 +214,7 @@
 		   	</div>
 		</div>
 	
-		<div class="form-group form-group-sm" ng-show="false">
+		<div class="form-group form-group-sm">
 			<label for="_selectedTacitRenewal">{{'TACITRENEWAL.LABEL' | translate }}:</label>
 			<div>
 				<select id="_selectedTacitRenewal" name="_selectedTacitRenewal" class="form-control" ng-model="_selectedTacitRenewal">
@@ -245,7 +245,7 @@
           	</div>	
 		</div>
 		
-		<div class="form-group form-group-sm" ng-show="false">
+		<div class="form-group form-group-sm">
 			<label for="dateStart">{{'DATESTART.LABEL' | translate }}:</label>
 			<div>
 				<div class="input-group date" id="dateStartpicker">
@@ -255,7 +255,7 @@
 	        </div>	
 		</div>
 		
-		<div class="form-group form-group-sm" ng-show="false">
+		<div class="form-group form-group-sm">
 			<label for="dateEnd">{{'DATEEND.LABEL' | translate }}:</label>
 			<div>
 				<div class="input-group date" id="dateEndpicker">
@@ -264,6 +264,27 @@
 	          	</div>
 	        </div>  		
 		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="dateEnd">{{'DATECLOSE.LABEL' | translate }}:</label>
+			<div>
+				<div class="input-group date" id="dateClosepicker">
+	            <input class="form-control" type="text" name="_dateClose" id="_dateClose" type="text"  ng-model="_dateClose">
+	            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	          	</div>
+	        </div>  		
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_scale">{{'OLD_ID.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_oldId" id="_oldId" type="number" ng-model="_oldId" size="10" step="1"/></div>
+		</div>
+		
+		<div class="form-group form-group-sm">
+			<label for="_scale">{{'NEW_ID.LABEL' | translate }}:</label>
+			<div><input class="form-control" name="_newId" id="_newId" type="number" ng-model="_newId" size="10" step="1"/></div>
+		</div>
+		
 		
 		<h6>
 			<span class="label label-warning" ng-show="purchaseForm._selectedCompany.$error.required" translate>COMPANY.REQUIRED</span>

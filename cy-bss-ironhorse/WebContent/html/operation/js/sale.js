@@ -18,6 +18,12 @@ $('#dateEndpicker').datepicker({
    console.log('dateEndpicker:'+e.date);
 });
 
+$('#dateClosepicker').datepicker({
+    autoclose:true,format: 'dd/mm/yyyy',language:languageCode
+  }).on("changeDate", function(e){
+   console.log('dateClosepicker:'+e.date);
+});
+
 $('#datepickerFrom').datepicker({
     autoclose:true,format: 'dd/mm/yyyy',language:languageCode
   }).on("changeDate", function(e){
@@ -69,7 +75,10 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'DATE.LABEL':'Date',
  		'DATESTART.LABEL':'Date Start',
  		'DATEEND.LABEL':'Date End',
- 		'ATTRIBUTE.LABEL':'Attribute',
+ 		'DATECLOSE.LABEL':'Data Close',
+ 		'OLD_ID.LABEL':'Old Id',
+ 		'NEW_ID.LABEL':'New Id',
+ 	 	'ATTRIBUTE.LABEL':'Attribute',
  		'COMPANY.REQUIRED':'Company is required',
  		'PRODUCT.REQUIRED':'Product is required',
  		'CUSTOMER_PERSON.REQUIRED':'Customer o Person is required',
@@ -134,7 +143,10 @@ var app = angular.module('pageApp', ['pascalprecht.translate','irtranslator','ir
  		'DATE.LABEL':'Data',
  		'DATESTART.LABEL':'Data Inizio',
  		'DATEEND.LABEL':'Data Fine',
- 		'ATTRIBUTE.LABEL':'Attributo',
+ 		'DATECLOSE.LABEL':'Data Chiusura',
+ 		'OLD_ID.LABEL':'Vecchio Id',
+ 		'NEW_ID.LABEL':'Nuovo Id',
+ 	 	'ATTRIBUTE.LABEL':'Attributo',
  		'COMPANY.REQUIRED':'Azienda obbligatoria',
  		'PRODUCT.REQUIRED':'Prodotto obbligatorio',
  		'CUSTOMER_PERSON.REQUIRED':'Cliente o Persona obbligatorio',
@@ -318,6 +330,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 		data['date']=$scope._date;
 		data['dateStart']=$scope._dateStart;
 		data['dateEnd']=$scope._dateEnd;
+		data['dateClose']=$scope._dateClose;
+		data['oldId']=$scope._oldId;
+		data['newId']=$scope._newId;
 		data['frequencyId']=$scope._selectedFrequency;
 		data['tacitRenewal']=$scope._selectedTacitRenewal;
 		data['transactionType']=$scope._selectedType;
@@ -403,6 +418,9 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 		$scope._date='';
 		$scope._dateStart='';
 		$scope._dateEnd='';
+		$scope._dateClose='';
+		$scope._oldId='';
+		$scope._newId='';
 		$scope._selectedFrequency='';
 		$scope._selectedTacitRenewal='';
 		$scope._selectedType='';
@@ -481,7 +499,10 @@ app.controller('pageCtrl', function($q,$scope,$http,$translate,ircompany,irprodu
 						$scope._vat=response.data.sale.vat.round(2);
 						$scope._date=dateToStringDDMMYYYY(new Date(response.data.sale.date));
 						$scope._dateStart=response.data.sale.dateStart==undefined?undefined:dateToStringDDMMYYYY(new Date(response.data.sale.dateStart));
-						$scope._dateEnd=response.data.sale.dateEnd==undefined?undefined:dateToStringDDMMYYYY(new Date(response.data.sale.dateEnd));;
+						$scope._dateEnd=response.data.sale.dateEnd==undefined?undefined:dateToStringDDMMYYYY(new Date(response.data.sale.dateEnd));
+						$scope._dateClose=response.data.sale.dateClose==undefined?undefined:dateToStringDDMMYYYY(new Date(response.data.sale.dateClose));
+						$scope._oldId=response.data.sale.oldId==0?undefined:response.data.sale.oldId;
+						$scope._newId=response.data.sale.newId==0?undefined:response.data.sale.newId;
 						$scope._selectedFrequency=response.data.sale.frequencyId;
 						$scope._selectedTacitRenewal=response.data.sale.tacitRenewal;
 						$scope._selectedType=response.data.sale.transactionType;
